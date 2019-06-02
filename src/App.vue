@@ -1,5 +1,5 @@
 <template>
-  <jadwal-siak />
+  <jadwal-siak/>
 </template>
 
 <script>

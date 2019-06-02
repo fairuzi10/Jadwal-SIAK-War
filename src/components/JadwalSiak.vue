@@ -51,24 +51,24 @@
 
 <script>
 export default {
-  name: "JadwalSiak",
-  data() {
+  name: 'JadwalSiak',
+  data () {
     return {
       file: null,
       form: {
         jurusan: null
       },
       list_jurusan: [
-        { text: "Pilih Jurusanmu", value: null },
-        "Ilmu Komputer",
-        "Sistem Informasi"
+        { text: 'Pilih Jurusanmu', value: null },
+        'Ilmu Komputer',
+        'Sistem Informasi'
       ]
-    };
+    }
   },
   methods: {
-    handleSelect(key, keyPath) {}
+    handleSelect (key, keyPath) {}
   }
-};
+}
 </script>
 
 <style scoped>
