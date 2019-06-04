@@ -8,14 +8,14 @@
       @click="updateChosenClassIns(classIns)"
     >
       <b-row>
-        <b-col cols="2">
+        <b-col cols="2" class="px-2">
           {{classIns['NAMA KELAS']}}
         </b-col>
-        <b-col cols="3" v-html="classIns.WAKTU.join('<br />')">
+        <b-col cols="3" v-html="classIns.WAKTU.join('<br />')" class="px-2">
         </b-col>
-        <b-col cols="2" v-html="classIns.RUANG.join('<br />')">
+        <b-col cols="2" v-html="classIns.RUANG.join('<br />')" class="px-2">
         </b-col>
-        <b-col cols="5" v-html="classIns.PENGAJAR.join('<br />')">
+        <b-col cols="5" v-html="classIns.PENGAJAR.join('<br />')" class="px-2">
         </b-col>
       </b-row>
     </b-button>
@@ -54,5 +54,9 @@ export default {
 
   .btn-outline-green-light:not(:disabled):not(.disabled).active {
     background-color: #349268;
+  }
+
+  .btn-outline-green-light:not(:disabled):not(.disabled):not(.active) {
+    box-shadow: 0 0 0 0;
   }
 </style>
