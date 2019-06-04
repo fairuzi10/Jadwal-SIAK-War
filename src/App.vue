@@ -4,6 +4,7 @@
 
 <script>
 import './bootstrap'
+import './store'
 import JadwalSiak from '@/components/JadwalSiak'
 
 export default {
@@ -14,7 +15,11 @@ export default {
 }
 </script>
 
-<style>
-@import "~bootstrap-vue/dist/bootstrap-vue.min.css";
-@import "~bootstrap/dist/css/bootstrap.min.css";
+<style lang="scss">
+$theme-colors: (
+  "green-dark": #2c3e50,
+  "green-light": #41b883
+);
+@import "~bootstrap/scss/bootstrap.scss";
+@import "~bootstrap-vue/src/index.scss";
 </style>
