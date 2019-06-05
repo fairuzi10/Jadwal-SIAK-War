@@ -17,14 +17,14 @@
               <b-form-group>
                 <b-form-select
                   id="input-jurusan"
-                  v-model="form.jurusan"
+                  v-model="jurusan"
                   :options="list_jurusan"
                   required
                 />
               </b-form-group>
             </b-form>
 
-            <template v-if="!form.jurusan">
+            <template v-if="!jurusan">
               <b-card-text v-if="!file">
                 Atau unggah jadwal jurusanmu
                 <b-button id="help-upload" href="#" size="sm" variant="info" class="bg-green-dark">?</b-button>
@@ -65,15 +65,16 @@ import TableParser from '@/helper/TableParser'
 import Course from '@/components/Course'
 import { mapGetters } from 'vuex'
 import { INIT_CHOSEN_CLASS } from '@/store'
+import data from '@/data/schedule.json'
+import { setImmediate } from 'timers'
 
 export default {
   name: 'JadwalSiak',
   data () {
     return {
+      data,
       file: null,
-      form: {
-        jurusan: null
-      },
+      jurusan: null,
       list_jurusan: [
         { text: 'Pilih Jurusanmu', value: null },
         'Ilmu Komputer',
@@ -94,19 +95,28 @@ export default {
         const parser = new DOMParser()
         const htmlDoc = parser.parseFromString(e.target.result, 'text/html')
         const table = htmlDoc.querySelectorAll('table.box')
-        this.classOpt = Object.freeze(TableParser.parse(table))
+        this.classOpt = TableParser.parse(table)
       }
       return reader
     }
   },
   watch: {
     file: function (newFile, oldFile) {
-      if (newFile.type !== 'text/html') {
+      if (!newFile || newFile.type !== 'text/html') {
         this.validHtmlFile = false
       } else {
         this.validHtmlFile = true
         this.reader.readAsText(newFile)
       }
+    },
+    jurusan: function (newJurusan, oldJurusan) {
+      // async function
+      // failed to use Promise, probably due to Promise's high priority
+      // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
+      setImmediate(() => {
+        const slug = newJurusan.replace(' ', '-').toLowerCase()
+        this.classOpt = this.data[slug]
+      })
     },
     classOpt: function (newClassOpt, oldClassOpt) {
       this.$store.dispatch(INIT_CHOSEN_CLASS, Object.keys(newClassOpt))

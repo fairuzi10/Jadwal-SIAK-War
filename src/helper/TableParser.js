@@ -15,7 +15,7 @@ const cleanifier = {
   'PERIODE': dom => dom.innerHTML.split('<br>'),
   'RUANG': dom => dom.innerHTML.split('<br>'),
   'WAKTU': dom => dom.innerHTML.split('<br>'),
-  'DEFAULT': dom => dom.innerText
+  'DEFAULT': dom => dom.textContent
 }
 
 /**
@@ -43,9 +43,9 @@ function factory (headings) {
  * @return {Array[Object]}       array of objects representing each row in the table
  */
 const parse = function (tables) {
-  var headings = arrayify(tables[0].tBodies[0].rows[1].cells).map(function (heading) {
+  const headings = arrayify(tables[0].tBodies[0].rows[1].cells).map(function (heading) {
     // for now, only NO. has unclean name.
-    return heading.innerText.replace('.', '').toLocaleUpperCase()
+    return heading.textContent.replace('.', '').toLocaleUpperCase()
   })
 
   const htmlTableToObject = table => {
@@ -64,7 +64,7 @@ const parse = function (tables) {
               options: activeList
             }
           }
-          activeClass = classNameEl.innerText
+          activeClass = classNameEl.textContent
           activeList = []
         }
       } else if (row.cells.length === headings.length) {
