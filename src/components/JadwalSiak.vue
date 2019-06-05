@@ -77,12 +77,12 @@ export default {
       jurusan: null,
       list_jurusan: [
         { text: 'Pilih Jurusanmu', value: null },
-        'Ilmu Komputer',
-        'Sistem Informasi'
+        { text: 'Ilmu Komputer', value: 'ilmu-komputer' },
+        { text: 'Sistem Informasi', value: 'sistem-informasi' }
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: null
+      classOpt: {}
     }
   },
   computed: {
@@ -114,8 +114,11 @@ export default {
       // failed to use Promise, probably due to Promise's high priority
       // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
       setImmediate(() => {
-        const slug = newJurusan.replace(' ', '-').toLowerCase()
-        this.classOpt = this.data[slug]
+        if (newJurusan in this.data) {
+          this.classOpt = this.data[newJurusan]
+        } else {
+          this.classOpt = {}
+        }
       })
     },
     classOpt: function (newClassOpt, oldClassOpt) {
