@@ -65,14 +65,12 @@ import TableParser from '@/helper/TableParser'
 import Course from '@/components/Course'
 import { mapGetters } from 'vuex'
 import { INIT_CHOSEN_CLASS } from '@/store'
-import data from '@/data/schedule.json'
 import { setImmediate } from 'timers'
 
 export default {
   name: 'JadwalSiak',
   data () {
     return {
-      data,
       file: null,
       jurusan: null,
       list_jurusan: [
@@ -113,12 +111,9 @@ export default {
       // async function
       // failed to use Promise, probably due to Promise's high priority
       // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
-      setImmediate(() => {
-        if (newJurusan in this.data) {
-          this.classOpt = this.data[newJurusan]
-        } else {
-          this.classOpt = {}
-        }
+      setImmediate(async () => {
+        const dataJurusan = (await import('@/data/' + newJurusan + '.json')).default
+        this.classOpt = dataJurusan
       })
     },
     classOpt: function (newClassOpt, oldClassOpt) {

@@ -26,21 +26,23 @@ function readFiles (dirname, onFileContent, onError, onSuccess) {
 }
 
 process.chdir(__dirname)
-const data = {}
 readFiles('data/raw/', function (filename, content) {
   const htmlDoc = new JSDOM(content).window.document
   const table = htmlDoc.querySelectorAll('table.box')
   const jurusan = filename.split('.')[0].replace(' ', '-')
-  data[jurusan] = tp.parse(table)
-}, function (err) {
-  throw err
-}, function () {
-  fs.writeFile('data/schedule.json', JSON.stringify(data), function (err) {
+  const jurusanData = tp.parse(table)
+  const dataFilename = 'data/' + jurusan + '.json'
+  fs.writeFile(dataFilename, JSON.stringify(jurusanData), function (err) {
     if (err) {
       // eslint-disable-next-line no-console
       return console.error(err)
     }
     // eslint-disable-next-line no-console
-    console.log('The file was saved!')
+    console.log(dataFilename + ' was saved!')
   })
+}, function (err) {
+  throw err
+}, function () {
+  // eslint-disable-next-line no-console
+  console.log('Preprocessing completed')
 })
