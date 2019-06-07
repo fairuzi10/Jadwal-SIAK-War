@@ -16,9 +16,11 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/variables.scss';
+
 $theme-colors: (
-  "green-dark": #2c3e50,
-  "green-light": #41b883
+  "green-dark": $green-dark,
+  "green-light": $green-light
 );
 @import "~bootstrap/scss/bootstrap.scss";
 @import "~bootstrap-vue/src/index.scss";
