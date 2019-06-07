@@ -45,7 +45,8 @@
               </b-form-invalid-feedback>
             </template>
           </b-card>
-          <course-list :classOpt="classOpt" v-if="classOpt" />
+          <course-list v-if="classOpt" :classOpt="classOpt" />
+          <course-placeholder v-else />
         </b-col>
       </b-row>
     </b-container>
@@ -55,6 +56,7 @@
 <script>
 import TableParser from '@/helper/TableParser'
 import CoursePlaceholder from '@/components/CoursePlaceholder'
+import CourseList from '@/components/CourseList'
 import { INIT_CHOSEN_CLASS } from '@/store'
 import { setImmediate } from 'timers'
 
@@ -71,7 +73,7 @@ export default {
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: null
+      classOpt: {}
     }
   },
   methods: {
@@ -92,18 +94,21 @@ export default {
         this.validHtmlFile = false
       } else {
         this.validHtmlFile = true
+        this.classOpt = null
         this.reader.readAsText(newFile)
       }
     },
     jurusan: function (newJurusan, oldJurusan) {
       if (newJurusan) {
         this.classOpt = null
+        this.loading = true
         // async function
         // failed to use Promise, probably due to Promise's high priority
         // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
         setImmediate(async () => {
           const dataJurusan = (await import('@/data/' + newJurusan + '.json')).default
           this.classOpt = dataJurusan
+          this.loading = false
         })
       }
     },
@@ -112,11 +117,8 @@ export default {
     }
   },
   components: {
-    CourseList: () => ({
-      component: import('@/components/CourseList'),
-      loading: CoursePlaceholder,
-      delay: 0
-    })
+    CourseList,
+    CoursePlaceholder
   }
 }
 </script>
