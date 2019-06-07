@@ -45,16 +45,7 @@
               </b-form-invalid-feedback>
             </template>
           </b-card>
-          <template v-if="classOpt && !loading">
-            <b-card
-              :title="className"
-              class="mb-3"
-              v-for="(curClass, className) in classOpt" :key="className"
-            >
-              <course :clas="curClass" :chosen="chosenClass[className]"></course>
-            </b-card>
-          </template>
-          <loader v-if="loading"></loader>
+          <course-list :classOpt="classOpt" v-if="classOpt" />
         </b-col>
       </b-row>
     </b-container>
@@ -63,9 +54,7 @@
 
 <script>
 import TableParser from '@/helper/TableParser'
-import Course from '@/components/Course'
-import Loader from '@/components/Loader'
-import { mapGetters } from 'vuex'
+import CoursePlaceholder from '@/components/CoursePlaceholder'
 import { INIT_CHOSEN_CLASS } from '@/store'
 import { setImmediate } from 'timers'
 
@@ -82,23 +71,17 @@ export default {
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: {},
-      loading: false
+      classOpt: null
     }
-  },
-  computed: {
-    ...mapGetters(['chosenClass'])
   },
   methods: {
     initReader () {
       const reader = new FileReader()
       reader.onload = e => {
-        this.loading = true
         const parser = new DOMParser()
         const htmlDoc = parser.parseFromString(e.target.result, 'text/html')
         const table = htmlDoc.querySelectorAll('table.box')
         this.classOpt = TableParser.parse(table)
-        this.loading = false
       }
       return reader
     }
@@ -114,14 +97,13 @@ export default {
     },
     jurusan: function (newJurusan, oldJurusan) {
       if (newJurusan) {
-        this.loading = true
+        this.classOpt = null
         // async function
         // failed to use Promise, probably due to Promise's high priority
         // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
         setImmediate(async () => {
           const dataJurusan = (await import('@/data/' + newJurusan + '.json')).default
           this.classOpt = dataJurusan
-          this.loading = false
         })
       }
     },
@@ -130,8 +112,11 @@ export default {
     }
   },
   components: {
-    Course,
-    Loader
+    CourseList: () => ({
+      component: import('@/components/CourseList'),
+      loading: CoursePlaceholder,
+      delay: 0
+    })
   }
 }
 </script>
