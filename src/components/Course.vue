@@ -3,7 +3,7 @@
     :title="clas.name"
     class="mb-3"
   >
-    <b-card-body class="btn-group-toggle btn-group-vertical btn-block">
+    <div class="btn-group-toggle btn-group-vertical btn-block">
       <b-button variant="outline-green-light"
         class="class-card"
         v-for="classIns in clas.options"
@@ -23,7 +23,7 @@
           </b-col>
         </b-row>
       </b-button>
-    </b-card-body>
+    </div>
   </b-card>
 </template>
 

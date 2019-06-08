@@ -1,16 +1,19 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" class="bg-green-dark">
-      <b-navbar-brand href="">Jadwal SIAK</b-navbar-brand>
+      <b-navbar-brand href>Jadwal SIAK</b-navbar-brand>
     </b-navbar>
     <b-container fluid>
       <b-row>
-        <b-col id="jadwal-tersimpan" cols="12" md="3"
-          order="2" order-md="1" class="bg-green-light text-white"
+        <b-col
+          id="jadwal-tersimpan"
+          cols="12"
+          md="3"
+          class="bg-green-light text-white"
         >
-          <h3>Jadwal Tersimpan</h3>
+          <jadwal-tersimpan ref="jadwalTersimpan"/>
         </b-col>
-        <b-col id="buat-jadwal" cols="12" md="9" order="1" order-md="2">
+        <b-col id="buat-jadwal" cols="12" md="9">
           <h3>Buat Jadwal</h3>
           <b-card title="Cari Pilihan Jadwalmu" tag="article" class="mb-2">
             <b-form v-if="!file">
@@ -40,13 +43,28 @@
                 placeholder="Unggah jadwal"
                 drop-placeholder="Letakkan di sini"
               />
-              <b-form-invalid-feedback :state="validHtmlFile">
-                Pastikan file yang Anda unggah merupakan file HTML.
-              </b-form-invalid-feedback>
+              <b-form-invalid-feedback
+                :state="validHtmlFile"
+              >Pastikan file yang Anda unggah merupakan file HTML.</b-form-invalid-feedback>
             </template>
           </b-card>
-          <course-list v-if="classOpt" :classOpt="classOpt" />
-          <course-placeholder v-else />
+          <course-list v-if="classOpt" :classOpt="classOpt"/>
+          <course-placeholder v-else/>
+          <b-form inline v-if="!isEmptyObject(classOpt)">
+            <b-button variant="green-dark" @click="simpanJadwal">Simpan</b-button>
+            <b-input
+              class="mb-2 mr-sm-2 mb-sm-0"
+              :placeholder="namaJadwalDefault"
+              v-model="namaJadwal"
+              :state="validNamaJadwal"
+              required
+            />
+          </b-form>
+          <div class="text-right">
+            <b-form-invalid-feedback
+              :state="validNamaJadwal"
+            >Kamu telah memiliki jadwal dengan nama yang sama.</b-form-invalid-feedback>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -55,10 +73,19 @@
 
 <script>
 import TableParser from '@/helper/TableParser'
+import {
+  getObjectOrArray,
+  addArrayElement,
+  addObjectProperty,
+  JADWAL_LIST,
+  NAMA_JADWAL_LIST
+} from '@/helper/storage'
 import CoursePlaceholder from '@/components/CoursePlaceholder'
 import CourseList from '@/components/CourseList'
+import JadwalTersimpan from '@/components/JadwalTersimpan'
 import { INIT_CHOSEN_CLASS } from '@/store'
 import { setImmediate } from 'timers'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'JadwalSiak',
@@ -73,7 +100,9 @@ export default {
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: {}
+      classOpt: {},
+      namaJadwal: null,
+      validNamaJadwal: null
     }
   },
   methods: {
@@ -86,6 +115,21 @@ export default {
         this.classOpt = TableParser.parse(table)
       }
       return reader
+    },
+    simpanJadwal () {
+      const nama = this.namaJadwal || this.namaJadwalDefault
+      const existingJadwal = getObjectOrArray(JADWAL_LIST)
+      if (existingJadwal && nama in existingJadwal) {
+        this.validNamaJadwal = false
+      } else {
+        this.validNamaJadwal = true
+        addArrayElement(NAMA_JADWAL_LIST, nama)
+        addObjectProperty(JADWAL_LIST, nama, {
+          classOpt: this.classOpt,
+          chosenClass: this.chosenClass
+        })
+        this.$refs.jadwalTersimpan.updateNamaJadwalList()
+      }
     }
   },
   watch: {
@@ -106,32 +150,44 @@ export default {
         // failed to use Promise, probably due to Promise's high priority
         // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
         setImmediate(async () => {
-          const dataJurusan = (await import('@/data/' + newJurusan + '.json')).default
+          const dataJurusan = (await import('@/data/' + newJurusan + '.json'))
+            .default
           this.classOpt = dataJurusan
           this.loading = false
         })
       }
     },
     classOpt: function (newClassOpt, oldClassOpt) {
-      this.$store.dispatch(INIT_CHOSEN_CLASS, Object.keys(newClassOpt))
+      if (newClassOpt) {
+        this.$store.dispatch(INIT_CHOSEN_CLASS, Object.keys(newClassOpt))
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['chosenClass']),
+    namaJadwalDefault: function () {
+      const date = new Date()
+      return (
+        'Jadwal ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+      )
     }
   },
   components: {
     CourseList,
-    CoursePlaceholder
+    CoursePlaceholder,
+    JadwalTersimpan
   }
 }
 </script>
 
 <style scoped>
 #jadwal-tersimpan {
-  min-height: 700px;
   padding: 2rem;
   text-align: center;
 }
 
 #buat-jadwal {
-  min-height: 700px;
+  min-height: 650px;
   padding: 2rem;
   text-align: center;
 }
@@ -141,5 +197,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+form {
+  flex-flow: row-reverse;
 }
 </style>

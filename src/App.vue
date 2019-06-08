@@ -4,6 +4,7 @@
 
 <script>
 import './bootstrap'
+import './mixin'
 import store from './store'
 import JadwalSiak from '@/components/JadwalSiak'
 
