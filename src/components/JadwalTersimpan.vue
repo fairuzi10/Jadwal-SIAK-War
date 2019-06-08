@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div id="jadwal-tersimpan">
     <h3>Jadwal Tersimpan</h3>
     <hr class="white-border"/>
     <div v-if="isEmptyArray(namaJadwalList)">
@@ -46,6 +46,11 @@ export default {
 </script>
 
 <style scoped>
+#jadwal-tersimpan {
+  padding: 2rem;
+  text-align: center;
+}
+
 .card-jadwal {
   font-size: 0.9rem;
   font-weight: bold;
