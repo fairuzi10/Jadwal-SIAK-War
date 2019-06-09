@@ -71,6 +71,7 @@ import {
 
 export default {
   name: 'buat-jadwal',
+  props: ['updateNamaJadwalList'],
   data () {
     return {
       file: null,
@@ -110,7 +111,7 @@ export default {
           classOpt: this.classOpt,
           chosenClass: this.chosenClass
         })
-        this.$refs.jadwalTersimpan.updateNamaJadwalList()
+        this.updateNamaJadwalList()
       }
     }
   },

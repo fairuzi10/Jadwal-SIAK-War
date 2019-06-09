@@ -20,31 +20,14 @@
         </div>
       </div>
     </b-card>
+    <b-button variant="green-dark" block @click="showBuatJadwal">Buat Jadwal Baru</b-button>
   </div>
 </template>
 
 <script>
-import {
-  getObjectOrArray,
-  NAMA_JADWAL_LIST
-} from '@/helper/storage'
-
 export default {
   name: 'jadwal-tersimpan',
-  props: ['updateJadwalDilihat'],
-  data () {
-    return {
-      namaJadwalList: null
-    }
-  },
-  methods: {
-    updateNamaJadwalList () {
-      this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
-    }
-  },
-  created () {
-    this.updateNamaJadwalList()
-  }
+  props: ['updateJadwalDilihat', 'showBuatJadwal', 'namaJadwalList', 'updateNamaJadwaList']
 }
 </script>
 

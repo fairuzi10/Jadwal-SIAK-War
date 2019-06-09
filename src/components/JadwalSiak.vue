@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" class="bg-green-dark">
-      <b-navbar-brand href>Jadwal SIAK</b-navbar-brand>
+      <b-navbar-brand>Jadwal SIAK</b-navbar-brand>
     </b-navbar>
     <b-container fluid>
       <b-row>
@@ -13,13 +13,15 @@
         >
           <jadwal-tersimpan ref="jadwalTersimpan"
             :updateJadwalDilihat="updateJadwalDilihat"
+            :showBuatJadwal="showBuatJadwal"
+            :namaJadwalList="namaJadwalList"
           />
         </b-col>
         <b-col id="lihat-jadwal-wrapper" cols="12" md="9" v-if="jadwalDilihat" >
           <lihat-jadwal :namaJadwal="jadwalDilihat"/>
         </b-col>
         <b-col cols="12" md="9" v-else >
-          <buat-jadwal />
+          <buat-jadwal :updateNamaJadwalList="updateNamaJadwalList"/>
         </b-col>
       </b-row>
     </b-container>
@@ -30,17 +32,31 @@
 import JadwalTersimpan from '@/components/JadwalTersimpan'
 import BuatJadwal from '@/components/BuatJadwal'
 import LihatJadwal from '@/components/LihatJadwal'
+import {
+  getObjectOrArray,
+  NAMA_JADWAL_LIST
+} from '@/helper/storage'
 
 export default {
   name: 'JadwalSiak',
   data () {
     return {
-      jadwalDilihat: null
+      jadwalDilihat: null,
+      namaJadwalList: null
     }
+  },
+  created () {
+    this.updateNamaJadwalList()
   },
   methods: {
     updateJadwalDilihat (namaJadwal) {
       this.jadwalDilihat = namaJadwal
+    },
+    showBuatJadwal () {
+      this.jadwalDilihat = null
+    },
+    updateNamaJadwalList () {
+      this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
     }
   },
   components: {
