@@ -60,6 +60,7 @@ export default {
     },
     showBuatJadwal () {
       this.updateJadwalDilihat(null)
+      this.scrollToTop()
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)

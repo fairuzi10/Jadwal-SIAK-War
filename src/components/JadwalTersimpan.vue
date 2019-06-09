@@ -16,7 +16,6 @@
         <div id="choose-jadwal">
         <b-button variant="green-light" size="sm"
           @click="select(namaJadwal)"
-          :class="{ disabled: jadwalDilihat === namaJadwal }"
         >Lihat</b-button>
         <b-button variant="green-dark" size="sm">Ubah</b-button>
         </div>
@@ -24,7 +23,6 @@
     </b-card>
     <b-button variant="green-dark" block
       @click="showBuatJadwal"
-      :class="{ disabled: !jadwalDilihat }"
     >Buat Jadwal Baru</b-button>
   </div>
 </template>
@@ -42,6 +40,7 @@ export default {
   methods: {
     select (namaJadwal) {
       this.updateJadwalDilihat(namaJadwal)
+      this.scrollToTop()
     }
   }
 }

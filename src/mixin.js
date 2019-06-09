@@ -12,6 +12,13 @@ Vue.mixin({
       return str.split(' ')
         .map(substr => substr.charAt(0).toUpperCase() + substr.substring(1))
         .join(' ')
+    },
+    scrollToTop () {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
     }
   }
 })
