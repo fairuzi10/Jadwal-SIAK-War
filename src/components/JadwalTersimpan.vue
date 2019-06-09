@@ -7,6 +7,7 @@
     </div>
     <b-card
       class="mb-3 text-green-dark card-jadwal"
+      :class="{ selected: jadwalDilihat === namaJadwal }"
       v-for="namaJadwal in namaJadwalList"
       :key="namaJadwal"
     >
@@ -14,24 +15,39 @@
         {{namaJadwal}}
         <div id="choose-jadwal">
         <b-button variant="green-light" size="sm"
-          @click="updateJadwalDilihat(namaJadwal)"
+          @click="select(namaJadwal)"
+          :class="{ disabled: jadwalDilihat === namaJadwal }"
         >Lihat</b-button>
         <b-button variant="green-dark" size="sm">Ubah</b-button>
         </div>
       </div>
     </b-card>
-    <b-button variant="green-dark" block @click="showBuatJadwal">Buat Jadwal Baru</b-button>
+    <b-button variant="green-dark" block
+      @click="showBuatJadwal"
+      :class="{ disabled: !jadwalDilihat }"
+    >Buat Jadwal Baru</b-button>
   </div>
 </template>
 
 <script>
 export default {
   name: 'jadwal-tersimpan',
-  props: ['updateJadwalDilihat', 'showBuatJadwal', 'namaJadwalList', 'updateNamaJadwaList']
+  props: [
+    'updateJadwalDilihat',
+    'showBuatJadwal',
+    'namaJadwalList',
+    'updateNamaJadwaList',
+    'jadwalDilihat'
+  ],
+  methods: {
+    select (namaJadwal) {
+      this.updateJadwalDilihat(namaJadwal)
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #jadwal-tersimpan {
   padding: 2rem;
   text-align: center;
@@ -48,5 +64,9 @@ export default {
 
 .white-border {
   border-color: white;
+}
+
+.selected {
+  background-color: $white-selected;
 }
 </style>

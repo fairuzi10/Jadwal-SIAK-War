@@ -15,6 +15,7 @@
             :updateJadwalDilihat="updateJadwalDilihat"
             :showBuatJadwal="showBuatJadwal"
             :namaJadwalList="namaJadwalList"
+            :jadwalDilihat="jadwalDilihat"
           />
         </b-col>
         <b-col :class="{ 'lihat-jadwal-wrapper': jadwalDilihat }" cols="12" md="9" >
@@ -58,7 +59,7 @@ export default {
       this.jadwalDilihat = namaJadwal
     },
     showBuatJadwal () {
-      this.jadwalDilihat = null
+      this.updateJadwalDilihat(null)
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)

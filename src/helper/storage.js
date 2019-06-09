@@ -3,7 +3,11 @@ export const NAMA_JADWAL_LIST = 'namaJadwalList'
 export const LAST_SEEN_JADWAL = 'lastSeenJadwal'
 
 export const setObjectOrArray = function (key, value) {
-  localStorage.setItem(key, JSON.stringify(value))
+  if (value === null) {
+    localStorage.removeItem(value)
+  } else {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
 }
 
 export const getObjectOrArray = function (key) {
@@ -26,5 +30,9 @@ export const getItem = function (key) {
 }
 
 export const setItem = function (key, value) {
-  return localStorage.setItem(key, value)
+  if (value === null) {
+    localStorage.removeItem(key)
+  } else {
+    return localStorage.setItem(key, value)
+  }
 }
