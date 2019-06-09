@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar toggleable="lg" type="dark" class="bg-green-dark">
-      <b-navbar-brand>Jadwal SIAK</b-navbar-brand>
+      <b-navbar-brand href=".">Jadwal SIAK</b-navbar-brand>
     </b-navbar>
     <b-container fluid>
       <b-row>
@@ -34,7 +34,10 @@ import BuatJadwal from '@/components/BuatJadwal'
 import LihatJadwal from '@/components/LihatJadwal'
 import {
   getObjectOrArray,
-  NAMA_JADWAL_LIST
+  NAMA_JADWAL_LIST,
+  getItem,
+  setItem,
+  LAST_SEEN_JADWAL
 } from '@/helper/storage'
 
 export default {
@@ -47,9 +50,11 @@ export default {
   },
   created () {
     this.updateNamaJadwalList()
+    this.getLastSeenJadwal()
   },
   methods: {
     updateJadwalDilihat (namaJadwal) {
+      setItem(LAST_SEEN_JADWAL, namaJadwal)
       this.jadwalDilihat = namaJadwal
     },
     showBuatJadwal () {
@@ -57,6 +62,9 @@ export default {
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
+    },
+    getLastSeenJadwal () {
+      this.jadwalDilihat = getItem(LAST_SEEN_JADWAL)
     }
   },
   components: {
