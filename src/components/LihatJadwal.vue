@@ -43,7 +43,6 @@ export default {
   data () {
     return {
       listHari: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'],
-      listJam: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
       // need to sync manually with scss variable
       barisJamHeight: 50
     }
@@ -63,6 +62,13 @@ export default {
       const waktuAkhir = waktu.substr(6, 5)
       const durasi = this.waktuDalamJam(waktuAkhir) - this.waktuDalamJam(waktuAwal)
       return durasi * this.barisJamHeight + 'px'
+    },
+    generateList (from, to) {
+      const result = []
+      for (let i = from; i <= to; i++) {
+        result.push(i)
+      }
+      return result
     }
   },
   computed: {
@@ -104,6 +110,24 @@ export default {
           return result
         }
       }, initObject)
+    },
+    listJam () {
+      let min = 24
+      let max = 0
+      const chosen = this.jadwal.chosenClass
+      Object.keys(chosen).forEach(key => {
+        if (chosen[key]) {
+          const clas = chosen[key]
+          clas['WAKTU'].forEach((hariwaktu, idx) => {
+            const waktu = hariwaktu.split(', ')[1]
+            const jamAwal = Number(waktu.substr(0, 2))
+            const jamAkhir = Number(waktu.substr(6, 2)) + 1
+            min = Math.min(min, jamAwal)
+            max = Math.max(max, jamAkhir)
+          })
+        }
+      })
+      return this.generateList(min, max)
     }
   }
 }
@@ -123,9 +147,13 @@ $baris-jam-height: 50px;
 
 .baris-jam {
   height: $baris-jam-height;
-  border-left: 1px solid $green-dark;
+
+  &:nth-child(3) {
+    border-top: 1px dashed $green-dark;
+  }
 
   &:not(:last-child) {
+    border-left: 1px solid $green-dark;
     border-bottom: 1px dashed $green-dark;
   }
 }
