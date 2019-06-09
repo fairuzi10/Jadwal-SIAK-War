@@ -15,9 +15,11 @@
             :updateJadwalDilihat="updateJadwalDilihat"
           />
         </b-col>
-        <b-col id="buat-jadwal" cols="12" md="9">
-          <lihat-jadwal v-if="jadwalDilihat" :namaJadwal="jadwalDilihat"/>
-          <buat-jadwal v-else />
+        <b-col id="lihat-jadwal-wrapper" cols="12" md="9" v-if="jadwalDilihat" >
+          <lihat-jadwal :namaJadwal="jadwalDilihat"/>
+        </b-col>
+        <b-col cols="12" md="9" v-else >
+          <buat-jadwal />
         </b-col>
       </b-row>
     </b-container>
@@ -55,5 +57,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+#lihat-jadwal-wrapper {
+  /* special case, for mobile view */
+  padding: 0;
 }
 </style>

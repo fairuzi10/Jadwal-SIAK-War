@@ -39,7 +39,7 @@
     <b-form inline v-if="!isEmptyObject(classOpt)">
       <b-button variant="green-dark" @click="simpanJadwal">Simpan</b-button>
       <b-input
-        class="mb-2 mr-sm-2 mb-sm-0"
+        class="mr-2"
         :placeholder="namaJadwalDefault"
         v-model="namaJadwal"
         :state="validNamaJadwal"
@@ -164,7 +164,7 @@ export default {
 <style lang="scss" scoped>
 #buat-jadwal {
   min-height: $min-window-height;
-  padding: 2rem;
+  padding: 2rem 0;
   text-align: center;
 }
 

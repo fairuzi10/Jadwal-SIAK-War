@@ -1,15 +1,15 @@
 <template>
   <div id="lihat-jadwal">
-    <h2>{{namaJadwal}}</h2>
+    <h4>{{namaJadwal}}</h4>
     <div class="baris">
       <div id="kolom-penanda-jam">
         <div class="baris-penanda-jam" v-for="jam in listJam" :key="jam + '-baris-penanda'">
-          {{jam + '.00'}}
+          <strong>{{jam + '.00'}}</strong>
         </div>
       </div>
       <div class="baris" id="kolom-wrapper">
         <div class="kolom-hari" v-for="hari in listHari" :key="hari">
-          {{capitalize(hari)}}
+          <span class="hari">{{capitalize(hari)}}</span>
           <div class="anceran">
             <div class="posisi-kotak-jadwal"
               v-for="kelas in chosenJadwalGroupedByDay[hari]"
@@ -126,7 +126,7 @@ $baris-jam-height: 50px;
   border-left: 1px solid $green-dark;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $green-dark;
+    border-bottom: 1px dashed $green-dark;
   }
 }
 
@@ -137,7 +137,6 @@ $baris-jam-height: 50px;
 #kolom-wrapper {
   flex-grow: 1;
   max-width: 100%;
-  // min-width: 500px;
 }
 
 .anceran {
@@ -147,7 +146,17 @@ $baris-jam-height: 50px;
 .posisi-kotak-jadwal {
   position: absolute;
   width: 100%;
-  padding: 0 0.25rem;
+  padding: 0 0.1rem 0 0.2rem;
+}
+
+.hari {
+  font-size: 0.8rem;
+  @include sm {
+    font-size: 0.9rem;
+  }
+  @include md {
+    font-size: 1rem;
+  }
 }
 
 #kolom-penanda-jam {
@@ -184,7 +193,12 @@ $baris-jam-height: 50px;
 
 #lihat-jadwal {
   min-height: $min-window-height;
-  padding: 3rem 0;
+  padding: 3rem 0.25rem;
   text-align: center;
+
+  @include sm {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 </style>

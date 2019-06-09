@@ -36,8 +36,9 @@ function enableShadowCss (config) {
 
 module.exports = {
   devServer: {
-    compress: true,
-    public: 'fairuzi.localhost.run'
+    allowedHosts: [
+      '.localhost.run'
+    ]
   },
   // https://cli.vuejs.org/guide/webpack.html#chaining-advanced
   chainWebpack: config => {

@@ -9,7 +9,7 @@
         <b-col cols="3" class="placeholder big empty px-2" />
       </b-row>
 
-      <b-card-body>
+      <div class="ph-btn-group">
         <div class="ph-btn" v-for="i in 3" :key="i">
           <b-row>
             <b-col cols="2" class="placeholder px-2" />
@@ -21,7 +21,7 @@
             <b-col cols="3" class="placeholder px-2" />
           </b-row>
         </div>
-      </b-card-body>
+      </div>
     </div>
   </b-card>
 </template>
@@ -49,6 +49,10 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+}
+
+.card-body {
+  padding: 0.5rem;
 }
 
 .row {
