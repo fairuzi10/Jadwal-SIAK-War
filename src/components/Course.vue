@@ -9,7 +9,7 @@
         v-for="classIns in clas.options"
         :key="classIns.NO"
         :class="{ active: chosen == classIns }"
-        @click="updateChosenClassIns(classIns)"
+        @click="updateChosenClassIns(clas.name, classIns)"
       >
         <b-row>
           <b-col cols="2" class="kolom-info">
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import { UPDATE_CHOSEN_CLASS_INS } from '@/store'
-
 export default {
   name: 'course',
   props: {
@@ -37,16 +35,8 @@ export default {
       type: Object,
       required: true
     },
-    chosen: Object
-  },
-  methods: {
-    updateChosenClassIns (classIns) {
-      this.$store.dispatch(UPDATE_CHOSEN_CLASS_INS, {
-        className: this.clas.name,
-        // if selected twice, unselect
-        selected: classIns === this.chosen ? null : classIns
-      })
-    }
+    chosen: Object,
+    updateChosenClassIns: Function
   }
 }
 </script>
