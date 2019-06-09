@@ -19,6 +19,9 @@ Vue.mixin({
         left: 0,
         behavior: 'smooth'
       })
+    },
+    scrollIntoView (ref) {
+      ref.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   }
 })

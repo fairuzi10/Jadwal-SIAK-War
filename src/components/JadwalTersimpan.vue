@@ -35,12 +35,13 @@ export default {
     'showBuatJadwal',
     'namaJadwalList',
     'updateNamaJadwaList',
-    'jadwalDilihat'
+    'jadwalDilihat',
+    'topView'
   ],
   methods: {
     select (namaJadwal) {
       this.updateJadwalDilihat(namaJadwal)
-      this.scrollToTop()
+      this.scrollIntoView(this.topView)
     }
   }
 }

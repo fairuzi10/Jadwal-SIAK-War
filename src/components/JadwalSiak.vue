@@ -16,9 +16,13 @@
             :showBuatJadwal="showBuatJadwal"
             :namaJadwalList="namaJadwalList"
             :jadwalDilihat="jadwalDilihat"
+            :topView="$refs.topView"
           />
         </b-col>
-        <b-col :class="{ 'lihat-jadwal-wrapper': jadwalDilihat }" cols="12" md="9" >
+        <b-col :class="{ 'lihat-jadwal-wrapper': jadwalDilihat }"
+          cols="12" md="9"
+          ref="topView"
+        >
           <keep-alive>
             <lihat-jadwal :namaJadwal="jadwalDilihat" v-if="jadwalDilihat" />
             <buat-jadwal :updateNamaJadwalList="updateNamaJadwalList" v-else />
@@ -60,7 +64,7 @@ export default {
     },
     showBuatJadwal () {
       this.updateJadwalDilihat(null)
-      this.scrollToTop()
+      this.scrollIntoView(this.$refs.topView)
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
