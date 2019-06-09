@@ -13,7 +13,9 @@
       <div>
         {{namaJadwal}}
         <div id="choose-jadwal">
-        <b-button variant="green-light" size="sm">Lihat</b-button>
+        <b-button variant="green-light" size="sm"
+          @click="updateJadwalDilihat(namaJadwal)"
+        >Lihat</b-button>
         <b-button variant="green-dark" size="sm">Ubah</b-button>
         </div>
       </div>
@@ -29,6 +31,7 @@ import {
 
 export default {
   name: 'jadwal-tersimpan',
+  props: ['updateJadwalDilihat'],
   data () {
     return {
       namaJadwalList: null
@@ -57,7 +60,7 @@ export default {
 }
 
 #choose-jadwal > .btn {
-  margin: 0 2px;
+  margin: 2px;
 }
 
 .white-border {

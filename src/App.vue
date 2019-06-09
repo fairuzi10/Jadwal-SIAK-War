@@ -18,8 +18,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import '@/styles/variables.scss';
-
 $theme-colors: (
   "green-dark": $green-dark,
   "green-light": $green-light,

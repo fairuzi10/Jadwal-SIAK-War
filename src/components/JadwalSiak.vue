@@ -11,10 +11,13 @@
           md="3"
           class="bg-green-light text-white"
         >
-          <jadwal-tersimpan ref="jadwalTersimpan"/>
+          <jadwal-tersimpan ref="jadwalTersimpan"
+            :updateJadwalDilihat="updateJadwalDilihat"
+          />
         </b-col>
         <b-col id="buat-jadwal" cols="12" md="9">
-          <buat-jadwal />
+          <lihat-jadwal v-if="jadwalDilihat" :namaJadwal="jadwalDilihat"/>
+          <buat-jadwal v-else />
         </b-col>
       </b-row>
     </b-container>
@@ -24,12 +27,24 @@
 <script>
 import JadwalTersimpan from '@/components/JadwalTersimpan'
 import BuatJadwal from '@/components/BuatJadwal'
+import LihatJadwal from '@/components/LihatJadwal'
 
 export default {
   name: 'JadwalSiak',
+  data () {
+    return {
+      jadwalDilihat: null
+    }
+  },
+  methods: {
+    updateJadwalDilihat (namaJadwal) {
+      this.jadwalDilihat = namaJadwal
+    }
+  },
   components: {
     JadwalTersimpan,
-    BuatJadwal
+    BuatJadwal,
+    LihatJadwal
   }
 }
 </script>

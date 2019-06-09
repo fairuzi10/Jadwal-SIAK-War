@@ -161,9 +161,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 #buat-jadwal {
-  min-height: 650px;
+  min-height: $min-window-height;
   padding: 2rem;
   text-align: center;
 }
