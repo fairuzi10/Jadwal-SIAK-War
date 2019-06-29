@@ -181,6 +181,8 @@ export default {
     classOpt: function (newClassOpt, oldClassOpt) {
       if (newClassOpt) {
         this.$store.dispatch(INIT_CHOSEN_CLASS, Object.keys(newClassOpt))
+      } else {
+        this.$store.dispatch(INIT_CHOSEN_CLASS, [])
       }
     }
   },

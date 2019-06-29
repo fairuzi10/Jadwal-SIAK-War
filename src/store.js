@@ -19,6 +19,9 @@ const getters = {
 }
 
 const mutations = {
+  [INIT_CHOSEN_CLASS] (state) {
+    state.chosenClass = {}
+  },
   [SET_CHOSEN_CLASS] (state, { className, selected }) {
     Vue.set(state.chosenClass, className, selected)
   }
@@ -26,6 +29,7 @@ const mutations = {
 
 const actions = {
   [INIT_CHOSEN_CLASS] ({ commit }, classNames) {
+    commit(INIT_CHOSEN_CLASS)
     classNames.forEach(className => {
       commit(SET_CHOSEN_CLASS, { className, selected: null })
     })
