@@ -95,8 +95,8 @@
 </template>
 
 <script>
-import CourseList from '@/components/CourseList'
-import CoursePlaceholder from '@/components/CoursePlaceholder'
+import CourseList from './CourseList'
+import CoursePlaceholder from './CoursePlaceholder'
 import { mapGetters } from 'vuex'
 import { INIT_CHOSEN_CLASS } from '@/store'
 import TableParser from '@/helper/TableParser'

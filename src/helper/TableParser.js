@@ -22,7 +22,7 @@ const cleanifier = {
  * generates factory functions to convert table rows to objects,
  * based on the titles in the table's <thead>
  * @param  {Array[String]} headings the values of the table's <thead>
- * @return {Function}      a function that takes a table row and spits out an object
+ * @return {Function} a function that takes a table row and spits out an object
  */
 function factory (headings) {
   return function (row) {

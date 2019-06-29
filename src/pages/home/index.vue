@@ -55,9 +55,9 @@
 </template>
 
 <script>
-import JadwalTersimpan from '@/components/JadwalTersimpan'
-import BuatJadwal from '@/components/BuatJadwal'
-import LihatJadwal from '@/components/LihatJadwal'
+import JadwalTersimpan from './components/JadwalTersimpan'
+import BuatJadwal from './components/BuatJadwal'
+import LihatJadwal from './components/LihatJadwal'
 import {
   getObjectOrArray,
   NAMA_JADWAL_LIST,
@@ -113,7 +113,7 @@ body {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .15s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 </style>

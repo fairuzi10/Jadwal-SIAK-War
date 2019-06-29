@@ -1,12 +1,12 @@
 <template>
-  <jadwal-siak/>
+  <jadwal-siak />
 </template>
 
 <script>
 import './bootstrap'
 import './mixin'
 import store from './store'
-import JadwalSiak from '@/components/JadwalSiak'
+import JadwalSiak from '@/pages/home'
 
 export default {
   store,

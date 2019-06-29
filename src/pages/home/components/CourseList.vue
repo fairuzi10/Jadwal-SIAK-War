@@ -1,30 +1,38 @@
 <template>
   <div>
     <course
+      v-for="(curClass, className) in classOpt"
+      :key="className"
       :clas="curClass"
       :chosen="chosenClass[className]"
       class="mb-3"
-      v-for="(curClass, className) in classOpt" :key="className"
-      :updateChosenClassIns="updateChosenClassIns"
+      :update-chosen-class-ins="updateChosenClassIns"
     />
-    <b-modal id="conflict-modal"
+    <b-modal
+      id="conflict-modal"
       v-model="showModal"
       title="Jadwal Bentrok!"
-      headerTextVariant="light"
+      header-text-variant="light"
       ok-only
       ok-variant="green-dark"
-    ><div v-for="conflict in conflictList" :key="conflict">{{conflict}}</div>
+    >
+      <div
+        v-for="conflict in conflictList"
+        :key="conflict"
+      >
+        {{ conflict }}
+      </div>
     </b-modal>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import Course from '@/components/Course'
+import Course from './Course'
 import { UPDATE_CHOSEN_CLASS_INS } from '@/store'
 
 export default {
-  name: 'course-list',
+  name: 'CourseList',
   props: {
     classOpt: {
       type: Object,
