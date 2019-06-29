@@ -1,18 +1,18 @@
 <template>
-  <jadwal-siak />
+  <home />
 </template>
 
 <script>
 import './bootstrap'
 import './mixin'
 import store from './store'
-import JadwalSiak from '@/pages/home'
+import Home from '@/pages/home'
 
 export default {
   store,
   name: 'App',
   components: {
-    JadwalSiak
+    Home
   }
 }
 </script>

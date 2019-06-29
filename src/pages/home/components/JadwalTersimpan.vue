@@ -80,6 +80,7 @@ export default {
   &:hover {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, opacity 0.15s ease-in-out;
     opacity: 0.8;
+    color: $green-dark;
   }
   &:active:not(:disabled):not(.disabled) {
     color: $green-dark;
