@@ -16,21 +16,21 @@
         <div>
           {{ namaJadwal }}
           <div id="choose-jadwal">
-            <button
-              class="mt-2 bg-gradient-yellow"
-              @click="() => select(namaJadwal)"
+            <b-button
+              class="yellow-block-button"
+              @click="select(namaJadwal)"
             >
               Lihat
-            </button>
+            </b-button>
           </div>
         </div>
       </b-card>
-      <button
-        class="bg-gradient-yellow"
+      <b-button
+        class="yellow-block-button"
         @click="showBuatJadwal"
       >
         Buat Jadwal Baru
-      </button>
+      </b-button>
     </div>
   </div>
 </template>
@@ -38,18 +38,28 @@
 <script>
 export default {
   name: 'JadwalTersimpan',
-  props: [
-    'updateJadwalDilihat',
-    'showBuatJadwal',
-    'namaJadwalList',
-    'updateNamaJadwaList',
-    'jadwalDilihat',
-    'topView'
-  ],
+  props: {
+    updateJadwalDilihat: {
+      type: Function,
+      required: true
+    },
+    showBuatJadwal: {
+      type: Function,
+      required: true
+    },
+    namaJadwalList: {
+      type: Array,
+      required: true
+    },
+    jadwalDilihat: {
+      type: String,
+      default: null
+    }
+  },
   methods: {
     select: function (namaJadwal) {
       this.updateJadwalDilihat(namaJadwal)
-      window.document.getElementById('top-view').scrollIntoView({ block: 'start', behavior: 'smooth' })
+      this.scrollIntoView('lihat-jadwal')
     }
   }
 }
@@ -62,18 +72,17 @@ export default {
   flex: 1;
 }
 
-button {
-  border: 1px solid $green-dark;
-  padding: 0.375rem 0.75rem;
-  border-radius: 50rem !important;
+.yellow-block-button {
+  @include bg-gradient-yellow;
   display: block;
   width: 100%;
+  border-radius: 1.25rem;
   &:hover {
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, opacity 0.15s ease-in-out;
     opacity: 0.8;
   }
-  &:focus {
-    outline: 0;
+  &:active:not(:disabled):not(.disabled) {
+    color: $green-dark;
   }
 }
 

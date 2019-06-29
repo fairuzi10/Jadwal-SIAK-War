@@ -57,7 +57,12 @@ import {
 
 export default {
   name: 'LihatJadwal',
-  props: ['namaJadwal'],
+  props: {
+    namaJadwal: {
+      type: String,
+      default: null
+    }
+  },
   data () {
     return {
       listHari: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'],

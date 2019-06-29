@@ -19,12 +19,6 @@
           />
         </b-form-group>
       </b-form>
-      <select>
-        <option>Tes</option>
-        <option style=":hover{background-color: red}">
-          Tes lagi
-        </option>
-      </select>
 
       <template v-if="!jurusan">
         <b-card-text v-if="!file">
@@ -65,25 +59,30 @@
       v-if="classOpt"
       :class-opt="classOpt"
     />
-    <course-placeholder v-else />
-    <b-form
-      v-if="!isEmptyObject(classOpt)"
-      inline
-    >
-      <b-button
-        variant="green-dark"
-        @click="simpanJadwal"
+    <course-placeholder v-else-if="loading" />
+    <transition name="fade">
+      <b-form
+        v-if="!allValueOfObjectIsNull(chosenClass)"
+        inline
       >
-        Simpan
-      </b-button>
-      <b-input
-        v-model="namaJadwal"
-        class="mr-2"
-        :placeholder="namaJadwalDefault"
-        :state="validNamaJadwal"
-        required
-      />
-    </b-form>
+        <b-button
+          id="button-simpan-jadwal"
+          size="lg"
+          pill
+          class="px-5"
+          @click="simpanJadwal"
+        >
+          Simpan Jadwal
+        </b-button>
+        <b-input
+          v-model="namaJadwal"
+          class="mr-2"
+          :placeholder="namaJadwalDefault"
+          :state="validNamaJadwal"
+          required
+        />
+      </b-form>
+    </transition>
     <div class="text-right">
       <b-form-invalid-feedback
         :state="validNamaJadwal"
@@ -96,7 +95,7 @@
 
 <script>
 import CourseList from './CourseList'
-import CoursePlaceholder from './CoursePlaceholder'
+import CoursePlaceholder from './CourseList/Placeholder'
 import { mapGetters } from 'vuex'
 import { INIT_CHOSEN_CLASS } from '@/store'
 import TableParser from '@/helper/TableParser'
@@ -111,7 +110,19 @@ import {
 
 export default {
   name: 'BuatJadwal',
-  props: ['updateNamaJadwalList'],
+
+  components: {
+    CourseList,
+    CoursePlaceholder
+  },
+
+  props: {
+    updateNamaJadwalList: {
+      type: Function,
+      required: true
+    }
+  },
+
   data () {
     return {
       file: null,
@@ -125,7 +136,17 @@ export default {
       validHtmlFile: null,
       classOpt: {},
       namaJadwal: null,
-      validNamaJadwal: null
+      validNamaJadwal: null,
+      loading: false
+    }
+  },
+  computed: {
+    ...mapGetters(['chosenClass']),
+    namaJadwalDefault: function () {
+      const date = new Date()
+      return (
+        'Jadwal ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+      )
     }
   },
   watch: {
@@ -139,16 +160,20 @@ export default {
       }
     },
     jurusan: function (newJurusan, oldJurusan) {
+      this.classOpt = null
       if (newJurusan) {
-        this.classOpt = null
         this.loading = true
         // async function
         // failed to use Promise, probably due to Promise's high priority
         // more on this: https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/
         setImmediate(async () => {
-          const dataJurusan = (await import('@/data/' + newJurusan + '.json'))
-            .default
-          this.classOpt = dataJurusan
+          try {
+            const dataJurusan = (await import('@/data/' + newJurusan + '.json'))
+              .default
+            this.classOpt = dataJurusan
+          } catch (e) {
+            // TODO: error handling
+          }
           this.loading = false
         })
       }
@@ -185,19 +210,6 @@ export default {
         this.updateNamaJadwalList()
       }
     }
-  },
-  computed: {
-    ...mapGetters(['chosenClass']),
-    namaJadwalDefault: function () {
-      const date = new Date()
-      return (
-        'Jadwal ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
-      )
-    }
-  },
-  components: {
-    CourseList,
-    CoursePlaceholder
   }
 }
 </script>
@@ -213,21 +225,17 @@ form {
   flex-flow: row-reverse;
 }
 
-select {
-  display: inline-block;
-  width: 100%;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  appearance: none;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  vertical-align: middle;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  outline: 0;
-  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%23343a40' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px
+#button-simpan-jadwal {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  @include bg-gradient-navy-blue;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .15s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

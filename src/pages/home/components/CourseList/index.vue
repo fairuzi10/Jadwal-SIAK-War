@@ -33,6 +33,9 @@ import { UPDATE_CHOSEN_CLASS_INS } from '@/store'
 
 export default {
   name: 'CourseList',
+  components: {
+    Course
+  },
   props: {
     classOpt: {
       type: Object,
@@ -43,6 +46,14 @@ export default {
     return {
       conflictList: [],
       showModal: false
+    }
+  },
+  computed: {
+    ...mapGetters(['chosenClass'])
+  },
+  watch: {
+    conflictList: function (newList, oldList) {
+      this.showModal = newList.length > 0
     }
   },
   methods: {
@@ -93,23 +104,12 @@ export default {
       })
       return conflictList
     }
-  },
-  computed: {
-    ...mapGetters(['chosenClass'])
-  },
-  watch: {
-    conflictList: function (newList, oldList) {
-      this.showModal = newList.length > 0
-    }
-  },
-  components: {
-    Course
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .modal-header {
-  background: linear-gradient(40deg, #ED213A, #93291E);
+  background: $gradient-red;
 }
 </style>
