@@ -1,8 +1,4 @@
-$breakpoint-xs: 0;
-$breakpoint-sm: 576px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 992px;
-$breakpoint-xl: 1200px;
+@import "./variables.scss";
 
 @mixin xs {
   @media (min-width: #{$breakpoint-xs}) {
@@ -28,4 +24,13 @@ $breakpoint-xl: 1200px;
   @media (min-width: #{$breakpoint-xl}) {
     @content;
   }
+}
+
+@mixin bg-gradient-yellow {
+  background: $gradient-yellow;
+  color: $green-dark;
+}
+@mixin bg-gradient-navy-blue {
+  background: $gradient-navy-blue;
+  color: $white;
 }

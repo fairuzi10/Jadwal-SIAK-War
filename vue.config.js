@@ -50,6 +50,7 @@ module.exports = {
         data: `
           @import "@/styles/variables.scss";
           @import "@/styles/mixin.scss";
+          @import "@/styles/class.scss";
         `
       }
     }

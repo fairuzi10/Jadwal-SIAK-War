@@ -11,7 +11,6 @@
       v-model="showModal"
       title="Jadwal Bentrok!"
       headerTextVariant="light"
-      headerBgVariant="danger"
       ok-only
       ok-variant="green-dark"
     ><div v-for="conflict in conflictList" :key="conflict">{{conflict}}</div>
@@ -100,3 +99,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.modal-header {
+  background: linear-gradient(40deg, #ED213A, #93291E);
+}
+</style>

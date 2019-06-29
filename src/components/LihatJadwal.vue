@@ -1,30 +1,48 @@
 <template>
   <div id="lihat-jadwal">
-    <h4>{{namaJadwal}}</h4>
+    <h4>{{ namaJadwal }}</h4>
     <div class="baris">
       <div id="kolom-penanda-jam">
-        <div class="baris-penanda-jam" v-for="jam in listJam" :key="jam + '-baris-penanda'">
-          <strong>{{jam + '.00'}}</strong>
+        <div
+          v-for="jam in listJam"
+          :key="jam + '-baris-penanda'"
+          class="baris-penanda-jam"
+        >
+          <strong>{{ jam + '.00' }}</strong>
         </div>
       </div>
-      <div class="baris" id="kolom-wrapper">
-        <div class="kolom-hari" v-for="hari in listHari" :key="hari">
-          <span class="hari">{{capitalize(hari)}}</span>
+      <div
+        id="kolom-wrapper"
+        class="baris"
+      >
+        <div
+          v-for="hari in listHari"
+          :key="hari"
+          class="kolom-hari"
+        >
+          <span class="hari">{{ capitalize(hari) }}</span>
           <div class="anceran">
-            <div class="posisi-kotak-jadwal"
+            <div
               v-for="kelas in chosenJadwalGroupedByDay[hari]"
               :key="kelas.RUANG + '-' + kelas.WAKTU"
+              class="posisi-kotak-jadwal"
               :style="{top: waktuToTopOffset(kelas.WAKTU)}"
-            ><div class="kotak-jadwal"
+            >
+              <div
+                class="kotak-jadwal"
                 :style="{ height: waktuToHeight(kelas.WAKTU) }"
               >
-                <small>{{kelas.WAKTU}}</small>
-                <div><strong>{{kelas['NAMA KELAS'].replace('Kelas ', '')}}</strong></div>
-                <small>{{kelas.RUANG}}</small>
+                <small>{{ kelas.WAKTU }}</small>
+                <div><strong>{{ kelas['NAMA KELAS'].replace('Kelas ', '') }}</strong></div>
+                <small>{{ kelas.RUANG }}</small>
               </div>
             </div>
           </div>
-          <div class="baris-jam" v-for="jam in listJam" :key="jam + '-' + hari"></div>
+          <div
+            v-for="jam in listJam"
+            :key="jam + '-' + hari"
+            class="baris-jam"
+          />
         </div>
       </div>
     </div>
@@ -38,37 +56,13 @@ import {
 } from '@/helper/storage'
 
 export default {
-  name: 'lihat-jadwal',
+  name: 'LihatJadwal',
   props: ['namaJadwal'],
   data () {
     return {
       listHari: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'],
       // need to sync manually with scss variable
       barisJamHeight: 50
-    }
-  },
-  methods: {
-    waktuDalamJam (waktu) {
-      const jam = Number(waktu.substr(0, 2))
-      const menit = Number(waktu.substr(3, 2))
-      return jam + menit / 60
-    },
-    waktuToTopOffset (waktu) {
-      // start from jam 8
-      return (this.waktuDalamJam(waktu) - 8) * this.barisJamHeight + 'px'
-    },
-    waktuToHeight (waktu) {
-      const waktuAwal = waktu.substr(0, 5)
-      const waktuAkhir = waktu.substr(6, 5)
-      const durasi = this.waktuDalamJam(waktuAkhir) - this.waktuDalamJam(waktuAwal)
-      return durasi * this.barisJamHeight + 'px'
-    },
-    generateList (from, to) {
-      const result = []
-      for (let i = from; i <= to; i++) {
-        result.push(i)
-      }
-      return result
     }
   },
   computed: {
@@ -128,6 +122,30 @@ export default {
         }
       })
       return this.generateList(min, max)
+    }
+  },
+  methods: {
+    waktuDalamJam (waktu) {
+      const jam = Number(waktu.substr(0, 2))
+      const menit = Number(waktu.substr(3, 2))
+      return jam + menit / 60
+    },
+    waktuToTopOffset (waktu) {
+      // start from jam 8
+      return (this.waktuDalamJam(waktu) - 8) * this.barisJamHeight + 'px'
+    },
+    waktuToHeight (waktu) {
+      const waktuAwal = waktu.substr(0, 5)
+      const waktuAkhir = waktu.substr(6, 5)
+      const durasi = this.waktuDalamJam(waktuAkhir) - this.waktuDalamJam(waktuAwal)
+      return durasi * this.barisJamHeight + 'px'
+    },
+    generateList (from, to) {
+      const result = []
+      for (let i = from; i <= to; i++) {
+        result.push(i)
+      }
+      return result
     }
   }
 }
@@ -202,8 +220,8 @@ $baris-jam-height: 50px;
 }
 
 .kotak-jadwal {
+  @include bg-gradient-yellow;
   padding: 0.2rem;
-  background-color: $green-light;
   text-align: left;
   opacity: 0.9;
   border-radius: 0.25rem;

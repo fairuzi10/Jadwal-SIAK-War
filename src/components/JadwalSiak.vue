@@ -1,31 +1,52 @@
 <template>
   <div>
-    <b-navbar toggleable="lg" type="dark" class="bg-green-dark">
-      <b-navbar-brand href=".">Jadwal SIAK</b-navbar-brand>
+    <b-navbar
+      toggleable="lg"
+      class="bg-gradient-yellow"
+    >
+      <b-navbar-brand href=".">
+        Jadwal SIAK
+      </b-navbar-brand>
     </b-navbar>
-    <b-container fluid>
-      <b-row>
+    <b-container
+      fluid
+      class="px-0"
+    >
+      <b-row no-gutters>
         <b-col
-          id="jadwal-tersimpan"
           cols="12"
           md="3"
-          class="bg-green-light text-white"
+          class="d-flex"
         >
-          <jadwal-tersimpan ref="jadwalTersimpan"
-            :updateJadwalDilihat="updateJadwalDilihat"
-            :showBuatJadwal="showBuatJadwal"
-            :namaJadwalList="namaJadwalList"
-            :jadwalDilihat="jadwalDilihat"
-            :topView="$refs.topView"
+          <jadwal-tersimpan
+            ref="jadwalTersimpan"
+            :update-jadwal-dilihat="updateJadwalDilihat"
+            :show-buat-jadwal="showBuatJadwal"
+            :nama-jadwal-list="namaJadwalList"
+            :jadwal-dilihat="jadwalDilihat"
           />
         </b-col>
-        <b-col :class="{ 'lihat-jadwal-wrapper': jadwalDilihat }"
-          cols="12" md="9"
-          ref="topView"
+        <b-col
+          id="top-view"
+          cols="12"
+          md="9"
         >
           <keep-alive>
-            <lihat-jadwal :namaJadwal="jadwalDilihat" v-if="jadwalDilihat" />
-            <buat-jadwal :updateNamaJadwalList="updateNamaJadwalList" v-else />
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <lihat-jadwal
+                v-if="jadwalDilihat"
+                :key="jadwalDilihat"
+                :nama-jadwal="jadwalDilihat"
+              />
+              <buat-jadwal
+                v-else
+                key="buat-jadwal"
+                :update-nama-jadwal-list="updateNamaJadwalList"
+              />
+            </transition>
           </keep-alive>
         </b-col>
       </b-row>
@@ -47,6 +68,11 @@ import {
 
 export default {
   name: 'JadwalSiak',
+  components: {
+    JadwalTersimpan,
+    BuatJadwal,
+    LihatJadwal
+  },
   data () {
     return {
       jadwalDilihat: null,
@@ -64,7 +90,7 @@ export default {
     },
     showBuatJadwal () {
       this.updateJadwalDilihat(null)
-      this.scrollIntoView(this.$refs.topView)
+      window.document.getElementById('top-view').scrollIntoView({ block: 'start', behavior: 'smooth' })
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
@@ -72,11 +98,6 @@ export default {
     getLastSeenJadwal () {
       this.jadwalDilihat = getItem(LAST_SEEN_JADWAL)
     }
-  },
-  components: {
-    JadwalTersimpan,
-    BuatJadwal,
-    LihatJadwal
   }
 }
 </script>
@@ -88,8 +109,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-.lihat-jadwal-wrapper {
-  /* special case, for mobile view */
-  padding: 0;
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .15s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
