@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from 'fs'
 import tp from './helper/TableParser'
 import { JSDOM } from 'jsdom'
@@ -34,15 +35,12 @@ readFiles('data/raw/', function (filename, content) {
   const dataFilename = 'data/' + jurusan + '.json'
   fs.writeFile(dataFilename, JSON.stringify(jurusanData), function (err) {
     if (err) {
-      // eslint-disable-next-line no-console
       return console.error(err)
     }
-    // eslint-disable-next-line no-console
     console.log(dataFilename + ' was saved!')
   })
 }, function (err) {
   throw err
 }, function () {
-  // eslint-disable-next-line no-console
   console.log('Preprocessing completed')
 })
