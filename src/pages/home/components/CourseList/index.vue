@@ -1,7 +1,17 @@
 <template>
   <div>
+    <div class="filter-box">
+      <h5>Filter</h5>
+      <input
+        v-model="filter"
+        class="form-control"
+        type="text"
+        aria-describedby="filter-class"
+        placeholder="Filter nama kelas/dosen"
+      >
+    </div>
     <course
-      v-for="(curClass, className) in classOpt"
+      v-for="(curClass, className) in classFiltered"
       :key="className"
       :clas="curClass"
       :chosen="chosenClass[className]"
@@ -30,11 +40,13 @@
 import { mapGetters } from 'vuex'
 import Course from './Course'
 import { UPDATE_CHOSEN_CLASS_INS } from '@/store'
+import { BModal } from 'bootstrap-vue'
 
 export default {
   name: 'CourseList',
   components: {
-    Course
+    Course,
+    BModal
   },
   props: {
     classOpt: {
@@ -45,18 +57,52 @@ export default {
   data () {
     return {
       conflictList: [],
-      showModal: false
+      showModal: false,
+      filter: null,
+      classFiltered: { ...this.classOpt }
     }
   },
   computed: {
     ...mapGetters(['chosenClass'])
   },
   watch: {
-    conflictList: function (newList, oldList) {
+    conflictList (newList, oldList) {
       this.showModal = newList.length > 0
+    },
+    filter (newFilter, oldFilter) {
+      if (newFilter) {
+        const upperCasedFilter = newFilter.toUpperCase()
+        const filteredClassName = Object.keys(this.classOpt).filter(className =>
+          this.matchClassName(className, upperCasedFilter) ||
+          this.matchClassInsName(className, upperCasedFilter) ||
+          this.matchLecturerName(className, upperCasedFilter)
+        )
+        this.classFiltered = filteredClassName.reduce((acc, className) => ({
+          [className]: this.classOpt[className], ...acc
+        }), {})
+      } else {
+        this.classFiltered = { ...this.classOpt }
+      }
     }
   },
   methods: {
+    matchClassName (className, upperCasedFilter) {
+      const cleanClassName = className.replace('-', ' ').toUpperCase()
+      return cleanClassName.includes(upperCasedFilter)
+    },
+    matchClassInsName (className, upperCasedFilter) {
+      if (this.classOpt[className].options.length === 0) return false
+      const classInsName = this.classOpt[className].options[0]['NAMA KELAS']
+      const cleanClassInsName = classInsName.replace('-', '').toUpperCase()
+      return cleanClassInsName.includes(upperCasedFilter)
+    },
+    matchLecturerName (className, upperCasedFilter) {
+      const lecturersName = this.classOpt[className].options
+        .map(classIns => classIns['PENGAJAR'].join(', '))
+        .join(', ')
+      const cleanLecturersName = lecturersName.toUpperCase()
+      return cleanLecturersName.includes(upperCasedFilter)
+    },
     updateChosenClassIns (className, classIns) {
       this.conflictList = this.validateClasInsNotConflict(className, classIns)
       if (this.conflictList.length === 0) {
@@ -119,5 +165,13 @@ export default {
   &:hover {
     color: $light;
   }
+}
+
+.filter-box {
+  background-image: $gradient-yellow;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
 }
 </style>

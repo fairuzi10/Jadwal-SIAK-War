@@ -1,22 +1,11 @@
 <template>
-  <b-card
-    class="mb-3"
-  >
+  <div>
     <div class="blinked">
-      <b-row>
-        <b-col
-          cols="3"
-          class="placeholder big empty px-2"
-        />
-        <b-col
-          cols="6"
-          class="placeholder big px-2"
-        />
-        <b-col
-          cols="3"
-          class="placeholder big empty px-2"
-        />
-      </b-row>
+      <div class="row">
+        <div class="col-3 placeholder big empty px-2" />
+        <div class="col-6 placeholder big px-2" />
+        <div class="col-3 placeholder big empty px-2" />
+      </div>
 
       <div class="ph-btn-group">
         <div
@@ -24,40 +13,33 @@
           :key="i"
           class="ph-btn"
         >
-          <b-row>
-            <b-col
-              cols="2"
-              class="placeholder px-2"
+          <div class="row">
+            <div
+              class="col-2 placeholder px-2"
             />
-            <b-col
-              cols="1"
-              class="placeholder empty px-2"
+            <div
+              class="col-1 placeholder empty px-2"
             />
-            <b-col
-              cols="2"
-              class="placeholder px-2"
+            <div
+              class="col-2 placeholder px-2"
             />
-            <b-col
-              cols="1"
-              class="placeholder empty px-2"
+            <div
+              class="col-1 placeholder empty px-2"
             />
-            <b-col
-              cols="2"
-              class="placeholder px-2"
+            <div
+              class="col-2 placeholder px-2"
             />
-            <b-col
-              cols="1"
-              class="placeholder empty px-2"
+            <div
+              class="col-1 placeholder empty px-2"
             />
-            <b-col
-              cols="3"
-              class="placeholder px-2"
+            <div
+              class="col-3 placeholder px-2"
             />
-          </b-row>
+          </div>
         </div>
       </div>
     </div>
-  </b-card>
+  </div>
 </template>
 
 <style lang="scss" scoped>

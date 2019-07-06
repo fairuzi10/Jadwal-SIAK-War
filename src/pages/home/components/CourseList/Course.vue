@@ -4,7 +4,9 @@
   <div
     class="mb-4 course-card"
   >
-    <h5>{{ clas.name }}</h5>
+    <h5 class="text-center">
+      {{ clas.name }}
+    </h5>
     <div class="course">
       <div
         v-for="classIns in clas.options"
@@ -132,6 +134,13 @@ export default {
 .kolom-info {
   padding: 0 0.25rem;
   text-align: center;
+
+  &:first-child {
+    padding-left: 0.5rem;
+  }
+  &:last-child {
+    padding-right: 0.5rem;
+  }
 }
 
 .class-card:not(:disabled):not(.disabled).active {

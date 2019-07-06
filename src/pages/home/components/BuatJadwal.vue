@@ -62,7 +62,7 @@
     />
     <course-placeholder v-else-if="loading" />
 
-    <transition name="fade">
+    <!-- <transition name="fade">
       <b-form
         v-if="!allValueOfObjectIsNull(chosenClass)"
         inline
@@ -84,14 +84,14 @@
           required
         />
       </b-form>
-    </transition>
-    <div class="text-right">
+    </transition> -->
+    <!-- <div class="text-right">
       <b-form-invalid-feedback
         :state="validNamaJadwal"
       >
         Kamu telah memiliki jadwal dengan nama yang sama.
       </b-form-invalid-feedback>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -135,7 +135,7 @@ export default {
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: {},
+      classOpt: null,
       namaJadwal: null,
       validNamaJadwal: null,
       loading: false
@@ -228,7 +228,7 @@ export default {
 }
 
 #pilih-jurusan-form {
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: 1px solid $border-color;
   border-radius: $border-radius;
   padding: 1rem 2rem;
   margin-bottom: 2rem;
