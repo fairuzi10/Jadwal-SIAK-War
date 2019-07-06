@@ -1,5 +1,7 @@
 <template>
-  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+  <div class="lds-ring">
+<div/><div/><div/><div/>
+</div>
 </template>
 
 <style lang="scss" scoped>
@@ -18,14 +20,14 @@
   width: 150px;
   height: 150px;
   margin: 6px;
-  border: 20px solid $green-dark;
+  border: 20px solid $dark;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: $green-light transparent transparent transparent;
+  border-color: $border-color transparent transparent transparent;
 }
 .lds-ring div:nth-child(1) {
   animation-delay: -0.45s;
-  border-color: $green-dark
+  border-color: $dark
 }
 .lds-ring div:nth-child(2) {
   animation-delay: -0.3s;

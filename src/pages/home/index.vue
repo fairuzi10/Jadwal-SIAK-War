@@ -2,22 +2,20 @@
   <div>
     <b-navbar
       toggleable="lg"
-      class="bg-gradient-yellow"
+      variant="light"
     >
-      <b-navbar-brand href=".">
-        Jadwal SIAK
+      <b-navbar-brand
+        href="."
+        class="text-decoration-none"
+      >
+        <div id="navbar-logo">
+          Jadwal SIAK
+        </div>
       </b-navbar-brand>
     </b-navbar>
-    <b-container
-      fluid
-      class="px-0"
-    >
-      <b-row no-gutters>
-        <b-col
-          cols="12"
-          md="3"
-          class="d-flex"
-        >
+    <div class="container-fluid px-0">
+      <div class="row no-gutters">
+        <div class="col-12 col-md-3 d-flex">
           <jadwal-tersimpan
             ref="jadwalTersimpan"
             :update-jadwal-dilihat="updateJadwalDilihat"
@@ -25,11 +23,10 @@
             :nama-jadwal-list="namaJadwalList"
             :jadwal-dilihat="jadwalDilihat"
           />
-        </b-col>
-        <b-col
+        </div>
+        <div
           id="top-view"
-          cols="12"
-          md="9"
+          class="col-12 col-md-9"
         >
           <keep-alive>
             <transition
@@ -48,9 +45,9 @@
               />
             </transition>
           </keep-alive>
-        </b-col>
-      </b-row>
-    </b-container>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -65,13 +62,19 @@ import {
   setItem,
   LAST_SEEN_JADWAL
 } from '@/helper/storage'
+import {
+  BNavbar,
+  BNavbarBrand
+} from 'bootstrap-vue'
 
 export default {
   name: 'JadwalSiak',
   components: {
     JadwalTersimpan,
     BuatJadwal,
-    LihatJadwal
+    LihatJadwal,
+    BNavbar,
+    BNavbarBrand
   },
   data () {
     return {
@@ -107,7 +110,7 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $green-dark;
+  color: $dark;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -115,5 +118,22 @@ body {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+#navbar-logo {
+  background-image: $gradient-yellow;
+  padding: 0.25rem 1rem;
+  color: $dark;
+  font-weight: bold;
+  border-radius: 1rem;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.navbar {
+  z-index: 1;
+  box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
 }
 </style>

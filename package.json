@@ -29,11 +29,14 @@
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "braces": "^2.3.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "jsdom": "^15.1.1",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
+    "stylelint": "^10.1.0",
+    "stylelint-config-recommended": "^2.2.0",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.6.10"
   }

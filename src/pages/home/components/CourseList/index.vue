@@ -14,14 +14,14 @@
       title="Jadwal Bentrok!"
       header-text-variant="light"
       ok-only
-      ok-variant="green-dark"
+      ok-variant="red"
     >
+      <!-- eslint-disable vue/no-v-html -->
       <div
         v-for="conflict in conflictList"
         :key="conflict"
-      >
-        {{ conflict }}
-      </div>
+        v-html="conflict"
+      />
     </b-modal>
   </div>
 </template>
@@ -97,7 +97,7 @@ export default {
             const cmpWaktuAwal = getWaktuInMinute(cmpWaktu.substr(0, 5))
             const cmpWaktuAkhir = getWaktuInMinute(cmpWaktu.substr(6, 5))
             if (hari === cmpHari && !(cmpWaktuAkhir < waktuAwal || waktuAkhir < cmpWaktuAwal)) {
-              conflictList.push('Bentrok dengan ' + this.chosenClass[cmpClassName]['NAMA KELAS'] + ' pada ' + cmpHariwaktu)
+              conflictList.push('Bentrok dengan  <b>' + this.chosenClass[cmpClassName]['NAMA KELAS'] + '</b> pada <b>' + cmpHariwaktu + '</b>')
             }
           })
         }
@@ -111,5 +111,13 @@ export default {
 <style lang="scss">
 .modal-header {
   background: $gradient-red;
+}
+
+.btn.btn-red {
+  background: $gradient-red;
+  color: $light;
+  &:hover {
+    color: $light;
+  }
 }
 </style>

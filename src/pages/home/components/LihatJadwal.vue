@@ -172,12 +172,12 @@ $baris-jam-height: 50px;
   height: $baris-jam-height;
 
   &:nth-child(3) {
-    border-top: 1px dashed $green-dark;
+    border-top: 1px dashed $dark;
   }
 
   &:not(:last-child) {
-    border-left: 1px solid $green-dark;
-    border-bottom: 1px dashed $green-dark;
+    border-left: 1px solid $dark;
+    border-bottom: 1px dashed $dark;
   }
 }
 

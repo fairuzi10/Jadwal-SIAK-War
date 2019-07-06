@@ -66,7 +66,7 @@
 .ph-btn {
   width: 100%;
   border: 1px solid transparent;
-  border-color: $green-dark;
+  border-color: $border-color;
   border-radius: 0.25rem;
 
   &:not(:first-child) {

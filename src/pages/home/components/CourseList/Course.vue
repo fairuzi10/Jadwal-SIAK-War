@@ -1,9 +1,10 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <b-card
-    :title="clas.name"
-    class="mb-3 course-card"
+  <!-- eslint-disable vue/valid-v-html -->
+  <div
+    class="mb-4 course-card"
   >
+    <h5>{{ clas.name }}</h5>
     <div class="course">
       <div
         v-for="classIns in clas.options"
@@ -12,32 +13,28 @@
         :class="{ active: chosen == classIns }"
         @click="updateChosenClassIns(clas.name, classIns)"
       >
-        <b-row>
-          <b-col
-            cols="2"
-            class="kolom-info"
+        <div class="row">
+          <div
+            class="kolom-info kolom-kelas"
           >
             {{ classIns['NAMA KELAS'] }}
-          </b-col>
-          <b-col
-            cols="3"
-            class="kolom-info"
+          </div>
+          <div
+            class="kolom-info kolom-waktu"
             v-html="classIns.WAKTU.join('<br />')"
           />
-          <b-col
-            cols="2"
-            class="kolom-info"
+          <div
+            class="kolom-info kolom-ruang"
             v-html="classIns.RUANG.join('<br />')"
           />
-          <b-col
-            cols="5"
-            class="kolom-info"
+          <div
+            class="kolom-info kolom-pengajar"
             v-html="classIns.PENGAJAR.join('<br />')"
           />
-        </b-row>
+        </div>
       </div>
     </div>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -61,31 +58,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.kolom-kelas { width: 20% }
+.kolom-waktu { width: 30% }
+.kolom-ruang { width: 20% }
+.kolom-pengajar {width: 30% }
+
 .course {
-  border: 1px solid $green-dark;
-  border-radius: 0.25rem;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
 }
 
 .class-card {
   cursor: pointer;
   font-size: 0.5rem;
   padding: 0.2rem 0.75rem;
-  color: $green-dark;
+  color: $dark;
   background-color: $white;
   transition: background-color 0.15s ease-in-out;
 
   // to make the border from course visible
   &:first-child {
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
   }
   &:last-child {
-    border-bottom-left-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid $green-dark;
+    border-bottom: 1px solid $border-color;
   }
 
   // disable hover effect on mobile devices
@@ -93,17 +96,17 @@ export default {
     background-color: $white;
   }
   @include sm {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
   }
   @include md {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     &:hover {
       background-color: $yellow1;
-      color: $green-dark;
+      color: $dark;
     }
   }
   @include lg {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -112,7 +115,7 @@ export default {
 }
 
 .card-title {
-  color: $green-dark;
+  color: $dark;
   font-weight: bold;
   font-size: 0.8rem;
   @include sm {
@@ -128,15 +131,16 @@ export default {
 
 .kolom-info {
   padding: 0 0.25rem;
-}
-
-.class-card:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+  text-align: center;
 }
 
 .class-card:not(:disabled):not(.disabled).active {
   background-color: $yellow3;
-  color: $green-dark;
+  color: $dark;
+}
+
+.class-card:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
+  box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
 
 .class-card:not(:disabled):not(.disabled):not(.active) {

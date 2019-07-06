@@ -1,65 +1,67 @@
 <template>
   <div
     id="buat-jadwal"
-    class="p-3"
   >
-    <h3>Buat Jadwal</h3>
-    <b-card
-      title="Cari Pilihan Jadwalmu"
-      tag="article"
-      class="mb-2"
-    >
-      <b-form v-if="!file">
-        <b-form-group>
-          <b-form-select
-            id="input-jurusan"
-            v-model="jurusan"
-            :options="list_jurusan"
-            required
-          />
-        </b-form-group>
-      </b-form>
+    <h3 class="text-center">
+      Buat Jadwal
+    </h3>
 
+    <form id="pilih-jurusan-form">
+      <div
+        v-if="!file"
+        class="form-group"
+      >
+        <select
+          id="pilih-jurusan"
+          v-model="jurusan"
+          class="form-control"
+        >
+          <option
+            :value="null"
+            selected
+          >
+            Pilih Jurusanmu
+          </option>
+          <option
+            v-for="opsi_jurusan in list_jurusan"
+            :key="opsi_jurusan.value"
+            :value="opsi_jurusan.value"
+          >
+            {{ opsi_jurusan.label }}
+          </option>
+        </select>
+      </div>
       <template v-if="!jurusan">
-        <b-card-text v-if="!file">
+        <div class="text-center">
           Atau unggah jadwal jurusanmu
-          <b-button
-            id="help-upload"
-            href="#"
-            size="sm"
-            variant="info"
-            class="bg-green-dark"
+        </div>
+        <div class="custom-file">
+          <input
+            id="file-jadwal"
+            type="file"
+            class="custom-file-input"
+            @change="changeFile"
           >
-            ?
-          </b-button>
-          <b-tooltip
-            ref="tooltip"
-            target="help-upload"
-            placement="bottom"
-          >
-            Unggah file HTML dari SIAK-mu. Klik untuk info lebih
-            lanjut
-          </b-tooltip>
-        </b-card-text>
-
-        <b-form-file
-          v-model="file"
-          :state="validHtmlFile"
-          placeholder="Unggah jadwal"
-          drop-placeholder="Letakkan di sini"
-        />
-        <b-form-invalid-feedback
-          :state="validHtmlFile"
+          <label
+            class="custom-file-label"
+            for="file-jadwal"
+          >Unggah Jadwal</label>
+        </div>
+        <div
+          v-if="validHtmlFile === false"
+          class="invalid-feedback d-block"
         >
           Pastikan file yang Anda unggah merupakan file HTML.
-        </b-form-invalid-feedback>
+        </div>
       </template>
-    </b-card>
+    </form>
+
     <course-list
       v-if="classOpt"
       :class-opt="classOpt"
     />
     <course-placeholder v-else-if="loading" />
+
     <transition name="fade">
       <b-form
         v-if="!allValueOfObjectIsNull(chosenClass)"
@@ -128,9 +130,8 @@ export default {
       file: null,
       jurusan: null,
       list_jurusan: [
-        { text: 'Pilih Jurusanmu', value: null },
-        { text: 'Ilmu Komputer', value: 'ilmu-komputer' },
-        { text: 'Sistem Informasi', value: 'sistem-informasi' }
+        { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
+        { label: 'Sistem Informasi', value: 'sistem-informasi' }
       ],
       reader: this.initReader(),
       validHtmlFile: null,
@@ -153,6 +154,7 @@ export default {
     file: function (newFile, oldFile) {
       if (!newFile || newFile.type !== 'text/html') {
         this.validHtmlFile = false
+        this.classOpt = null
       } else {
         this.validHtmlFile = true
         this.classOpt = null
@@ -187,6 +189,9 @@ export default {
     }
   },
   methods: {
+    changeFile (event) {
+      this.file = event.target.files[0]
+    },
     initReader () {
       const reader = new FileReader()
       reader.onload = e => {
@@ -219,12 +224,20 @@ export default {
 <style lang="scss" scoped>
 #buat-jadwal {
   min-height: $min-window-height;
-  padding: 2rem 0;
-  text-align: center;
+  padding: 3rem 1rem;
 }
 
-form {
-  flex-flow: row-reverse;
+#pilih-jurusan-form {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: $border-radius;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 #button-simpan-jadwal {

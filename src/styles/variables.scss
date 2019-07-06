@@ -1,16 +1,22 @@
-$green-dark: #2c3e50;
-$green-light: #41b883;
-$green-light-faded: #9cdec1;
+$dark: #2c3e50;
+$light: #FFFFFF;
 $white: #ffffff;
-$white-selected: #d6d6d6;
-$grey3: #ced4da;
-$grey7: #495057;
+$grey0: #E6ECF0;
+$grey1: #DCDCDC	;
+$grey2: #D3D3D3;
+$grey3: #C0C0C0;
+$grey4: #A9A9A9;
+$grey5: #808080	;
+$grey6: #696969	;
 $yellow1: #ffff80;
 $yellow3: #ffff00;
 $yellow5: #f7d316;
 
+$border-color: rgba(0, 0, 0, 0.125);
+
 $gradient-navy-blue: linear-gradient(120deg, #2c3e50, #00478c);
 $gradient-yellow: linear-gradient(120deg, #f7d316 , #ffff00);
+$gradient-yellow-dark: linear-gradient(120deg, #c5a912 , #d6d601);
 $gradient-red: linear-gradient(120deg, #93291E, #ED213A);
 
 $yellow-transparent: rgba(255, 255, 0, 0.5);
@@ -23,3 +29,5 @@ $breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
 $breakpoint-xl: 1200px;
+
+$border-radius: 0.5rem;
