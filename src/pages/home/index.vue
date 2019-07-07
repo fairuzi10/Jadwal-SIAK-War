@@ -42,6 +42,10 @@
               key="buat-jadwal"
               :class-opt="classOpt"
               :update-nama-jadwal-list="updateNamaJadwalList"
+              :jurusan="jurusan"
+              :file="file"
+              @set-jurusan="jurusan = $event"
+              @set-file="file = $event"
               @set-class-opt="classOpt = $event"
             />
           </transition>
@@ -80,7 +84,9 @@ export default {
     return {
       jadwalDilihat: null,
       namaJadwalList: null,
-      classOpt: null
+      classOpt: null,
+      file: null,
+      jurusan: null
     }
   },
   created () {

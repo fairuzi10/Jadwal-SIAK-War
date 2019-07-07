@@ -13,19 +13,14 @@
       >
         <select
           id="pilih-jurusan"
-          v-model="jurusan"
           class="form-control"
+          @change="$emit('set-jurusan', $event.target.value)"
         >
-          <option
-            :value="null"
-            selected
-          >
-            Pilih Jurusanmu
-          </option>
           <option
             v-for="opsi_jurusan in list_jurusan"
             :key="opsi_jurusan.value"
             :value="opsi_jurusan.value"
+            :selected="opsi_jurusan.value === jurusan"
           >
             {{ opsi_jurusan.label }}
           </option>
@@ -45,7 +40,7 @@
           <label
             class="custom-file-label"
             for="file-jadwal"
-          >Unggah Jadwal</label>
+          >{{ file ? file.name : 'Unggah Jadwal' }}</label>
         </div>
         <div
           v-if="validHtmlFile === false"
@@ -150,14 +145,21 @@ export default {
     classOpt: {
       type: Object,
       default: null
+    },
+    file: {
+      type: Object,
+      default: null
+    },
+    jurusan: {
+      type: String,
+      default: null
     }
   },
 
   data () {
     return {
-      file: null,
-      jurusan: null,
       list_jurusan: [
+        { label: 'Pilih Jurusanmu', value: null },
         { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
         { label: 'Sistem Informasi', value: 'sistem-informasi' }
       ],
@@ -218,7 +220,7 @@ export default {
   },
   methods: {
     changeFile (event) {
-      this.file = event.target.files[0]
+      this.$emit('set-file', event.target.files[0])
     },
     initReader () {
       const reader = new FileReader()
