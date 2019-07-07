@@ -62,6 +62,16 @@
     />
     <course-placeholder v-else-if="loading" />
 
+    <transition name="fade">
+      <button
+        v-if="!allValueOfObjectIsNull(chosenClass)"
+        id="button-simpan-jadwal"
+        @click="showCurrentChosenTable = true"
+      >
+        Lihat Jadwal Sementara
+      </button>
+    </transition>
+
     <!-- <transition name="fade">
       <b-form
         v-if="!allValueOfObjectIsNull(chosenClass)"
@@ -92,6 +102,16 @@
         Kamu telah memiliki jadwal dengan nama yang sama.
       </b-form-invalid-feedback>
     </div> -->
+    <b-modal
+      v-model="showCurrentChosenTable"
+      title="Jadwal Sementara"
+      header-text-variant="dark"
+      header-class="modal-header-yellow"
+      ok-only
+      ok-variant="yellow"
+    >
+      <tabel-jadwal :jadwal="chosenClass" />
+    </b-modal>
   </div>
 </template>
 
@@ -109,13 +129,17 @@ import {
   JADWAL_LIST,
   NAMA_JADWAL_LIST
 } from '@/helper/storage'
+import { BModal } from 'bootstrap-vue'
+import TabelJadwal from './TabelJadwal'
 
 export default {
   name: 'BuatJadwal',
 
   components: {
     CourseList,
-    CoursePlaceholder
+    CoursePlaceholder,
+    BModal,
+    TabelJadwal
   },
 
   props: {
@@ -138,7 +162,8 @@ export default {
       classOpt: null,
       namaJadwal: null,
       validNamaJadwal: null,
-      loading: false
+      loading: false,
+      showCurrentChosenTable: false
     }
   },
   computed: {
@@ -222,6 +247,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 #buat-jadwal {
   min-height: $min-window-height;
   padding: 3rem 1rem;
@@ -244,7 +270,15 @@ export default {
   position: fixed;
   right: 20px;
   bottom: 20px;
-  @include bg-gradient-navy-blue;
+  border: 1px solid $yellow5;
+  border-radius: 2rem;
+  padding: 0.75rem 2rem;
+  outline: 0;
+  color: $dark;
+  background-image: $gradient-yellow;
+  &:hover {
+    background-image: $gradient-yellow-dark;
+  }
 }
 
 .fade-enter-active, .fade-leave-active {

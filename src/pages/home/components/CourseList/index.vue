@@ -23,6 +23,7 @@
       v-model="showModal"
       title="Jadwal Bentrok!"
       header-text-variant="light"
+      header-class="modal-header-red"
       ok-only
       ok-variant="red"
     >
@@ -154,24 +155,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.modal-header {
-  background: $gradient-red;
-}
-
-.btn.btn-red {
-  background: $gradient-red;
-  color: $light;
-  &:hover {
-    color: $light;
-  }
-}
-
+<style lang="scss" scoped>
 .filter-box {
-  background-image: $gradient-yellow;
+  background-color: $grey0;
   border: 1px solid $border-color;
   border-radius: $border-radius;
   padding: 1rem 2rem;
   margin-bottom: 2rem;
+  box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
 }
 </style>

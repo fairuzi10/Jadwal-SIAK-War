@@ -41,4 +41,29 @@ h4 {
 h5 {
   font-weight: bold;
 }
+
+.modal {
+  padding-left: 0 !important;
+}
+
+.modal-header-red {
+  background: $gradient-red;
+}
+.modal-header-yellow {
+  background: $gradient-yellow;
+}
+.btn.btn-red {
+  background: $gradient-red;
+  color: $light;
+  &:hover {
+    color: $light;
+  }
+}
+.btn.btn-yellow{
+  background: $gradient-yellow;
+  color: $dark;
+  &:hover {
+    color: $dark;
+  }
+}
 </style>
