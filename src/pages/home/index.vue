@@ -28,23 +28,23 @@
           id="top-view"
           class="col-12 col-md-9"
         >
-          <keep-alive>
-            <transition
-              name="fade"
-              mode="out-in"
-            >
-              <lihat-jadwal
-                v-if="jadwalDilihat"
-                :key="jadwalDilihat"
-                :nama-jadwal="jadwalDilihat"
-              />
-              <buat-jadwal
-                v-else
-                key="buat-jadwal"
-                :update-nama-jadwal-list="updateNamaJadwalList"
-              />
-            </transition>
-          </keep-alive>
+          <transition
+            name="fade"
+            mode="out-in"
+          >
+            <lihat-jadwal
+              v-if="jadwalDilihat"
+              :key="jadwalDilihat"
+              :nama-jadwal="jadwalDilihat"
+            />
+            <buat-jadwal
+              v-else
+              key="buat-jadwal"
+              :class-opt="classOpt"
+              :update-nama-jadwal-list="updateNamaJadwalList"
+              @set-class-opt="classOpt = $event"
+            />
+          </transition>
         </div>
       </div>
     </div>
@@ -79,7 +79,8 @@ export default {
   data () {
     return {
       jadwalDilihat: null,
-      namaJadwalList: null
+      namaJadwalList: null,
+      classOpt: null
     }
   },
   created () {

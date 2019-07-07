@@ -146,6 +146,10 @@ export default {
     updateNamaJadwalList: {
       type: Function,
       required: true
+    },
+    classOpt: {
+      type: Object,
+      default: null
     }
   },
 
@@ -159,7 +163,6 @@ export default {
       ],
       reader: this.initReader(),
       validHtmlFile: null,
-      classOpt: null,
       namaJadwal: null,
       validNamaJadwal: null,
       loading: false,
@@ -179,15 +182,15 @@ export default {
     file: function (newFile, oldFile) {
       if (!newFile || newFile.type !== 'text/html') {
         this.validHtmlFile = false
-        this.classOpt = null
+        this.$emit('set-class-opt', null)
       } else {
         this.validHtmlFile = true
-        this.classOpt = null
+        this.$emit('set-class-opt', null)
         this.reader.readAsText(newFile)
       }
     },
     jurusan: function (newJurusan, oldJurusan) {
-      this.classOpt = null
+      this.$emit('set-class-opt', null)
       if (newJurusan) {
         this.loading = true
         // async function
@@ -197,7 +200,7 @@ export default {
           try {
             const dataJurusan = (await import('@/data/' + newJurusan + '.json'))
               .default
-            this.classOpt = dataJurusan
+            this.$emit('set-class-opt', dataJurusan)
           } catch (e) {
             // TODO: error handling
           }
@@ -223,7 +226,7 @@ export default {
         const parser = new DOMParser()
         const htmlDoc = parser.parseFromString(e.target.result, 'text/html')
         const table = htmlDoc.querySelectorAll('table.box')
-        this.classOpt = TableParser.parse(table)
+        this.$emit('set-class-opt', TableParser.parse(table))
       }
       return reader
     },
