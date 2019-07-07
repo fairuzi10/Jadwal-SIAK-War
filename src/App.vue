@@ -52,6 +52,9 @@ h5 {
 .modal-header-yellow {
   background: $gradient-yellow;
 }
+.modal-header.tabel-jadwal {
+  padding: 0.5rem 1rem;
+}
 .modal-dialog.tabel-jadwal {
   @media (min-width: 576px) {
     max-width: none;
@@ -59,7 +62,7 @@ h5 {
   }
   @media (min-width: 850px) {
     max-width: 800px;
-    margin: 1.5rem auto;
+    margin: 0.5rem auto;
   }
 }
 .btn.btn-red {

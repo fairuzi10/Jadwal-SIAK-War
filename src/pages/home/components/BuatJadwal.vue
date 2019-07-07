@@ -115,12 +115,16 @@
       v-model="showCurrentChosenTable"
       title="Jadwal Sementara"
       header-text-variant="dark"
-      header-class="modal-header-yellow"
+      header-class="modal-header-yellow tabel-jadwal"
       dialog-class="tabel-jadwal"
-      ok-only
-      ok-variant="yellow"
+      hide-footer
     >
       <tabel-jadwal :jadwal="chosenClass" />
+      <div class="d-flex justify-content-end mt-2">
+        <button class="btn btn-yellow">
+          Simpan
+        </button>
+      </div>
     </b-modal>
   </div>
 </template>
