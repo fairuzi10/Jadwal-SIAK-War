@@ -275,6 +275,7 @@ export default {
   padding: 0.75rem 2rem;
   outline: 0;
   color: $dark;
+  font-weight: bold;
   background-image: $gradient-yellow;
   &:hover {
     background-image: $gradient-yellow-dark;

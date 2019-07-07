@@ -75,7 +75,7 @@
   height: 15px;
 
   &:not(.empty) {
-    background-color: $yellow1;
+    background-color: $grey0;
   }
 
   &.empty {
