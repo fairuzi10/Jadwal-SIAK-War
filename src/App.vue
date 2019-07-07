@@ -52,6 +52,16 @@ h5 {
 .modal-header-yellow {
   background: $gradient-yellow;
 }
+.modal-dialog.tabel-jadwal {
+  @media (min-width: 576px) {
+    max-width: none;
+    margin: 0.5rem;
+  }
+  @media (min-width: 850px) {
+    max-width: 800px;
+    margin: 1.5rem auto;
+  }
+}
 .btn.btn-red {
   background: $gradient-red;
   color: $light;

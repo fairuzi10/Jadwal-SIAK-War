@@ -124,7 +124,7 @@ export default {
     },
     waktuToTopOffset (waktu) {
       // start from jam 8
-      return (this.waktuDalamJam(waktu) - 8) * this.barisJamHeight + 'px'
+      return (this.waktuDalamJam(waktu) - this.listJam[0]) * this.barisJamHeight + 'px'
     },
     waktuToHeight (waktu) {
       const waktuAwal = waktu.substr(0, 5)

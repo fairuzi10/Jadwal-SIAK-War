@@ -116,6 +116,7 @@
       title="Jadwal Sementara"
       header-text-variant="dark"
       header-class="modal-header-yellow"
+      dialog-class="tabel-jadwal"
       ok-only
       ok-variant="yellow"
     >
