@@ -26,7 +26,10 @@
           </option>
         </select>
       </div>
-      <template v-if="!jurusan">
+      <div
+        v-if="!jurusan"
+        class=" mb-3"
+      >
         <div class="text-center">
           Atau unggah jadwal jurusanmu
         </div>
@@ -48,7 +51,18 @@
         >
           Pastikan file yang Anda unggah merupakan file HTML.
         </div>
-      </template>
+      </div>
+      <div
+        v-if="jurusan || file"
+        class="d-flex justify-content-end"
+      >
+        <button
+          class="btn btn-red"
+          @click.prevent="reset"
+        >
+          Reset
+        </button>
+      </div>
     </form>
 
     <course-list
@@ -219,6 +233,11 @@ export default {
     }
   },
   methods: {
+    reset () {
+      this.$emit('set-jurusan', null)
+      this.$emit('set-file', null)
+      this.$emit('set-class-opt', null)
+    },
     changeFile (event) {
       this.$emit('set-file', event.target.files[0])
     },
