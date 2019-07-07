@@ -122,7 +122,7 @@
       <tabel-jadwal :jadwal="chosenClass" />
       <div class="d-flex justify-content-end mt-2">
         <button class="btn btn-yellow">
-          Simpan
+          <b>Simpan</b>
         </button>
       </div>
     </b-modal>

@@ -70,6 +70,7 @@ h5 {
   color: $light;
   &:hover {
     color: $light;
+    background: $gradient-red-dark;
   }
 }
 .btn.btn-yellow{
@@ -77,6 +78,7 @@ h5 {
   color: $dark;
   &:hover {
     color: $dark;
+    background: $gradient-yellow-dark;
   }
 }
 </style>
