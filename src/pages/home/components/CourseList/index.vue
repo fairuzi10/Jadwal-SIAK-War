@@ -4,11 +4,23 @@
       <h5>Filter</h5>
       <input
         v-model="filter"
-        class="form-control"
+        class="form-control mb-2"
         type="text"
         aria-describedby="filter-class"
         placeholder="Filter nama kelas/dosen"
       >
+      <div class="form-group form-check">
+        <input
+          id="filter-selected"
+          v-model="filterSelected"
+          type="checkbox"
+          class="form-check-input"
+        >
+        <label
+          class="form-check-label"
+          for="filter-selected"
+        >Kelas terpilih</label>
+      </div>
     </div>
     <course
       v-for="(curClass, className) in classFiltered"
@@ -35,6 +47,7 @@
       />
     </b-modal>
   </div>
+  </div>
 </template>
 
 <script>
@@ -60,6 +73,7 @@ export default {
       conflictList: [],
       showModal: false,
       filter: null,
+      filterSelected: false,
       classFiltered: { ...this.classOpt }
     }
   },
@@ -71,19 +85,10 @@ export default {
       this.showModal = newList.length > 0
     },
     filter (newFilter, oldFilter) {
-      if (newFilter) {
-        const upperCasedFilter = newFilter.toUpperCase()
-        const filteredClassName = Object.keys(this.classOpt).filter(className =>
-          this.matchClassName(className, upperCasedFilter) ||
-          this.matchClassInsName(className, upperCasedFilter) ||
-          this.matchLecturerName(className, upperCasedFilter)
-        )
-        this.classFiltered = filteredClassName.reduce((acc, className) => ({
-          [className]: this.classOpt[className], ...acc
-        }), {})
-      } else {
-        this.classFiltered = { ...this.classOpt }
-      }
+      this.filterClassOpt()
+    },
+    filterSelected (newFilterSelected, oldFilterSelected) {
+      this.filterClassOpt()
     }
   },
   methods: {
@@ -103,6 +108,28 @@ export default {
         .join(', ')
       const cleanLecturersName = lecturersName.toUpperCase()
       return cleanLecturersName.includes(upperCasedFilter)
+    },
+    filterClassOpt () {
+      let classFiltered = { ...this.classOpt }
+      if (this.filter) {
+        const upperCasedFilter = this.filter.toUpperCase()
+        const filteredClassName = Object.keys(classFiltered).filter(className =>
+          this.matchClassName(className, upperCasedFilter) ||
+          this.matchClassInsName(className, upperCasedFilter) ||
+          this.matchLecturerName(className, upperCasedFilter)
+        )
+        classFiltered = filteredClassName.reduce((acc, className) => ({
+          [className]: classFiltered[className], ...acc
+        }), {})
+      }
+      if (this.filterSelected) {
+        classFiltered = Object.keys(classFiltered).reduce((acc, className) => (
+          this.chosenClass[className]
+            ? { [className]: classFiltered[className], ...acc }
+            : acc
+        ), {})
+      }
+      this.classFiltered = classFiltered
     },
     updateChosenClassIns (className, classIns) {
       this.conflictList = this.validateClasInsNotConflict(className, classIns)
