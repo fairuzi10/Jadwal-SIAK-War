@@ -72,6 +72,8 @@ export default {
     },
     validateClasInsNotConflict (className, clasIns) {
       let conflictList = []
+      // tugas akhir
+      if (!clasIns['WAKTU']) return []
       clasIns['WAKTU'].forEach(hariwaktu => {
         conflictList = conflictList.concat(this.validateHariWaktuNotConflict(className, hariwaktu))
       })
@@ -95,6 +97,7 @@ export default {
       Object.keys(this.chosenClass).forEach(cmpClassName => {
         if (className !== cmpClassName && this.chosenClass[cmpClassName]) {
           const cmpArrHariwaktu = this.chosenClass[cmpClassName]['WAKTU']
+          if (!cmpArrHariwaktu) return
           cmpArrHariwaktu.forEach(cmpHariwaktu => {
             const cmpSplitted = cmpHariwaktu.split(', ')
             const cmpHari = cmpSplitted[0]

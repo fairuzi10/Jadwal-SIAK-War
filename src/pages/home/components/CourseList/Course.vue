@@ -21,18 +21,27 @@
           >
             {{ classIns['NAMA KELAS'] }}
           </div>
+          <template v-if="classIns.WAKTU">
+            <div
+              class="kolom-info kolom-waktu"
+              v-html="classIns.WAKTU.join('<br />')"
+            />
+            <div
+              class="kolom-info kolom-ruang"
+              v-html="classIns.RUANG.join('<br />')"
+            />
+            <div
+              class="kolom-info kolom-pengajar"
+              v-html="classIns.PENGAJAR.join('<br />')"
+            />
+          </template>
+          <!-- special case, tugas akhir/kerja praktik -->
           <div
-            class="kolom-info kolom-waktu"
-            v-html="classIns.WAKTU.join('<br />')"
-          />
-          <div
-            class="kolom-info kolom-ruang"
-            v-html="classIns.RUANG.join('<br />')"
-          />
-          <div
-            class="kolom-info kolom-pengajar"
-            v-html="classIns.PENGAJAR.join('<br />')"
-          />
+            v-else
+            class="kolom-info kolom-keterangan"
+          >
+            {{ classIns['PERIODE'][0] }}
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +74,7 @@ export default {
 .kolom-waktu { width: 30% }
 .kolom-ruang { width: 20% }
 .kolom-pengajar {width: 30% }
+.kolom-keterangan { flex-grow: 1 }
 
 .course {
   border: 1px solid $border-color;

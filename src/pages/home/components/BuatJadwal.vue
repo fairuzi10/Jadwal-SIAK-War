@@ -210,8 +210,11 @@ export default {
     return {
       list_jurusan: [
         { label: 'Pilih Jurusanmu', value: null },
-        { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
-        { label: 'Sistem Informasi', value: 'sistem-informasi' }
+        ...[
+          { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
+          { label: 'Teknik Elektro', value: 'teknik-elektro' },
+          { label: 'Farmasi', value: 'farmasi' }
+        ].sort((a, b) => a.label.localeCompare(b.label))
       ],
       reader: this.initReader(),
       validHtmlFile: null,
@@ -329,6 +332,7 @@ export default {
         this.showCurrentChosenTable = false
         this.reset()
         this.updateJadwalDilihat(nama)
+        this.scrollIntoView('top-view')
       }
     },
     matchClassName (className, upperCasedFilter) {
@@ -343,7 +347,7 @@ export default {
     },
     matchLecturerName (className, upperCasedFilter) {
       const lecturersName = this.classOpt[className].options
-        .map(classIns => classIns['PENGAJAR'].join(', '))
+        .map(classIns => (classIns['PENGAJAR'] || []).join(', '))
         .join(', ')
       const cleanLecturersName = lecturersName.toUpperCase()
       return cleanLecturersName.includes(upperCasedFilter)

@@ -26,9 +26,11 @@ const cleanifier = {
  */
 function factory (headings) {
   return function (row) {
-    return arrayify(row.cells).reduce(function (prev, curr, i) {
+    const cells = arrayify(row.cells)
+    // SPECIAL CASE: keterangan mata kuliah spesial will be in PERIODE column
+    return cells.reduce(function (prev, curCell, i) {
       const currCleanifier = cleanifier[headings[i]] || cleanifier['DEFAULT']
-      prev[headings[i]] = currCleanifier(curr)
+      prev[headings[i]] = currCleanifier(curCell)
       return prev
     }, {})
   }
@@ -67,7 +69,7 @@ const parse = function (tables) {
           activeClass = classNameEl.textContent
           activeList = []
         }
-      } else if (row.cells.length === headings.length) {
+      } else {
         activeList.push(factory(headings)(row))
       }
     }

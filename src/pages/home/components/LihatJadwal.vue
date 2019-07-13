@@ -1,6 +1,8 @@
 <template>
   <div id="lihat-jadwal">
-    <h4>{{ namaJadwal }}</h4>
+    <h4 class="text-center">
+      {{ namaJadwal }}
+    </h4>
     <tabel-jadwal :jadwal="jadwal.chosenClass" />
   </div>
 </template>
@@ -35,7 +37,6 @@ export default {
 #lihat-jadwal {
   min-height: $min-window-height;
   padding: 3rem 0.25rem;
-  text-align: center;
 
   @include sm {
     padding-left: 0.5rem;

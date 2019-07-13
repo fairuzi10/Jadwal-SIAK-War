@@ -1,47 +1,55 @@
 <template>
-  <div class="baris">
-    <div id="kolom-penanda-jam">
+  <div>
+    <div class="baris mb-2">
+      <div id="kolom-penanda-jam">
+        <div
+          v-for="jam in listJam"
+          :key="jam + '-baris-penanda'"
+          class="baris-penanda-jam"
+        >
+          <strong>{{ jam + '.00' }}</strong>
+        </div>
+      </div>
       <div
-        v-for="jam in listJam"
-        :key="jam + '-baris-penanda'"
-        class="baris-penanda-jam"
+        id="kolom-wrapper"
+        class="baris"
       >
-        <strong>{{ jam + '.00' }}</strong>
+        <div
+          v-for="hari in listHari"
+          :key="hari"
+          class="kolom-hari"
+        >
+          <span class="hari">{{ capitalize(hari) }}</span>
+          <div class="anceran">
+            <div
+              v-for="kelas in chosenJadwalGroupedByDay[hari]"
+              :key="kelas.RUANG + '-' + kelas.WAKTU"
+              class="posisi-kotak-jadwal"
+              :style="{top: waktuToTopOffset(kelas.WAKTU)}"
+            >
+              <div
+                class="kotak-jadwal"
+                :style="{ height: waktuToHeight(kelas.WAKTU) }"
+              >
+                {{ kelas.WAKTU }}
+                <div><strong>{{ kelas['NAMA KELAS'].replace('Kelas ', '') }}</strong></div>
+                {{ kelas.RUANG }}
+              </div>
+            </div>
+          </div>
+          <div
+            v-for="jam in listJam.slice(0, listJam.length - 1)"
+            :key="jam + '-' + hari"
+            class="baris-jam"
+          />
+        </div>
       </div>
     </div>
     <div
-      id="kolom-wrapper"
-      class="baris"
+      v-for="kelas in specialClass"
+      :key="kelas['NAMA KELAS']"
     >
-      <div
-        v-for="hari in listHari"
-        :key="hari"
-        class="kolom-hari"
-      >
-        <span class="hari">{{ capitalize(hari) }}</span>
-        <div class="anceran">
-          <div
-            v-for="kelas in chosenJadwalGroupedByDay[hari]"
-            :key="kelas.RUANG + '-' + kelas.WAKTU"
-            class="posisi-kotak-jadwal"
-            :style="{top: waktuToTopOffset(kelas.WAKTU)}"
-          >
-            <div
-              class="kotak-jadwal"
-              :style="{ height: waktuToHeight(kelas.WAKTU) }"
-            >
-              {{ kelas.WAKTU }}
-              <div><strong>{{ kelas['NAMA KELAS'].replace('Kelas ', '') }}</strong></div>
-              {{ kelas.RUANG }}
-            </div>
-          </div>
-        </div>
-        <div
-          v-for="jam in listJam.slice(0, listJam.length - 1)"
-          :key="jam + '-' + hari"
-          class="baris-jam"
-        />
-      </div>
+      <strong>{{ '+ ' + kelas['NAMA KELAS'].replace('Kelas ', '') }}</strong>
     </div>
   </div>
 </template>
@@ -62,14 +70,22 @@ export default {
     }
   },
   computed: {
+    classWithTime () {
+      const filteredKey = Object.keys(this.jadwal).filter(key => this.jadwal[key] && this.jadwal[key]['WAKTU'])
+      return filteredKey.reduce((acc, key) => ({ ...acc, [key]: this.jadwal[key] }), {})
+    },
+    specialClass () {
+      const filteredKey = Object.keys(this.jadwal).filter(key => this.jadwal[key] && !this.jadwal[key]['WAKTU'])
+      return filteredKey.reduce((acc, key) => ({ ...acc, [key]: this.jadwal[key] }), {})
+    },
     chosenJadwalGroupedByDay () {
       const initObject = this.listHari.reduce((acc, hari) => ({ ...acc, [hari]: [] }), {})
-      return Object.keys(this.jadwal).reduce((acc, key) => {
-        if (!this.jadwal[key]) {
+      return Object.keys(this.classWithTime).reduce((acc, key) => {
+        if (!this.classWithTime[key]) {
           return acc
         } else {
           const result = acc
-          const clas = this.jadwal[key]
+          const clas = this.classWithTime[key]
           // corner case, different time period (month or sth) but same schedule
           const filtered = clas['WAKTU'].map((waktu, idx) => {
             for (let i = 0; i < idx; i++) {
@@ -100,9 +116,9 @@ export default {
     listHari () {
       const result = ['senin', 'selasa', 'rabu', 'kamis', 'jumat']
       let sabtuExist = false
-      Object.keys(this.jadwal).forEach(key => {
-        if (this.jadwal[key]) {
-          const clas = this.jadwal[key]
+      Object.keys(this.classWithTime).forEach(key => {
+        if (this.classWithTime[key]) {
+          const clas = this.classWithTime[key]
           clas['WAKTU'].forEach((hariwaktu, idx) => {
             const hari = hariwaktu.split(', ')[0]
             if (hari.toLowerCase() === 'sabtu') {
@@ -117,9 +133,9 @@ export default {
     listJam () {
       let min = 24
       let max = 0
-      Object.keys(this.jadwal).forEach(key => {
-        if (this.jadwal[key]) {
-          const clas = this.jadwal[key]
+      Object.keys(this.classWithTime).forEach(key => {
+        if (this.classWithTime[key]) {
+          const clas = this.classWithTime[key]
           clas['WAKTU'].forEach((hariwaktu, idx) => {
             const waktu = hariwaktu.split(', ')[1]
             const jamAwal = Number(waktu.substr(0, 2))
