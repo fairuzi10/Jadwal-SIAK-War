@@ -161,8 +161,11 @@ import {
   getObjectOrArray,
   addArrayElement,
   addObjectProperty,
+  setItem,
+  getItem,
   JADWAL_LIST,
-  NAMA_JADWAL_LIST
+  NAMA_JADWAL_LIST,
+  SUGGESTED_NAMA_JADWAL
 } from '@/helper/storage'
 import TabelJadwal from './TabelJadwal'
 
@@ -227,11 +230,8 @@ export default {
   computed: {
     ...mapGetters(['chosenClass']),
     namaJadwalDefault () {
-      const namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST) || []
-      const numOfJadwal = namaJadwalList.length
-      return (
-        'Plan ' + String.fromCharCode(65 + numOfJadwal)
-      )
+      const suggestion = getItem(SUGGESTED_NAMA_JADWAL) || 'Plan A'
+      return suggestion
     },
     classFiltered () {
       if (!this.classOpt) return null
@@ -328,6 +328,11 @@ export default {
           classOpt: this.classOpt,
           chosenClass: this.chosenClass
         })
+
+        const nextNamaJadwalDefault = this.namaJadwalDefault.slice(0, -1) +
+          String.fromCharCode(this.namaJadwalDefault.charCodeAt(this.namaJadwalDefault.length - 1) + 1)
+        setItem(SUGGESTED_NAMA_JADWAL, nextNamaJadwalDefault)
+
         this.updateNamaJadwalList()
         this.showCurrentChosenTable = false
         this.reset()

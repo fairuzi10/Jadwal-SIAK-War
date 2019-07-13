@@ -3,13 +3,27 @@
     <h4 class="text-center">
       {{ namaJadwal }}
     </h4>
-    <tabel-jadwal :jadwal="jadwal.chosenClass" />
+    <tabel-jadwal
+      :jadwal="jadwal.chosenClass"
+      class="mb-3"
+    />
+    <div class="text-right">
+      <button
+        class="btn btn-red"
+        @click="hapusJadwal"
+      >
+        Hapus
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
 import {
   getObjectOrArray,
+  removeObjectProperty,
+  removeArrayElement,
+  NAMA_JADWAL_LIST,
   JADWAL_LIST
 } from '@/helper/storage'
 import TabelJadwal from './TabelJadwal'
@@ -23,11 +37,27 @@ export default {
     namaJadwal: {
       type: String,
       default: null
+    },
+    showBuatJadwal: {
+      type: Function,
+      required: true
+    },
+    updateNamaJadwalList: {
+      type: Function,
+      required: true
     }
   },
   computed: {
     jadwal () {
       return getObjectOrArray(JADWAL_LIST)[this.namaJadwal]
+    }
+  },
+  methods: {
+    hapusJadwal () {
+      removeObjectProperty(JADWAL_LIST, this.namaJadwal)
+      removeArrayElement(NAMA_JADWAL_LIST, this.namaJadwal)
+      this.updateNamaJadwalList()
+      this.showBuatJadwal()
     }
   }
 }

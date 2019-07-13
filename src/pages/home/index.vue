@@ -36,6 +36,8 @@
               v-if="jadwalDilihat"
               :key="jadwalDilihat"
               :nama-jadwal="jadwalDilihat"
+              :show-buat-jadwal="showBuatJadwal"
+              :update-nama-jadwal-list="updateNamaJadwalList"
             />
             <buat-jadwal
               v-else
