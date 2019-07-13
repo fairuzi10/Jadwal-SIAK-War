@@ -237,11 +237,11 @@ export default {
       if (!this.classOpt) return null
       let classFiltered = { ...this.classOpt }
       if (this.filter) {
-        const upperCasedFilter = this.filter.toUpperCase()
+        const cleanFilter = this.filter.replace('-', ' ').toUpperCase()
         const filteredClassName = Object.keys(classFiltered).filter(className =>
-          this.matchClassName(className, upperCasedFilter) ||
-          this.matchClassInsName(className, upperCasedFilter) ||
-          this.matchLecturerName(className, upperCasedFilter)
+          this.matchClassName(className, cleanFilter) ||
+          this.matchClassInsName(className, cleanFilter) ||
+          this.matchLecturerName(className, cleanFilter)
         )
         classFiltered = filteredClassName.reduce((acc, className) => ({
           ...acc, [className]: classFiltered[className]
@@ -335,22 +335,22 @@ export default {
         this.scrollIntoView('top-view')
       }
     },
-    matchClassName (className, upperCasedFilter) {
+    matchClassName (className, cleanFilter) {
       const cleanClassName = className.replace('-', ' ').toUpperCase()
-      return cleanClassName.includes(upperCasedFilter)
+      return cleanClassName.includes(cleanFilter)
     },
-    matchClassInsName (className, upperCasedFilter) {
+    matchClassInsName (className, cleanFilter) {
       if (this.classOpt[className].options.length === 0) return false
       const classInsName = this.classOpt[className].options[0]['NAMA KELAS']
-      const cleanClassInsName = classInsName.replace('-', '').toUpperCase()
-      return cleanClassInsName.includes(upperCasedFilter)
+      const cleanClassInsName = classInsName.replace('-', ' ').toUpperCase()
+      return cleanClassInsName.includes(cleanFilter)
     },
-    matchLecturerName (className, upperCasedFilter) {
+    matchLecturerName (className, cleanFilter) {
       const lecturersName = this.classOpt[className].options
         .map(classIns => (classIns['PENGAJAR'] || []).join(', '))
         .join(', ')
       const cleanLecturersName = lecturersName.toUpperCase()
-      return cleanLecturersName.includes(upperCasedFilter)
+      return cleanLecturersName.includes(cleanFilter)
     }
   }
 }
