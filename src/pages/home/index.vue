@@ -41,12 +41,17 @@
               v-else
               key="buat-jadwal"
               :class-opt="classOpt"
+              :update-jadwal-dilihat="updateJadwalDilihat"
               :update-nama-jadwal-list="updateNamaJadwalList"
               :jurusan="jurusan"
               :file="file"
+              :filter="filter"
+              :filter-selected="filterSelected"
               @set-jurusan="jurusan = $event"
               @set-file="file = $event"
               @set-class-opt="classOpt = $event"
+              @set-filter="filter = $event"
+              @set-filter-selected="filterSelected = $event"
             />
           </transition>
         </div>
@@ -86,7 +91,9 @@ export default {
       namaJadwalList: null,
       classOpt: null,
       file: null,
-      jurusan: null
+      jurusan: null,
+      filter: null,
+      filterSelected: null
     }
   },
   created () {
@@ -100,10 +107,10 @@ export default {
     },
     showBuatJadwal () {
       this.updateJadwalDilihat(null)
-      window.document.getElementById('top-view').scrollIntoView({ block: 'start', behavior: 'smooth' })
+      this.scrollIntoView('top-view')
     },
     updateNamaJadwalList () {
-      this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST)
+      this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST) || []
     },
     getLastSeenJadwal () {
       this.jadwalDilihat = getItem(LAST_SEEN_JADWAL)

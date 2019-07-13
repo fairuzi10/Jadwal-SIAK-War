@@ -55,7 +55,40 @@
       <div
         v-if="jurusan || file"
         class="d-flex justify-content-end"
+      />
+    </form>
+
+    <template
+      v-if="classFiltered"
+    >
+      <div
+        class="filter-box"
       >
+        <h5>Filter</h5>
+        <input
+          :value="filter"
+          class="form-control mb-2"
+          type="text"
+          aria-describedby="filter-class"
+          placeholder="Filter nama kelas/dosen"
+          @input="$emit('set-filter', $event.target.value)"
+        >
+        <div class="form-group form-check">
+          <input
+            id="filter-selected"
+            :checked="filterSelected"
+            type="checkbox"
+            class="form-check-input"
+            @input="$emit('set-filter-selected', $event.target.checked)"
+          >
+          <label
+            class="form-check-label"
+            for="filter-selected"
+          >Kelas terpilih</label>
+        </div>
+      </div>
+
+      <div class="text-right">
         <button
           class="btn btn-red"
           @click.prevent="reset"
@@ -63,12 +96,11 @@
           Reset
         </button>
       </div>
-    </form>
 
-    <course-list
-      v-if="classOpt"
-      :class-opt="classOpt"
-    />
+      <course-list
+        :class-filtered="classFiltered"
+      />
+    </template>
     <course-placeholder v-else-if="loading" />
 
     <transition name="fade">
@@ -81,36 +113,6 @@
       </button>
     </transition>
 
-    <!-- <transition name="fade">
-      <b-form
-        v-if="!allValueOfObjectIsNull(chosenClass)"
-        inline
-      >
-        <b-button
-          id="button-simpan-jadwal"
-          size="lg"
-          pill
-          class="px-5"
-          @click="simpanJadwal"
-        >
-          Simpan Jadwal
-        </b-button>
-        <b-input
-          v-model="namaJadwal"
-          class="mr-2"
-          :placeholder="namaJadwalDefault"
-          :state="validNamaJadwal"
-          required
-        />
-      </b-form>
-    </transition> -->
-    <!-- <div class="text-right">
-      <b-form-invalid-feedback
-        :state="validNamaJadwal"
-      >
-        Kamu telah memiliki jadwal dengan nama yang sama.
-      </b-form-invalid-feedback>
-    </div> -->
     <b-modal
       v-model="showCurrentChosenTable"
       title="Jadwal Sementara"
@@ -121,10 +123,29 @@
     >
       <tabel-jadwal :jadwal="chosenClass" />
       <div class="d-flex justify-content-end mt-2">
-        <button class="btn btn-yellow">
-          <b>Simpan</b>
-        </button>
+        <form class="form-inline">
+          <div class="input-group mr-2">
+            <b-input
+              v-model="namaJadwal"
+              class="mr-2"
+              :placeholder="namaJadwalDefault"
+              :state="validNamaJadwal"
+            />
+          </div>
+          <button
+            class="btn btn-yellow"
+            @click.prevent="simpanJadwal"
+          >
+            <b>Simpan</b>
+          </button>
+        </form>
       </div>
+      <b-form-invalid-feedback
+        :state="validNamaJadwal"
+        class="text-right"
+      >
+        Kamu telah memiliki jadwal dengan nama yang sama.
+      </b-form-invalid-feedback>
     </b-modal>
   </div>
 </template>
@@ -143,7 +164,6 @@ import {
   JADWAL_LIST,
   NAMA_JADWAL_LIST
 } from '@/helper/storage'
-import { BModal } from 'bootstrap-vue'
 import TabelJadwal from './TabelJadwal'
 
 export default {
@@ -152,11 +172,14 @@ export default {
   components: {
     CourseList,
     CoursePlaceholder,
-    BModal,
     TabelJadwal
   },
 
   props: {
+    updateJadwalDilihat: {
+      type: Function,
+      required: true
+    },
     updateNamaJadwalList: {
       type: Function,
       required: true
@@ -171,6 +194,14 @@ export default {
     },
     jurusan: {
       type: String,
+      default: null
+    },
+    filter: {
+      type: String,
+      default: null
+    },
+    filterSelected: {
+      type: Boolean,
       default: null
     }
   },
@@ -192,11 +223,35 @@ export default {
   },
   computed: {
     ...mapGetters(['chosenClass']),
-    namaJadwalDefault: function () {
-      const date = new Date()
+    namaJadwalDefault () {
+      const namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST) || []
+      const numOfJadwal = namaJadwalList.length
       return (
-        'Jadwal ' + date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+        'Plan ' + String.fromCharCode(65 + numOfJadwal)
       )
+    },
+    classFiltered () {
+      if (!this.classOpt) return null
+      let classFiltered = { ...this.classOpt }
+      if (this.filter) {
+        const upperCasedFilter = this.filter.toUpperCase()
+        const filteredClassName = Object.keys(classFiltered).filter(className =>
+          this.matchClassName(className, upperCasedFilter) ||
+          this.matchClassInsName(className, upperCasedFilter) ||
+          this.matchLecturerName(className, upperCasedFilter)
+        )
+        classFiltered = filteredClassName.reduce((acc, className) => ({
+          ...acc, [className]: classFiltered[className]
+        }), {})
+      }
+      if (this.filterSelected) {
+        classFiltered = Object.keys(classFiltered).reduce((acc, className) => (
+          this.chosenClass[className]
+            ? { ...acc, [className]: classFiltered[className] }
+            : acc
+        ), {})
+      }
+      return classFiltered
     }
   },
   watch: {
@@ -235,13 +290,15 @@ export default {
       } else {
         this.$store.dispatch(INIT_CHOSEN_CLASS, [])
       }
+      this.$emit('set-filter', null)
+      this.$emit('set-filter-selected', false)
     }
   },
   methods: {
     reset () {
-      this.$emit('set-jurusan', null)
-      this.$emit('set-file', null)
-      this.$emit('set-class-opt', null)
+      this.$store.dispatch(INIT_CHOSEN_CLASS, [])
+      this.$emit('set-filter', null)
+      this.$emit('set-filter-selected', null)
     },
     changeFile (event) {
       this.$emit('set-file', event.target.files[0])
@@ -258,8 +315,8 @@ export default {
     },
     simpanJadwal () {
       const nama = this.namaJadwal || this.namaJadwalDefault
-      const existingJadwal = getObjectOrArray(JADWAL_LIST)
-      if (existingJadwal && nama in existingJadwal) {
+      const existingJadwal = getObjectOrArray(JADWAL_LIST) || {}
+      if (nama in existingJadwal) {
         this.validNamaJadwal = false
       } else {
         this.validNamaJadwal = true
@@ -269,7 +326,27 @@ export default {
           chosenClass: this.chosenClass
         })
         this.updateNamaJadwalList()
+        this.showCurrentChosenTable = false
+        this.reset()
+        this.updateJadwalDilihat(nama)
       }
+    },
+    matchClassName (className, upperCasedFilter) {
+      const cleanClassName = className.replace('-', ' ').toUpperCase()
+      return cleanClassName.includes(upperCasedFilter)
+    },
+    matchClassInsName (className, upperCasedFilter) {
+      if (this.classOpt[className].options.length === 0) return false
+      const classInsName = this.classOpt[className].options[0]['NAMA KELAS']
+      const cleanClassInsName = classInsName.replace('-', '').toUpperCase()
+      return cleanClassInsName.includes(upperCasedFilter)
+    },
+    matchLecturerName (className, upperCasedFilter) {
+      const lecturersName = this.classOpt[className].options
+        .map(classIns => classIns['PENGAJAR'].join(', '))
+        .join(', ')
+      const cleanLecturersName = lecturersName.toUpperCase()
+      return cleanLecturersName.includes(upperCasedFilter)
     }
   }
 }
@@ -309,6 +386,15 @@ export default {
   &:hover {
     background-image: $gradient-yellow-dark;
   }
+}
+
+.filter-box {
+  background-color: $grey0;
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
 }
 
 .fade-enter-active, .fade-leave-active {

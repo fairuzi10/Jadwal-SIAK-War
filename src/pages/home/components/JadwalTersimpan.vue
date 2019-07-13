@@ -1,6 +1,6 @@
 <template>
   <div id="jadwal-tersimpan">
-    <div class="bg-gradient-yellow p-1 mt-5">
+    <div class="bg-gradient-yellow p-1 mt-5 mb-2">
       <h4>Jadwal Tersimpan</h4>
     </div>
     <div v-if="isEmptyArray(namaJadwalList)">
@@ -60,7 +60,7 @@ export default {
   methods: {
     select: function (namaJadwal) {
       this.updateJadwalDilihat(namaJadwal)
-      this.scrollIntoView('lihat-jadwal')
+      this.scrollIntoView('top-view')
     }
   }
 }

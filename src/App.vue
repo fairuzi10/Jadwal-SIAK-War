@@ -68,6 +68,7 @@ h5 {
 .btn.btn-red {
   background: $gradient-red;
   color: $light;
+  border-radius: 0.5rem;
   &:hover {
     color: $light;
     background: $gradient-red-dark;
@@ -76,6 +77,7 @@ h5 {
 .btn.btn-yellow{
   background: $gradient-yellow;
   color: $dark;
+  border-radius: 0.5rem;
   &:hover {
     color: $dark;
     background: $gradient-yellow-dark;

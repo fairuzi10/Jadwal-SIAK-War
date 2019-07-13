@@ -1,27 +1,5 @@
 <template>
   <div>
-    <div class="filter-box">
-      <h5>Filter</h5>
-      <input
-        v-model="filter"
-        class="form-control mb-2"
-        type="text"
-        aria-describedby="filter-class"
-        placeholder="Filter nama kelas/dosen"
-      >
-      <div class="form-group form-check">
-        <input
-          id="filter-selected"
-          v-model="filterSelected"
-          type="checkbox"
-          class="form-check-input"
-        >
-        <label
-          class="form-check-label"
-          for="filter-selected"
-        >Kelas terpilih</label>
-      </div>
-    </div>
     <course
       v-for="(curClass, className) in classFiltered"
       :key="className"
@@ -62,7 +40,7 @@ export default {
     BModal
   },
   props: {
-    classOpt: {
+    classFiltered: {
       type: Object,
       required: true
     }
@@ -70,10 +48,7 @@ export default {
   data () {
     return {
       conflictList: [],
-      showModal: false,
-      filter: null,
-      filterSelected: false,
-      classFiltered: { ...this.classOpt }
+      showModal: false
     }
   },
   computed: {
@@ -82,54 +57,9 @@ export default {
   watch: {
     conflictList (newList, oldList) {
       this.showModal = newList.length > 0
-    },
-    filter (newFilter, oldFilter) {
-      this.filterClassOpt()
-    },
-    filterSelected (newFilterSelected, oldFilterSelected) {
-      this.filterClassOpt()
     }
   },
   methods: {
-    matchClassName (className, upperCasedFilter) {
-      const cleanClassName = className.replace('-', ' ').toUpperCase()
-      return cleanClassName.includes(upperCasedFilter)
-    },
-    matchClassInsName (className, upperCasedFilter) {
-      if (this.classOpt[className].options.length === 0) return false
-      const classInsName = this.classOpt[className].options[0]['NAMA KELAS']
-      const cleanClassInsName = classInsName.replace('-', '').toUpperCase()
-      return cleanClassInsName.includes(upperCasedFilter)
-    },
-    matchLecturerName (className, upperCasedFilter) {
-      const lecturersName = this.classOpt[className].options
-        .map(classIns => classIns['PENGAJAR'].join(', '))
-        .join(', ')
-      const cleanLecturersName = lecturersName.toUpperCase()
-      return cleanLecturersName.includes(upperCasedFilter)
-    },
-    filterClassOpt () {
-      let classFiltered = { ...this.classOpt }
-      if (this.filter) {
-        const upperCasedFilter = this.filter.toUpperCase()
-        const filteredClassName = Object.keys(classFiltered).filter(className =>
-          this.matchClassName(className, upperCasedFilter) ||
-          this.matchClassInsName(className, upperCasedFilter) ||
-          this.matchLecturerName(className, upperCasedFilter)
-        )
-        classFiltered = filteredClassName.reduce((acc, className) => ({
-          ...acc, [className]: classFiltered[className]
-        }), {})
-      }
-      if (this.filterSelected) {
-        classFiltered = Object.keys(classFiltered).reduce((acc, className) => (
-          this.chosenClass[className]
-            ? { ...acc, [className]: classFiltered[className] }
-            : acc
-        ), {})
-      }
-      this.classFiltered = classFiltered
-    },
     updateChosenClassIns (className, classIns) {
       this.conflictList = this.validateClasInsNotConflict(className, classIns)
       if (this.conflictList.length === 0) {
@@ -180,14 +110,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.filter-box {
-  background-color: $grey0;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  padding: 1rem 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
-}
-</style>
