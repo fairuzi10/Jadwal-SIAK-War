@@ -103,10 +103,10 @@
     </template>
     <course-placeholder v-else-if="loading" />
 
-    <transition name="fade">
+    <transition name="button-jadwal-sementara">
       <button
         v-if="!allValueOfObjectIsNull(chosenClass)"
-        id="button-simpan-jadwal"
+        id="button-jadwal-sementara"
         @click="showCurrentChosenTable = true"
       >
         Lihat Jadwal Sementara
@@ -372,19 +372,39 @@ export default {
   }
 }
 
-#button-simpan-jadwal {
+#button-jadwal-sementara {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 30px;
+  bottom: 30px;
   border: 1px solid $yellow5;
   border-radius: 2rem;
   padding: 0.75rem 2rem;
   outline: 0;
   color: $dark;
   font-weight: bold;
+  background-color: $yellow3;
   background-image: $gradient-yellow;
+
   &:hover {
     background-image: $gradient-yellow-dark;
+  }
+}
+
+.button-jadwal-sementara-enter-active {
+  animation: button-jadwal-sementara .5s;
+}
+.button-jadwal-sementara-leave-active {
+  animation: button-jadwal-sementara .5s reverse;
+}
+
+@keyframes button-jadwal-sementara {
+  from {
+    bottom: 0px;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
   }
 }
 
@@ -403,4 +423,5 @@ export default {
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
 </style>
