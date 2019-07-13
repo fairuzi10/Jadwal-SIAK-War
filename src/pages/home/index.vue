@@ -13,8 +13,8 @@
         </div>
       </b-navbar-brand>
     </b-navbar>
-    <div class="container-fluid px-0">
-      <div class="row no-gutters">
+    <div class="container-fluid px-0 d-flex full-height">
+      <div class="row no-gutters flex-grow-1">
         <div class="col-12 col-md-3 d-flex">
           <jadwal-tersimpan
             ref="jadwalTersimpan"
@@ -142,5 +142,9 @@ body {
 .navbar {
   z-index: 1;
   box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
+}
+
+.full-height {
+  min-height: 1000px;
 }
 </style>
