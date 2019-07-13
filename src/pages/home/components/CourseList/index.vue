@@ -75,6 +75,8 @@ export default {
       clasIns['WAKTU'].forEach(hariwaktu => {
         conflictList = conflictList.concat(this.validateHariWaktuNotConflict(className, hariwaktu))
       })
+      // need to uniqueify this list because of same datetime but different lecturer class
+      conflictList = [ ...new Set(conflictList) ]
       return conflictList
     },
     validateHariWaktuNotConflict (className, hariwaktu) {
@@ -89,7 +91,7 @@ export default {
       const waktuAwal = getWaktuInMinute(waktu.substr(0, 5))
       const waktuAkhir = getWaktuInMinute(waktu.substr(6, 5))
 
-      const conflictList = []
+      let conflictList = []
       Object.keys(this.chosenClass).forEach(cmpClassName => {
         if (className !== cmpClassName && this.chosenClass[cmpClassName]) {
           const cmpArrHariwaktu = this.chosenClass[cmpClassName]['WAKTU']
