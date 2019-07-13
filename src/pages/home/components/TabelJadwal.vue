@@ -30,9 +30,9 @@
               class="kotak-jadwal"
               :style="{ height: waktuToHeight(kelas.WAKTU) }"
             >
-              <small>{{ kelas.WAKTU }}</small>
+              {{ kelas.WAKTU }}
               <div><strong>{{ kelas['NAMA KELAS'].replace('Kelas ', '') }}</strong></div>
-              <small>{{ kelas.RUANG }}</small>
+              {{ kelas.RUANG }}
             </div>
           </div>
         </div>
@@ -57,7 +57,6 @@ export default {
   },
   data () {
     return {
-      listHari: ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'],
       // need to sync manually with scss variable
       barisJamHeight: 50
     }
@@ -97,6 +96,23 @@ export default {
           return result
         }
       }, initObject)
+    },
+    listHari () {
+      const result = ['senin', 'selasa', 'rabu', 'kamis', 'jumat']
+      let sabtuExist = false
+      Object.keys(this.jadwal).forEach(key => {
+        if (this.jadwal[key]) {
+          const clas = this.jadwal[key]
+          clas['WAKTU'].forEach((hariwaktu, idx) => {
+            const hari = hariwaktu.split(', ')[0]
+            if (hari.toLowerCase() === 'sabtu') {
+              sabtuExist = true
+            }
+          })
+        }
+      })
+      if (sabtuExist) result.append('sabtu')
+      return result
     },
     listJam () {
       let min = 24
@@ -151,8 +167,9 @@ $baris-jam-height: 50px;
 }
 
 .kolom-hari {
-  flex: 0 0 16.6667%;
-  max-width: 16.6667%;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
 }
 
 .baris-jam {
@@ -217,15 +234,15 @@ $baris-jam-height: 50px;
   text-align: left;
   opacity: 0.9;
   border-radius: 0.25rem;
-  font-size: 0.5rem;
-  line-height: 0.5rem;
+  font-size: 0.6rem;
+  line-height: 0.7rem;
   @include sm {
-    font-size: 0.6rem;
-    line-height: 0.6rem;
+    font-size: 0.7rem;
+    line-height: 0.8rem;
   }
   @include md {
-    font-size: 0.7rem;
-    line-height: 0.7rem;
+    font-size: 0.8rem;
+    line-height: 0.9rem;
   }
 }
 </style>
