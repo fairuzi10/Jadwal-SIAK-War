@@ -112,7 +112,7 @@ export default {
       let classFiltered = { ...this.classOpt }
       if (this.filter) {
         const upperCasedFilter = this.filter.toUpperCase()
-        const filteredClassName = Reflect.ownKeys(classFiltered).filter(className =>
+        const filteredClassName = Object.keys(classFiltered).filter(className =>
           this.matchClassName(className, upperCasedFilter) ||
           this.matchClassInsName(className, upperCasedFilter) ||
           this.matchLecturerName(className, upperCasedFilter)
@@ -122,7 +122,7 @@ export default {
         }), {})
       }
       if (this.filterSelected) {
-        classFiltered = Reflect.ownKeys(classFiltered).reduce((acc, className) => (
+        classFiltered = Object.keys(classFiltered).reduce((acc, className) => (
           this.chosenClass[className]
             ? { ...acc, [className]: classFiltered[className] }
             : acc
@@ -160,7 +160,7 @@ export default {
       const waktuAkhir = getWaktuInMinute(waktu.substr(6, 5))
 
       const conflictList = []
-      Reflect.ownKeys(this.chosenClass).forEach(cmpClassName => {
+      Object.keys(this.chosenClass).forEach(cmpClassName => {
         if (className !== cmpClassName && this.chosenClass[cmpClassName]) {
           const cmpArrHariwaktu = this.chosenClass[cmpClassName]['WAKTU']
           cmpArrHariwaktu.forEach(cmpHariwaktu => {

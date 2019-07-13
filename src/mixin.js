@@ -6,10 +6,10 @@ Vue.mixin({
       return !arr || arr.length === 0
     },
     isEmptyObject (obj) {
-      return !obj || Reflect.ownKeys(obj).length === 0
+      return !obj || Object.keys(obj).length === 0
     },
     allValueOfObjectIsNull (obj) {
-      return !obj || Reflect.ownKeys(obj).filter(key => obj[key]).length === 0
+      return !obj || Object.keys(obj).filter(key => obj[key]).length === 0
     },
     capitalize (str) {
       return str.split(' ')
