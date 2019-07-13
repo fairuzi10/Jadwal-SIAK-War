@@ -47,7 +47,6 @@
       />
     </b-modal>
   </div>
-  </div>
 </template>
 
 <script>
@@ -113,19 +112,19 @@ export default {
       let classFiltered = { ...this.classOpt }
       if (this.filter) {
         const upperCasedFilter = this.filter.toUpperCase()
-        const filteredClassName = Object.keys(classFiltered).filter(className =>
+        const filteredClassName = Reflect.ownKeys(classFiltered).filter(className =>
           this.matchClassName(className, upperCasedFilter) ||
           this.matchClassInsName(className, upperCasedFilter) ||
           this.matchLecturerName(className, upperCasedFilter)
         )
         classFiltered = filteredClassName.reduce((acc, className) => ({
-          [className]: classFiltered[className], ...acc
+          ...acc, [className]: classFiltered[className]
         }), {})
       }
       if (this.filterSelected) {
-        classFiltered = Object.keys(classFiltered).reduce((acc, className) => (
+        classFiltered = Reflect.ownKeys(classFiltered).reduce((acc, className) => (
           this.chosenClass[className]
-            ? { [className]: classFiltered[className], ...acc }
+            ? { ...acc, [className]: classFiltered[className] }
             : acc
         ), {})
       }
@@ -161,7 +160,7 @@ export default {
       const waktuAkhir = getWaktuInMinute(waktu.substr(6, 5))
 
       const conflictList = []
-      Object.keys(this.chosenClass).forEach(cmpClassName => {
+      Reflect.ownKeys(this.chosenClass).forEach(cmpClassName => {
         if (className !== cmpClassName && this.chosenClass[cmpClassName]) {
           const cmpArrHariwaktu = this.chosenClass[cmpClassName]['WAKTU']
           cmpArrHariwaktu.forEach(cmpHariwaktu => {

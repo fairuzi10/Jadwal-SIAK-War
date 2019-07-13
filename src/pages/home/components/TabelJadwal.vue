@@ -64,7 +64,7 @@ export default {
   computed: {
     chosenJadwalGroupedByDay () {
       const initObject = this.listHari.reduce((acc, hari) => ({ ...acc, [hari]: [] }), {})
-      return Object.keys(this.jadwal).reduce((acc, key) => {
+      return Reflect.ownKeys(this.jadwal).reduce((acc, key) => {
         if (!this.jadwal[key]) {
           return acc
         } else {
@@ -100,7 +100,7 @@ export default {
     listHari () {
       const result = ['senin', 'selasa', 'rabu', 'kamis', 'jumat']
       let sabtuExist = false
-      Object.keys(this.jadwal).forEach(key => {
+      Reflect.ownKeys(this.jadwal).forEach(key => {
         if (this.jadwal[key]) {
           const clas = this.jadwal[key]
           clas['WAKTU'].forEach((hariwaktu, idx) => {
@@ -117,7 +117,7 @@ export default {
     listJam () {
       let min = 24
       let max = 0
-      Object.keys(this.jadwal).forEach(key => {
+      Reflect.ownKeys(this.jadwal).forEach(key => {
         if (this.jadwal[key]) {
           const clas = this.jadwal[key]
           clas['WAKTU'].forEach((hariwaktu, idx) => {
