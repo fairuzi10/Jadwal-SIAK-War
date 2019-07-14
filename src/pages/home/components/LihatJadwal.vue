@@ -9,12 +9,32 @@
     />
     <div class="text-right">
       <button
+        class="btn btn-outline-grey mr-2"
+        @click="ubahJadwal"
+      >
+        Ubah
+      </button>
+      <button
         class="btn btn-red"
-        @click="hapusJadwal"
+        @click="showDeleteModal = true"
       >
         Hapus
       </button>
     </div>
+    <b-modal
+      id="delete-jadwal-modal"
+      v-model="showDeleteModal"
+      title="Hapus Jadwal"
+      header-text-variant="light"
+      header-class="modal-header-red"
+      cancel-variant="outline-grey"
+      cancel-title="Batal"
+      ok-variant="red"
+      ok-title="Hapus"
+      @ok="hapusJadwal"
+    >
+      Yakin ingin menghapus jadwal ini?
+    </b-modal>
   </div>
 </template>
 
@@ -47,6 +67,11 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      showDeleteModal: false
+    }
+  },
   computed: {
     jadwal () {
       return getObjectOrArray(JADWAL_LIST)[this.namaJadwal]
@@ -58,12 +83,15 @@ export default {
       removeArrayElement(NAMA_JADWAL_LIST, this.namaJadwal)
       this.updateNamaJadwalList()
       this.showBuatJadwal()
+    },
+    ubahJadwal () {
+
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #lihat-jadwal {
   min-height: $min-window-height;
   padding: 3rem 0.25rem;

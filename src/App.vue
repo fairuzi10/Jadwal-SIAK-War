@@ -83,4 +83,13 @@ h5 {
     background: $gradient-yellow-dark;
   }
 }
+.btn.btn-outline-grey {
+  background: $light;
+  color: $dark;
+  border-radius: 0.5rem;
+  border: 1px solid $dark;
+  &:hover {
+    background-color: $grey1;
+  }
+}
 </style>
