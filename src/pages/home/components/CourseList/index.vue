@@ -30,7 +30,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Course from './Course'
-import { UPDATE_CHOSEN_CLASS_INS } from '@/store'
+import { CHOOSE_CLASS_INS_OR_TOGGLE } from '@/store/actions.type'
 import { BModal } from 'bootstrap-vue'
 
 export default {
@@ -63,11 +63,7 @@ export default {
     updateChosenClassIns (className, classIns) {
       this.conflictList = this.validateClasInsNotConflict(className, classIns)
       if (this.conflictList.length === 0) {
-        this.$store.dispatch(UPDATE_CHOSEN_CLASS_INS, {
-          className,
-          // if selected twice, unselect
-          selected: classIns === this.chosenClass[className] ? null : classIns
-        })
+        this.$store.dispatch(CHOOSE_CLASS_INS_OR_TOGGLE, { className, classIns })
       }
     },
     validateClasInsNotConflict (className, clasIns) {
@@ -105,7 +101,7 @@ export default {
             const cmpWaktuAwal = getWaktuInMinute(cmpWaktu.substr(0, 5))
             const cmpWaktuAkhir = getWaktuInMinute(cmpWaktu.substr(6, 5))
             if (hari === cmpHari && !(cmpWaktuAkhir < waktuAwal || waktuAkhir < cmpWaktuAwal)) {
-              conflictList.push('Bentrok dengan  <b>' + this.chosenClass[cmpClassName]['NAMA KELAS'] + '</b> pada <b>' + cmpHariwaktu + '</b>')
+              conflictList.push(`Bentrok dengan  <b>${this.chosenClass[cmpClassName]['NAMA KELAS']}</b> pada <b>${cmpHariwaktu}</b>`)
             }
           })
         }

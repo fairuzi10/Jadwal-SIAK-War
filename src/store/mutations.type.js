@@ -1,0 +1,8 @@
+export const ASSIGN_ELEMENT_CHOSEN_CLASS_OR_TOGGLE = 'assignElementChosenClassOrToggle'
+export const SET_CLASS_OPT = 'setClassOpt'
+export const SET_FILTER_CLASS_OPT = 'setFilterClassOpt'
+export const SET_FILTER_CHOSEN_CLASS_OPT = 'setFilterChosenClassOpt'
+export const SET_FILTERED_CLASS = 'setFilteredClass'
+export const IS_LOADING_CLASS_OPT = 'isLoadingClassOpt'
+export const SET_CREATE_SCHEDULE_FILE = 'setCreateScheduleFile'
+export const SET_CREATE_SCHEDULE_MAJOR = 'setCreateScheduleMajor'

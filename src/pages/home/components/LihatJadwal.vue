@@ -1,40 +1,58 @@
 <template>
   <div id="lihat-jadwal">
-    <h4 class="text-center">
-      {{ namaJadwal }}
-    </h4>
-    <tabel-jadwal
-      :jadwal="jadwal.chosenClass"
-      class="mb-3"
-    />
-    <div class="text-right">
-      <button
-        class="btn btn-outline-grey mr-2"
-        @click="ubahJadwal"
+    <div v-if="!editJadwal">
+      <h4 class="text-center">
+        {{ namaJadwal }}
+      </h4>
+      <tabel-jadwal
+        :jadwal="jadwal.chosenClass"
+        class="mb-3"
+      />
+      <div class="text-right">
+        <button
+          class="btn btn-outline-grey mr-2"
+          @click="ubahJadwal"
+        >
+          Ubah
+        </button>
+        <button
+          class="btn btn-red"
+          @click="showDeleteModal = true"
+        >
+          Hapus
+        </button>
+      </div>
+      <b-modal
+        id="delete-jadwal-modal"
+        v-model="showDeleteModal"
+        title="Hapus Jadwal"
+        header-text-variant="light"
+        header-class="modal-header-red"
+        cancel-variant="outline-grey"
+        cancel-title="Batal"
+        ok-variant="red"
+        ok-title="Hapus"
+        @ok="hapusJadwal"
       >
-        Ubah
-      </button>
-      <button
-        class="btn btn-red"
-        @click="showDeleteModal = true"
-      >
-        Hapus
-      </button>
+        Yakin ingin menghapus jadwal ini?
+      </b-modal>
     </div>
-    <b-modal
-      id="delete-jadwal-modal"
-      v-model="showDeleteModal"
-      title="Hapus Jadwal"
-      header-text-variant="light"
-      header-class="modal-header-red"
-      cancel-variant="outline-grey"
-      cancel-title="Batal"
-      ok-variant="red"
-      ok-title="Hapus"
-      @ok="hapusJadwal"
-    >
-      Yakin ingin menghapus jadwal ini?
-    </b-modal>
+    <buat-jadwal
+      v-else
+      key="buat-jadwal"
+      :class-opt="jadwal.classOpt"
+      :update-jadwal-dilihat="updateJadwalDilihat"
+      :update-nama-jadwal-list="updateNamaJadwalList"
+      :jurusan="jurusan"
+      :file="file"
+      :filter="filter"
+      :filter-selected="filterSelected"
+      @set-jurusan="jurusan = $event"
+      @set-file="file = $event"
+      @set-class-opt="classOpt = $event"
+      @set-filter="filter = $event"
+      @set-filter-selected="filterSelected = $event"
+    />
   </div>
 </template>
 
@@ -69,7 +87,8 @@ export default {
   },
   data () {
     return {
-      showDeleteModal: false
+      showDeleteModal: false,
+      editJadwal: false
     }
   },
   computed: {
@@ -85,7 +104,7 @@ export default {
       this.showBuatJadwal()
     },
     ubahJadwal () {
-
+      this.editJadwal = true
     }
   }
 }

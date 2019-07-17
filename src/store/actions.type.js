@@ -1,0 +1,8 @@
+export const CHOOSE_CLASS_INS_OR_TOGGLE = 'chooseClassInsOrToggle'
+export const COMPUTE_FILTERED_CLASS = 'computeFilteredClass'
+export const FILTER_CHOSEN_CLASS_OPT = 'filterChosenClassOpt'
+export const FILTER_CLASS_OPT = 'filterClassOpt'
+export const RESET_ARRANGE_CLASS = 'resetArrangeClass'
+export const SELECT_MAJOR = 'selectMajor'
+export const SET_CLASS_OPT = 'setClassOpt'
+export const UPLOAD_SCHEDULE_FILE = 'uploadScheduleFile'
