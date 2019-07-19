@@ -52,10 +52,10 @@ h5 {
 .modal-header-yellow {
   background: $gradient-yellow;
 }
-.modal-header.tabel-jadwal {
+.modal-header.schedule-table {
   padding: 0.5rem 1rem;
 }
-.modal-dialog.tabel-jadwal {
+.modal-dialog.schedule-table {
   @media (min-width: 576px) {
     max-width: none;
     margin: 0.5rem;

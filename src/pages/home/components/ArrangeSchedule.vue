@@ -76,7 +76,7 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  name: 'SusunJadwal',
+  name: 'ArrangeSchedule',
   components: {
     CourseGroup,
     CoursePlaceholder

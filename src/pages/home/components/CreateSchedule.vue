@@ -68,11 +68,11 @@
       v-model="showCurrentChosenTable"
       title="Jadwal Sementara"
       header-text-variant="dark"
-      header-class="modal-header-yellow tabel-jadwal"
-      dialog-class="tabel-jadwal"
+      header-class="modal-header-yellow schedule-table"
+      dialog-class="schedule-table"
       hide-footer
     >
-      <tabel-jadwal :jadwal="chosenClass" />
+      <schedule-table :chosen-class="chosenClass" />
       <div class="d-flex justify-content-end mt-2">
         <form class="form-inline">
           <div class="input-group mr-2">
@@ -85,7 +85,7 @@
           </div>
           <button
             class="btn btn-yellow"
-            @click.prevent="simpanJadwal"
+            @click.prevent="saveSchedule"
           >
             <b>Simpan</b>
           </button>
@@ -103,7 +103,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import TabelJadwal from './TabelJadwal'
+import ScheduleTable from './ScheduleTable'
 import ArrangeSchedule from './ArrangeSchedule'
 import {
   CREATE_SCHEDULE__UPLOAD_FILE,
@@ -113,10 +113,10 @@ import {
 } from '@/store/actions.type'
 
 export default {
-  name: 'BuatJadwal',
+  name: 'CreateSchedule',
 
   components: {
-    TabelJadwal,
+    ScheduleTable,
     ArrangeSchedule
   },
 

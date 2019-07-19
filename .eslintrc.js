@@ -10,7 +10,8 @@ module.exports = {
   rules: {
     'no-console': 'error',
     'no-debugger': 'error',
-    'prefer-template': 'warn'
+    'prefer-template': 'warn',
+    'dot-notation': 'warn'
   },
   parserOptions: {
     parser: 'babel-eslint'

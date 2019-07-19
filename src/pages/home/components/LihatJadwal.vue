@@ -4,8 +4,8 @@
       <h4 class="text-center">
         {{ namaJadwal }}
       </h4>
-      <tabel-jadwal
-        :jadwal="jadwal.chosenClass"
+      <schedule-table
+        :chosen-class="jadwal.chosenClass"
         class="mb-3"
       />
       <div class="text-right">
@@ -64,12 +64,12 @@ import {
   NAMA_JADWAL_LIST,
   JADWAL_LIST
 } from '@/helper/storage'
-import TabelJadwal from './TabelJadwal'
+import ScheduleTable from './ScheduleTable'
 
 export default {
   name: 'LihatJadwal',
   components: {
-    TabelJadwal
+    ScheduleTable
   },
   props: {
     namaJadwal: {
