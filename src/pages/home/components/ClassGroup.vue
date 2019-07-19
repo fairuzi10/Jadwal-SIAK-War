@@ -2,45 +2,45 @@
   <!-- eslint-disable vue/no-v-html -->
   <!-- eslint-disable vue/valid-v-html -->
   <div
-    class="mb-4 course-card"
+    class="mb-4 class-card"
   >
     <h5 class="text-center">
-      {{ clas.name }}
+      {{ classGroup.name }}
     </h5>
-    <div class="course">
+    <div class="class">
       <div
-        v-for="classIns in clas.options"
-        :key="classIns.NO"
-        class="class-card"
-        :class="{ active: chosen == classIns }"
-        @click="updateChosenClassIns(clas.name, classIns)"
+        v-for="classInstance in classGroup.options"
+        :key="classInstance.NO"
+        class="class-instance-card"
+        :class="{ active: chosenClass[classGroup.name] == classInstance }"
+        @click="chooseOrToggleClassInstance(classGroup.name, classInstance)"
       >
         <div class="row">
           <div
-            class="kolom-info kolom-kelas"
+            class="info-col class-col"
           >
-            {{ classIns['NAMA KELAS'] }}
+            {{ classInstance['NAMA KELAS'] }}
           </div>
-          <template v-if="classIns.WAKTU">
+          <template v-if="classInstance.WAKTU">
             <div
-              class="kolom-info kolom-waktu"
-              v-html="classIns.WAKTU.join('<br />')"
+              class="info-col time-col"
+              v-html="classInstance.WAKTU.join('<br />')"
             />
             <div
-              class="kolom-info kolom-ruang"
-              v-html="classIns.RUANG.join('<br />')"
+              class="info-col room-col"
+              v-html="classInstance.RUANG.join('<br />')"
             />
             <div
-              class="kolom-info kolom-pengajar"
-              v-html="classIns.PENGAJAR.join('<br />')"
+              class="info-col lecturer-col"
+              v-html="classInstance.PENGAJAR.join('<br />')"
             />
           </template>
           <!-- special case, tugas akhir/kerja praktik -->
           <div
             v-else
-            class="kolom-info kolom-keterangan"
+            class="info-col description-col"
           >
-            {{ classIns['PERIODE'][0] }}
+            {{ classInstance.PERIODE[0] }}
           </div>
         </div>
       </div>
@@ -49,20 +49,25 @@
 </template>
 
 <script>
+import { ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE } from '@/store/actions.type'
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'Course',
+  name: 'ClassGroup',
   props: {
-    clas: {
+    classGroup: {
       type: Object,
       required: true
-    },
-    chosen: {
-      type: Object,
-      default: null
-    },
-    updateChosenClassIns: {
-      type: Function,
-      required: true
+    }
+  },
+  computed: {
+    ...mapGetters({
+      chosenClass: 'arrangeSchedule_chosenClass'
+    })
+  },
+  methods: {
+    chooseOrToggleClassInstance (className, classInstance) {
+      this.$store.dispatch(ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE, { className, classInstance })
     }
   }
 }
@@ -70,18 +75,18 @@ export default {
 
 <style lang="scss" scoped>
 
-.kolom-kelas { width: 20% }
-.kolom-waktu { width: 30% }
-.kolom-ruang { width: 20% }
-.kolom-pengajar {width: 30% }
-.kolom-keterangan { flex-grow: 1 }
+.class-col { width: 20% }
+.time-col { width: 30% }
+.room-col { width: 20% }
+.lecturer-col {width: 30% }
+.description-col { flex-grow: 1 }
 
-.course {
+.class {
   border: 1px solid $border-color;
   border-radius: $border-radius;
 }
 
-.class-card {
+.class-instance-card {
   cursor: pointer;
   font-size: 0.5rem;
   padding: 0.2rem 0.75rem;
@@ -89,7 +94,7 @@ export default {
   background-color: $white;
   transition: background-color 0.15s ease-in-out;
 
-  // to make the border from course visible
+  // to make the border from class visible
   &:first-child {
     border-top-left-radius: $border-radius;
     border-top-right-radius: $border-radius;
@@ -141,7 +146,7 @@ export default {
   }
 }
 
-.kolom-info {
+.info-col {
   padding: 0 0.25rem;
   text-align: center;
 
@@ -153,16 +158,16 @@ export default {
   }
 }
 
-.class-card:not(:disabled):not(.disabled).active {
+.class-instance-card:not(:disabled):not(.disabled).active {
   background-color: $yellow3;
   color: $dark;
 }
 
-.class-card:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
+.class-instance-card:not(:disabled):not(.disabled).active:focus, .show > .btn-secondary.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
 }
 
-.class-card:not(:disabled):not(.disabled):not(.active) {
+.class-instance-card:not(:disabled):not(.disabled):not(.active) {
   box-shadow: 0 0 0 0;
 }
 </style>

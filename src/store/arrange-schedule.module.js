@@ -1,100 +1,121 @@
 import {
-  CHOOSE_CLASS_INS_OR_TOGGLE,
-  COMPUTE_FILTERED_CLASS,
-  FILTER_CHOSEN_CLASS_OPT,
-  FILTER_CLASS_OPT,
-  RESET_ARRANGE_CLASS
+  ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE,
+  ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS,
+  ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
+  ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS,
+  ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
+  ARRANGE_SCHEDULE__REFRESH
 } from './actions.type'
 import {
-  ASSIGN_ELEMENT_CHOSEN_CLASS_OR_TOGGLE,
-  IS_LOADING_CLASS_OPT,
-  SET_CLASS_OPT,
-  SET_FILTER_CHOSEN_CLASS_OPT,
-  SET_FILTER_CLASS_OPT,
-  SET_FILTERED_CLASS
+  ARRANGE_SCHEDULE__ASSIGN_OR_TOGGLE_CHOSEN_CLASS,
+  ARRANGE_SCHEDULE__RESET,
+  ARRANGE_SCHEDULE__SET_CLASS_OPTIONS,
+  ARRANGE_SCHEDULE__SET_CONFLICT_LIST,
+  ARRANGE_SCHEDULE__SET_FILTER,
+  ARRANGE_SCHEDULE__SET_FILTER_IS_CHOSEN_CLASS,
+  ARRANGE_SCHEDULE__SET_FILTERED_CLASS,
+  ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS
 } from './mutations.type'
-import { matchClass } from './utils/class.filter'
+import { matchClass } from './utils/class-filter'
+import { validateClasInstanceNotConflict } from './utils/validate-conflict'
 
 const state = {
-  classOpt: {},
+  classOptions: {},
   filter: '',
-  filterChosen: false,
+  filterChosenClass: false,
   filteredClass: {},
   chosenClass: {},
-  isLoadingClassOpt: false
+  isLoadingClassOptions: false,
+  conflictList: []
 }
 
 const getters = {
-  classOpt: state => state.classOpt,
-  filter: state => state.filter,
-  filterChosen: state => state.filterChosen,
-  filteredClass: state => state.filteredClass,
-  chosenClass: state => state.chosenClass,
-  isLoadingClassOpt: state => state.isLoadingClassOpt
+  arrangeSchedule_classOptions: state => state.classOptions,
+  arrangeSchedule_filter: state => state.filter,
+  arrangeSchedule_filterChosenClass: state => state.filterChosenClass,
+  arrangeSchedule_filteredClass: state => state.filteredClass,
+  arrangeSchedule_chosenClass: state => state.chosenClass,
+  arrangeSchedule_isLoadingClassOptions: state => state.isLoadingClassOptions,
+  arrangeSchedule_conflictList: state => state.conflictList
 }
 
 const mutations = {
-  [SET_CLASS_OPT] (state, classOpt) {
-    state.classOpt = classOpt
-    state.chosenClass = Object.keys(classOpt)
-      .reduce((acc, className) => ({ ...acc, className: null }), {})
+  [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, classOptions) {
+    state.classOptions = classOptions
+    state.chosenClass = Object.keys(classOptions)
+      .reduce((acc, className) => ({ ...acc, [className]: null }), {})
     state.filter = ''
-    state.filterChosen = false
+    state.filterChosenClass = false
   },
   // used in create schedule
-  [IS_LOADING_CLASS_OPT] (state, isLoading) {
-    state.isLoadingClassOpt = isLoading
+  [ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS] (state, isLoading) {
+    state.isLoadingClassOptions = isLoading
   },
-  [ASSIGN_ELEMENT_CHOSEN_CLASS_OR_TOGGLE] (state, { className, classIns }) {
-    state.chosenClass[className] = classIns === state.chosenClass[className] ? null : classIns
+  [ARRANGE_SCHEDULE__ASSIGN_OR_TOGGLE_CHOSEN_CLASS] (state, { className, classInstance }) {
+    state.chosenClass[className] = classInstance === state.chosenClass[className] ? null : classInstance
   },
-  [SET_FILTER_CLASS_OPT] (state, filter) {
+  [ARRANGE_SCHEDULE__SET_FILTER] (state, filter) {
     state.filter = filter
   },
-  [SET_FILTER_CHOSEN_CLASS_OPT] (state, filterChosen) {
-    state.filterChosen = filterChosen
+  [ARRANGE_SCHEDULE__SET_FILTER_IS_CHOSEN_CLASS] (state, filterChosenClass) {
+    state.filterChosenClass = filterChosenClass
   },
-  [SET_FILTERED_CLASS] (state, filteredClass) {
+  [ARRANGE_SCHEDULE__SET_FILTERED_CLASS] (state, filteredClass) {
     state.filteredClass = filteredClass
+  },
+  [ARRANGE_SCHEDULE__RESET] (state) {
+    state.chosenClass = Object.keys(state.classOptions)
+      .reduce((acc, className) => ({ ...acc, [className]: null }), {})
+    state.filter = ''
+    state.filterChosenClass = false
+    state.filteredClass = {}
+  },
+  [ARRANGE_SCHEDULE__SET_CONFLICT_LIST] (state, conflictList) {
+    state.conflictList = conflictList
   }
 }
 
 const actions = {
-  [SET_CLASS_OPT] ({ commit, dispatch }, classOpt) {
-    commit(SET_CLASS_OPT, classOpt)
-    dispatch(COMPUTE_FILTERED_CLASS)
+  [ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS] ({ commit, dispatch }, classOptions) {
+    commit(ARRANGE_SCHEDULE__SET_CLASS_OPTIONS, classOptions)
+    dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
-  [CHOOSE_CLASS_INS_OR_TOGGLE] ({ commit }, { className, classIns }) {
-    commit(ASSIGN_ELEMENT_CHOSEN_CLASS_OR_TOGGLE, { className, classIns })
+  [ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE] ({ commit, state }, { className, classInstance }) {
+    const conflictList = validateClasInstanceNotConflict(className, classInstance, state.chosenClass)
+    if (conflictList.length === 0) {
+      commit(ARRANGE_SCHEDULE__ASSIGN_OR_TOGGLE_CHOSEN_CLASS, { className, classInstance })
+    } else {
+      commit(ARRANGE_SCHEDULE__SET_CONFLICT_LIST, conflictList)
+    }
   },
-  [COMPUTE_FILTERED_CLASS] ({ commit, state }) {
-    let filteredClass = state.classOpt
+  [ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS] ({ commit, state }) {
+    let filteredClass = state.classOptions
     if (state.filter) {
       const filteredClassName = Object.keys(filteredClass).filter(className => matchClass(filteredClass[className], state.filter))
       filteredClass = filteredClassName.reduce((acc, className) => ({
         ...acc, [className]: filteredClass[className]
       }), {})
     }
-    if (state.filterChosen) {
+    if (state.filterChosenClass) {
       filteredClass = Object.keys(filteredClass).reduce((acc, className) => (
         state.chosenClass[className]
           ? { ...acc, [className]: filteredClass[className] }
           : acc
       ), {})
     }
-    commit(SET_FILTERED_CLASS, filteredClass)
+    commit(ARRANGE_SCHEDULE__SET_FILTERED_CLASS, filteredClass)
   },
-  [FILTER_CLASS_OPT] ({ commit, dispatch }, filter) {
-    commit(SET_FILTER_CLASS_OPT, filter)
-    dispatch(COMPUTE_FILTERED_CLASS)
+  [ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS] ({ commit, dispatch }, filter) {
+    commit(ARRANGE_SCHEDULE__SET_FILTER, filter)
+    dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
-  [FILTER_CHOSEN_CLASS_OPT] ({ commit, dispatch }, filterChosen) {
-    commit(SET_FILTER_CHOSEN_CLASS_OPT, filterChosen)
-    dispatch(COMPUTE_FILTERED_CLASS)
+  [ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS] ({ commit, dispatch }, filterChosen) {
+    commit(ARRANGE_SCHEDULE__SET_FILTER_IS_CHOSEN_CLASS, filterChosen)
+    dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
-  [RESET_ARRANGE_CLASS] ({ commit, dispatch, state }) {
-    commit(SET_CLASS_OPT, state.classOpt)
-    dispatch(COMPUTE_FILTERED_CLASS)
+  [ARRANGE_SCHEDULE__REFRESH] ({ commit, dispatch, state }) {
+    commit(ARRANGE_SCHEDULE__RESET)
+    dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   }
 }
 

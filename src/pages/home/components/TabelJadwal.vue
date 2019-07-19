@@ -156,13 +156,13 @@ export default {
     },
     waktuToTopOffset (waktu) {
       // start from jam 8
-      return (this.waktuDalamJam(waktu) - this.listJam[0]) * this.barisJamHeight + 'px'
+      return `${(this.waktuDalamJam(waktu) - this.listJam[0]) * this.barisJamHeight}px`
     },
     waktuToHeight (waktu) {
       const waktuAwal = waktu.substr(0, 5)
       const waktuAkhir = waktu.substr(6, 5)
       const durasi = this.waktuDalamJam(waktuAkhir) - this.waktuDalamJam(waktuAwal)
-      return durasi * this.barisJamHeight + 'px'
+      return `${durasi * this.barisJamHeight}px`
     },
     generateList (from, to) {
       const result = []

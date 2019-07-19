@@ -1,26 +1,26 @@
 <template>
-  <div id="buat-jadwal">
+  <div id="create-schedule">
     <h3 class="text-center">
       Buat Jadwal
     </h3>
 
-    <form id="pilih-jurusan-form">
+    <form id="choose-major-form">
       <div
         v-if="!file"
         class="form-group"
       >
         <select
-          id="pilih-jurusan"
+          id="choose-major"
           class="form-control"
           @change="setMajor($event.target.value)"
         >
           <option
-            v-for="opsi_jurusan in list_jurusan"
-            :key="opsi_jurusan.value"
-            :value="opsi_jurusan.value"
-            :selected="opsi_jurusan.value === major"
+            v-for="majorOption in majorList"
+            :key="majorOption.value"
+            :value="majorOption.value"
+            :selected="majorOption.value === major"
           >
-            {{ opsi_jurusan.label }}
+            {{ majorOption.label }}
           </option>
         </select>
       </div>
@@ -33,35 +33,31 @@
         </div>
         <div class="custom-file">
           <input
-            id="file-jadwal"
+            id="schedule-file"
             type="file"
             class="custom-file-input"
             @change="setFile($event.target.files[0])"
           >
           <label
             class="custom-file-label"
-            for="file-jadwal"
+            for="schedule-file"
           >{{ file ? file.name : 'Unggah Jadwal' }}</label>
         </div>
         <div
-          v-if="validHtmlFile === false"
+          v-if="isValidFile === false"
           class="invalid-feedback d-block"
         >
           Pastikan file yang Anda unggah merupakan file HTML.
         </div>
       </div>
-      <div
-        v-if="major || file"
-        class="d-flex justify-content-end"
-      />
     </form>
 
-    <susun-jadwal />
+    <arrange-schedule />
 
-    <transition name="button-jadwal-sementara">
+    <transition name="button-current-schedule">
       <button
         v-if="!allValueOfObjectIsNull(chosenClass)"
-        id="button-jadwal-sementara"
+        id="button-current-schedule"
         @click="showCurrentChosenTable = true"
       >
         Lihat Jadwal Sementara
@@ -81,10 +77,10 @@
         <form class="form-inline">
           <div class="input-group mr-2">
             <b-input
-              v-model="namaJadwal"
               class="mr-2"
-              :placeholder="namaJadwalDefault"
-              :state="validNamaJadwal"
+              :placeholder="suggestedScheduleName"
+              :state="isValidTypedScheduleName"
+              @change="setTypedScheduleName"
             />
           </div>
           <button
@@ -96,7 +92,7 @@
         </form>
       </div>
       <b-form-invalid-feedback
-        :state="validNamaJadwal"
+        :state="isValidTypedScheduleName"
         class="text-right"
       >
         Kamu telah memiliki jadwal dengan nama yang sama.
@@ -107,46 +103,26 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  getObjectOrArray,
-  addArrayElement,
-  addObjectProperty,
-  setItem,
-  getItem,
-  JADWAL_LIST,
-  NAMA_JADWAL_LIST,
-  SUGGESTED_NAMA_JADWAL
-} from '@/helper/storage'
 import TabelJadwal from './TabelJadwal'
-import SusunJadwal from './SusunJadwal'
-import { UPLOAD_SCHEDULE_FILE, SELECT_MAJOR } from '@/store/actions.type'
+import ArrangeSchedule from './ArrangeSchedule'
+import {
+  CREATE_SCHEDULE__UPLOAD_FILE,
+  CREATE_SCHEDULE__SELECT_MAJOR,
+  CREATE_SCHEDULE__SAVE_SCHEDULE,
+  CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME
+} from '@/store/actions.type'
 
 export default {
   name: 'BuatJadwal',
 
   components: {
     TabelJadwal,
-    SusunJadwal
-  },
-
-  props: {
-    updateJadwalDilihat: {
-      type: Function,
-      required: true
-    },
-    updateNamaJadwalList: {
-      type: Function,
-      required: true
-    },
-    classOpt: {
-      type: Object,
-      default: null
-    }
+    ArrangeSchedule
   },
 
   data () {
     return {
-      list_jurusan: [
+      majorList: [
         { label: 'Pilih Jurusanmu', value: null },
         ...[
           { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
@@ -154,51 +130,33 @@ export default {
           { label: 'Farmasi', value: 'farmasi' }
         ].sort((a, b) => a.label.localeCompare(b.label))
       ],
-      validHtmlFile: null,
-      namaJadwal: null,
-      validNamaJadwal: null,
       loading: false,
       showCurrentChosenTable: false
     }
   },
   computed: {
-    ...mapGetters({ file: 'createScheduleFile', major: 'createScheduleMajor', chosenClass: 'chosenClass' }),
-    namaJadwalDefault () {
-      if (this.edittedNamaJadwal) return this.edittedNamaJadwal
-      const suggestion = getItem(SUGGESTED_NAMA_JADWAL) || 'Plan A'
-      return suggestion
-    }
+    ...mapGetters({
+      file: 'createSchedule_file',
+      major: 'createSchedule_major',
+      isValidFile: 'createSchedule_isValidFile',
+      chosenClass: 'arrangeSchedule_chosenClass',
+      suggestedScheduleName: 'createSchedule_suggestedScheduleName',
+      isValidTypedScheduleName: 'createSchedule_isValidTypedScheduleName'
+    })
   },
   methods: {
     setFile (file) {
-      this.$store.dispatch(UPLOAD_SCHEDULE_FILE, file)
+      this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
     },
     setMajor (major) {
-      this.$store.dispatch(SELECT_MAJOR, major)
+      this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
     },
-    simpanJadwal () {
-      const nama = this.namaJadwal || this.namaJadwalDefault
-      const existingJadwal = getObjectOrArray(JADWAL_LIST) || {}
-      if (nama in existingJadwal) {
-        this.validNamaJadwal = false
-      } else {
-        this.validNamaJadwal = true
-        addArrayElement(NAMA_JADWAL_LIST, nama)
-        addObjectProperty(JADWAL_LIST, nama, {
-          classOpt: this.classOpt,
-          chosenClass: this.chosenClass
-        })
-
-        const nextNamaJadwalDefault = this.namaJadwalDefault.slice(0, -1) +
-          String.fromCharCode(this.namaJadwalDefault.charCodeAt(this.namaJadwalDefault.length - 1) + 1)
-        setItem(SUGGESTED_NAMA_JADWAL, nextNamaJadwalDefault)
-
-        this.updateNamaJadwalList()
-        this.showCurrentChosenTable = false
-        this.reset()
-        this.updateJadwalDilihat(nama)
-        this.scrollIntoView('top-view')
-      }
+    setTypedScheduleName (typedScheduleName) {
+      this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
+    },
+    saveSchedule () {
+      this.$store.dispatch(CREATE_SCHEDULE__SAVE_SCHEDULE)
+      this.scrollIntoView('top-view')
     }
   }
 }
@@ -206,12 +164,12 @@ export default {
 
 <style lang="scss" scoped>
 
-#buat-jadwal {
+#create-schedule {
   min-height: $min-window-height;
   padding: 3rem 1rem;
 }
 
-#pilih-jurusan-form {
+#choose-major-form {
   border: 1px solid $border-color;
   border-radius: $border-radius;
   padding: 1rem 2rem;
@@ -224,7 +182,7 @@ export default {
   }
 }
 
-#button-jadwal-sementara {
+#button-current-schedule {
   position: fixed;
   right: 30px;
   bottom: 30px;
@@ -236,20 +194,21 @@ export default {
   font-weight: bold;
   background-color: $yellow3;
   background-image: $gradient-yellow;
+  box-shadow: 0px 20px 20px -10px rgba(0,64,128,0.2);
 
   &:hover {
     background-image: $gradient-yellow-dark;
   }
 }
 
-.button-jadwal-sementara-enter-active {
-  animation: button-jadwal-sementara .5s;
+.button-current-schedule-enter-active {
+  animation: button-current-schedule .5s;
 }
-.button-jadwal-sementara-leave-active {
-  animation: button-jadwal-sementara .5s reverse;
+.button-current-schedule-leave-active {
+  animation: button-current-schedule .5s reverse;
 }
 
-@keyframes button-jadwal-sementara {
+@keyframes button-current-schedule {
   from {
     bottom: 0px;
     opacity: 0;

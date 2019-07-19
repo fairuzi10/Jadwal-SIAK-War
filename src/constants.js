@@ -1,4 +1,5 @@
-export const classInsInfo = {
+export const classInstanceInfo = {
   NAMA_KELAS: 'NAMA KELAS',
-  PENGAJAR: 'PENGAJAR'
+  PENGAJAR: 'PENGAJAR',
+  WAKTU: 'WAKTU'
 }

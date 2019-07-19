@@ -39,21 +39,9 @@
               :show-buat-jadwal="showBuatJadwal"
               :update-nama-jadwal-list="updateNamaJadwalList"
             />
-            <buat-jadwal
+            <create-schedule
               v-else
-              key="buat-jadwal"
-              :class-opt="classOpt"
-              :update-jadwal-dilihat="updateJadwalDilihat"
-              :update-nama-jadwal-list="updateNamaJadwalList"
-              :jurusan="jurusan"
-              :file="file"
-              :filter="filter"
-              :filter-selected="filterSelected"
-              @set-jurusan="jurusan = $event"
-              @set-file="file = $event"
-              @set-class-opt="classOpt = $event"
-              @set-filter="filter = $event"
-              @set-filter-selected="filterSelected = $event"
+              key="create-schedule"
             />
           </transition>
         </div>
@@ -64,7 +52,7 @@
 
 <script>
 import JadwalTersimpan from './components/JadwalTersimpan'
-import BuatJadwal from './components/BuatJadwal'
+import CreateSchedule from './components/CreateSchedule'
 import LihatJadwal from './components/LihatJadwal'
 import {
   getObjectOrArray,
@@ -82,7 +70,7 @@ export default {
   name: 'JadwalSiak',
   components: {
     JadwalTersimpan,
-    BuatJadwal,
+    CreateSchedule,
     LihatJadwal,
     BNavbar,
     BNavbarBrand

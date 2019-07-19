@@ -1,13 +1,13 @@
-import { classInsInfo } from '@/constants'
+import { classInstanceInfo } from '@/constants'
 
 const cleanify = raw => raw.replace('-', ' ').toUpperCase()
 
 const matchClassName = (className, filter) => cleanify(className).includes(cleanify(filter))
 
-const matchClassInsName = (classIns, filter) => cleanify(classIns[classInsInfo.NAMA_KELAS]).includes(cleanify(filter))
+const matchClassInsName = (classIns, filter) => cleanify(classIns[classInstanceInfo.NAMA_KELAS]).includes(cleanify(filter))
 
 const matchLecturerName = (listOfClassIns, filter) => {
-  const lecturersNamePerClassIns = listOfClassIns.map(classIns => (classIns[classInsInfo.PENGAJAR] || []).join(', '))
+  const lecturersNamePerClassIns = listOfClassIns.map(classIns => (classIns[classInstanceInfo.PENGAJAR] || []).join(', '))
   const allLecturersName = lecturersNamePerClassIns.join(', ')
   return cleanify(allLecturersName).includes(cleanify(filter))
 }
