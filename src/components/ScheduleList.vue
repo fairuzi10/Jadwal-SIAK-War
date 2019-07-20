@@ -14,7 +14,7 @@
         v-for="schedule in scheduleList"
         :key="schedule.id"
         class="mb-3 schedule-card"
-        :class="{ selected: schedule.id === $route.params.id }"
+        :class="{ selected: schedule.id === $route.params.scheduleId }"
       >
         <div>
           {{ schedule.name }}

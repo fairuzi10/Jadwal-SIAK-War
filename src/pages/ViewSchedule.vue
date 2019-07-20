@@ -56,7 +56,7 @@ export default {
       scheduleList: 'scheduleList_scheduleList'
     }),
     schedule () {
-      return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId)
+      return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId) || {}
     }
   },
   methods: {
