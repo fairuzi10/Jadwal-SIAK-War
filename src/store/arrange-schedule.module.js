@@ -3,6 +3,7 @@ import {
   ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS,
   ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS,
+  ARRANGE_SCHEDULE__INIT,
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__REFRESH
 } from './actions.type'
@@ -26,7 +27,8 @@ const state = {
   filteredClass: {},
   chosenClass: {},
   isLoadingClassOptions: false,
-  conflictList: []
+  conflictList: [],
+  shouldBeRefreshedOnNextLoad: true
 }
 
 const getters = {
@@ -40,12 +42,13 @@ const getters = {
 }
 
 const mutations = {
-  [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, classOptions) {
+  [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, shouldBeRefreshedOnNextLoad }) {
     state.classOptions = classOptions
     state.chosenClass = Object.keys(classOptions)
       .reduce((acc, className) => ({ ...acc, [className]: null }), {})
     state.filter = ''
     state.filterChosenClass = false
+    state.shouldBeRefreshedOnNextLoad = shouldBeRefreshedOnNextLoad
   },
   // used in create schedule
   [ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS] (state, isLoading) {
@@ -76,8 +79,8 @@ const mutations = {
 }
 
 const actions = {
-  [ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS] ({ commit, dispatch }, classOptions) {
-    commit(ARRANGE_SCHEDULE__SET_CLASS_OPTIONS, classOptions)
+  [ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS] ({ commit, dispatch }, { classOptions, shouldBeRefreshedOnNextLoad }) {
+    commit(ARRANGE_SCHEDULE__SET_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad })
     dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
   [ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE] ({ commit, state }, { className, classInstance }) {
@@ -116,6 +119,11 @@ const actions = {
   [ARRANGE_SCHEDULE__REFRESH] ({ commit, dispatch, state }) {
     commit(ARRANGE_SCHEDULE__RESET)
     dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
+  },
+  [ARRANGE_SCHEDULE__INIT] ({ dispatch, state }) {
+    if (state.shouldBeRefreshedOnNextLoad) {
+      dispatch(ARRANGE_SCHEDULE__REFRESH)
+    }
   }
 }
 

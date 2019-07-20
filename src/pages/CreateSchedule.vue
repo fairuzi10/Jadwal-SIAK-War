@@ -109,7 +109,7 @@ import {
   CREATE_SCHEDULE__SELECT_MAJOR,
   CREATE_SCHEDULE__SAVE_SCHEDULE,
   CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
-  CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR
+  CREATE_SCHEDULE__INIT
 } from '@/store/actions.type'
 
 export default {
@@ -142,9 +142,7 @@ export default {
     })
   },
   mounted () {
-    if (this.major) {
-      this.$store.dispatch(CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR)
-    }
+    this.$store.dispatch(CREATE_SCHEDULE__INIT)
   },
   methods: {
     setFile (file) {

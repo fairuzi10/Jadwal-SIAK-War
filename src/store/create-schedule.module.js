@@ -5,9 +5,10 @@ import { parseTables } from '@/helper/table-parser.js'
 import uuidv4 from 'uuid/v4'
 
 import {
+  ARRANGE_SCHEDULE__INIT,
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__REFRESH,
-  CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR,
+  CREATE_SCHEDULE__INIT,
   CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
   CREATE_SCHEDULE__REFRESH,
   CREATE_SCHEDULE__SAVE_SCHEDULE,
@@ -18,6 +19,7 @@ import {
 } from './actions.type'
 import {
   ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS,
+  CREATE_SCHEDULE__HAS_BEEN_LOADED,
   CREATE_SCHEDULE__RESET,
   CREATE_SCHEDULE__SET_FILE,
   CREATE_SCHEDULE__SET_IS_VALID_FILE,
@@ -30,10 +32,11 @@ import {
 const state = {
   file: null,
   isValidFile: null,
-  major: getItem(LAST_SELECTED_MAJOR) || '',
+  major: '',
   typedScheduleName: '',
   isValidTypedScheduleName: null,
-  suggestedScheduleName: getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A'
+  suggestedScheduleName: getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A',
+  hasBeenLoaded: false
 }
 
 const getters = {
@@ -67,6 +70,9 @@ const mutations = {
   },
   [CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME] (state, suggestedScheduleName) {
     state.suggestedScheduleName = suggestedScheduleName
+  },
+  [CREATE_SCHEDULE__HAS_BEEN_LOADED] (state) {
+    state.hasBeenLoaded = true
   }
 }
 
@@ -79,8 +85,8 @@ const actions = {
       const htmlString = await readFile(file)
       const htmlDom = await readHtml(htmlString)
       const tables = htmlDom.querySelectorAll('table.box')
-      const classOpt = await parseTables(tables)
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, classOpt)
+      const classOptions = await parseTables(tables)
+      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad: false })
     } else {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, false)
       commit(CREATE_SCHEDULE__SET_FILE, null)
@@ -88,19 +94,16 @@ const actions = {
     }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
-  async [CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR] ({ dispatch, state }) {
-    if (state.major) {
-      const classOpt = (await import(`@/data/${state.major}.json`)).default
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, classOpt)
-    } else {
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
-    }
-  },
-  [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
+  async [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
     commit(CREATE_SCHEDULE__SET_MAJOR, major)
     setItem(LAST_SELECTED_MAJOR, major)
-    dispatch(CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR)
+    if (state.major) {
+      const classOptions = (await import(`@/data/${state.major}.json`)).default
+      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad: false })
+    } else {
+      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
+    }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
   [CREATE_SCHEDULE__SAVE_SCHEDULE] ({ commit, dispatch, state, rootState }) {
@@ -138,6 +141,16 @@ const actions = {
   },
   [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
     commit(CREATE_SCHEDULE__SET_TYPED_SCHEDULE_NAME, typedScheduleName)
+  },
+  [CREATE_SCHEDULE__INIT] ({ commit, dispatch, state }) {
+    if (!state.hasBeenLoaded) {
+      const major = getItem(LAST_SELECTED_MAJOR)
+      if (major) {
+        dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
+      }
+      dispatch(ARRANGE_SCHEDULE__INIT)
+      commit(CREATE_SCHEDULE__HAS_BEEN_LOADED)
+    }
   }
 }
 
