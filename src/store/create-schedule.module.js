@@ -96,12 +96,10 @@ const actions = {
       dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
     }
   },
-  async [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
-    await Promise.all([
-      commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true),
-      commit(CREATE_SCHEDULE__SET_MAJOR, major),
-      setItem(LAST_SELECTED_MAJOR, major)
-    ])
+  [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
+    commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
+    commit(CREATE_SCHEDULE__SET_MAJOR, major)
+    setItem(LAST_SELECTED_MAJOR, major)
     dispatch(CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR)
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
