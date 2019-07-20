@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <h1>Jadwal SIAK War</h1>
+  <div class="p-5">
+    <h1 class="text-center">
+      Jadwal SIAK War
+    </h1>
     <router-link :to="{ name: 'create-schedule' }">
       Create Schedule
     </router-link>

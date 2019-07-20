@@ -4,14 +4,13 @@
       toggleable="lg"
       variant="light"
     >
-      <b-navbar-brand
-        href="."
-        class="text-decoration-none"
-      >
-        <div id="navbar-logo">
-          Jadwal SIAK War
-        </div>
-      </b-navbar-brand>
+      <router-link :to="{name: 'home'}">
+        <b-navbar-brand class="text-decoration-none">
+          <div id="navbar-logo">
+            Jadwal SIAK War
+          </div>
+        </b-navbar-brand>
+      </router-link>
       <template v-if="!isShowingSidebar">
         <b-navbar-toggle target="nav-collapse" />
         <b-collapse
