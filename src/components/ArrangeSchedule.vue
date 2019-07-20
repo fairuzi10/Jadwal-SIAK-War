@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="text-right">
+      <div class="text-right mb-3">
         <button
           class="btn btn-red"
           @click.prevent="reset"
@@ -38,14 +38,14 @@
         </button>
       </div>
 
-      <course-group
+      <class-group
         v-for="(curClass, className) in filteredClass"
         :key="className"
         :class-group="curClass"
         class="mb-3"
       />
     </template>
-    <course-placeholder v-else />
+    <class-placeholder v-else />
     <b-modal
       id="conflict-modal"
       v-model="isShowingModal"
@@ -67,8 +67,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import CourseGroup from './ClassGroup'
-import CoursePlaceholder from './ClassPlaceholder'
+import ClassGroup from './ClassGroup'
+import ClassPlaceholder from './ClassPlaceholder'
 import {
   ARRANGE_SCHEDULE__REFRESH,
   ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
@@ -78,8 +78,8 @@ import {
 export default {
   name: 'ArrangeSchedule',
   components: {
-    CourseGroup,
-    CoursePlaceholder
+    ClassGroup,
+    ClassPlaceholder
   },
   data () {
     return {

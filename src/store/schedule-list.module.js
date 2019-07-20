@@ -1,36 +1,34 @@
-import { addObjectProperty, getObjectOrArray, setObjectOrArray } from '@/helper/storage'
-import { LAST_SEEN_SCHEDULE_NAME, SCHEDULE_LIST } from '@/helper/storage.type'
+import { addArrayElement, getObjectOrArray, setObjectOrArray } from '@/helper/storage'
+import { SCHEDULE_LIST } from '@/helper/storage.type'
 
-import { SCHEDULE_LIST__ADD, SCHEDULE_LIST__LOAD_ACTIVE_SEEN_SCHEDULE } from './actions.type'
-import { SCHEDULE_LIST__APPEND, SCHEDULE_LIST__SET_ACTIVE_SEEN_SCHEDULE } from './mutations.type'
+import { SCHEDULE_LIST__ADD, SCHEDULE_LIST__REMOVE } from './actions.type'
+import { SCHEDULE_LIST__APPEND, SCHEDULE_LIST__ERASE } from './mutations.type'
 
 const state = {
-  scheduleList: getObjectOrArray(SCHEDULE_LIST) || {},
-  activeSeenSchedule: null
+  scheduleList: getObjectOrArray(SCHEDULE_LIST) || []
 }
 
 const getters = {
-  scheduleList_scheduleList: state => state.scheduleList,
-  scheduleList_activeSeenSchedule: state => state.activeSeenSchedule
+  scheduleList_scheduleList: state => state.scheduleList
 }
 
 const mutations = {
-  [SCHEDULE_LIST__APPEND] (state, { scheduleName, schedule }) {
-    state.scheduleList = { ...state.scheduleList, [scheduleName]: schedule }
+  [SCHEDULE_LIST__APPEND] (state, { id, name, classOptions, chosenClass }) {
+    state.scheduleList = [ ...state.scheduleList, { id, name, classOptions, chosenClass } ]
   },
-  [SCHEDULE_LIST__SET_ACTIVE_SEEN_SCHEDULE] (state, activeSeenSchedule) {
-    state.activeSeenSchedule = activeSeenSchedule
+  [SCHEDULE_LIST__ERASE] (state, scheduleId) {
+    state.scheduleList = state.scheduleList.filter(schedule => schedule.id !== scheduleId)
   }
 }
 
 const actions = {
-  [SCHEDULE_LIST__ADD] ({ commit }, { scheduleName, schedule }) {
-    commit(SCHEDULE_LIST__APPEND, { scheduleName, schedule })
-    addObjectProperty(SCHEDULE_LIST, scheduleName, schedule)
+  [SCHEDULE_LIST__ADD] ({ commit }, { id, name, classOptions, chosenClass }) {
+    commit(SCHEDULE_LIST__APPEND, { id, name, classOptions, chosenClass })
+    addArrayElement(SCHEDULE_LIST, { id, name, classOptions, chosenClass })
   },
-  [SCHEDULE_LIST__LOAD_ACTIVE_SEEN_SCHEDULE] ({ commit }, activeSeenScheduleName) {
-    commit(SCHEDULE_LIST__SET_ACTIVE_SEEN_SCHEDULE, activeSeenScheduleName)
-    setObjectOrArray(LAST_SEEN_SCHEDULE_NAME, activeSeenScheduleName)
+  async [SCHEDULE_LIST__REMOVE] ({ commit, state }, scheduleId) {
+    await commit(SCHEDULE_LIST__ERASE, scheduleId)
+    setObjectOrArray(SCHEDULE_LIST, state.scheduleList)
   }
 }
 

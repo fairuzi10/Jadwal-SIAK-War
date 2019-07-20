@@ -9,40 +9,34 @@
         class="text-decoration-none"
       >
         <div id="navbar-logo">
-          Jadwal SIAK
+          Jadwal SIAK War
         </div>
       </b-navbar-brand>
+      <template v-if="!isShowingSidebar">
+        <b-navbar-toggle target="nav-collapse" />
+        <b-collapse
+          id="nav-collapse"
+          class="schedule-list-navbar-wrapper"
+          is-nav
+        >
+          <schedule-list />
+        </b-collapse>
+      </template>
     </b-navbar>
     <div class="container-fluid px-0 d-flex full-height">
       <div class="row no-gutters flex-grow-1">
-        <div class="col-12 col-md-3 d-flex">
-          <jadwal-tersimpan
-            ref="jadwalTersimpan"
-            :update-jadwal-dilihat="updateJadwalDilihat"
-            :show-buat-jadwal="showBuatJadwal"
-            :nama-jadwal-list="namaJadwalList"
-            :jadwal-dilihat="jadwalDilihat"
-          />
-        </div>
+        <schedule-list
+          v-if="isShowingSidebar"
+          class="schedule-list-sidebar-wrapper"
+        />
         <div
-          id="top-view"
-          class="col-12 col-md-9"
+          class="col"
         >
           <transition
             name="fade"
             mode="out-in"
           >
-            <lihat-jadwal
-              v-if="jadwalDilihat"
-              :key="jadwalDilihat"
-              :nama-jadwal="jadwalDilihat"
-              :show-buat-jadwal="showBuatJadwal"
-              :update-nama-jadwal-list="updateNamaJadwalList"
-            />
-            <create-schedule
-              v-else
-              key="create-schedule"
-            />
+            <router-view :key="$route.fullPath" />
           </transition>
         </div>
       </div>
@@ -51,59 +45,53 @@
 </template>
 
 <script>
-import JadwalTersimpan from './components/JadwalTersimpan'
-import CreateSchedule from './components/CreateSchedule'
-import LihatJadwal from './components/LihatJadwal'
+import ScheduleList from '@/components/ScheduleList'
 import {
   getObjectOrArray,
   NAMA_JADWAL_LIST,
   getItem,
   setItem,
-  LAST_SEEN_JADWAL
+  LAST_VIEWED_JADWAL
 } from '@/helper/storage'
-import {
-  BNavbar,
-  BNavbarBrand
-} from 'bootstrap-vue'
+import { WINDOW__RESIZED } from '@/store/actions.type'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'JadwalSiak',
+  name: 'JadwalSiakWar',
   components: {
-    JadwalTersimpan,
-    CreateSchedule,
-    LihatJadwal,
-    BNavbar,
-    BNavbarBrand
+    ScheduleList
   },
-  data () {
-    return {
-      jadwalDilihat: null,
-      namaJadwalList: null,
-      classOpt: null,
-      file: null,
-      jurusan: null,
-      filter: null,
-      filterSelected: null
+  computed: {
+    ...mapGetters({
+      height: 'window_height',
+      width: 'window_width'
+    }),
+    isShowingSidebar () {
+      return this.width > this.breakpoint.lg
     }
   },
   created () {
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize()
     this.updateNamaJadwalList()
-    this.getLastSeenJadwal()
+    this.getLastViewedJadwal()
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     updateJadwalDilihat (namaJadwal) {
-      setItem(LAST_SEEN_JADWAL, namaJadwal)
+      setItem(LAST_VIEWED_JADWAL, namaJadwal)
       this.jadwalDilihat = namaJadwal
-    },
-    showBuatJadwal () {
-      this.updateJadwalDilihat(null)
-      this.scrollIntoView('top-view')
     },
     updateNamaJadwalList () {
       this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST) || []
     },
-    getLastSeenJadwal () {
-      this.jadwalDilihat = getItem(LAST_SEEN_JADWAL)
+    getLastViewedJadwal () {
+      this.jadwalDilihat = getItem(LAST_VIEWED_JADWAL)
+    },
+    handleResize () {
+      this.$store.dispatch(WINDOW__RESIZED)
     }
   }
 }
@@ -143,5 +131,15 @@ body {
 
 .full-height {
   min-height: 1000px;
+}
+
+.schedule-list-navbar-wrapper {
+  margin-top: 8px;
+  margin-bottom: -8px;
+  margin-left: -16px;
+  margin-right: -16px;
+}
+.schedule-list-sidebar-wrapper {
+  width: 16rem;
 }
 </style>

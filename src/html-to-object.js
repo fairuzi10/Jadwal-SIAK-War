@@ -32,12 +32,12 @@ readFiles('data/raw/', function (filename, content) {
   const table = htmlDoc.querySelectorAll('table.box')
   const jurusan = filename.split('.')[0].replace(' ', '-')
   const jurusanData = tp.parse(table)
-  const dataFilename = 'data/' + jurusan + '.json'
+  const dataFilename = `data/${jurusan}.json`
   fs.writeFile(dataFilename, JSON.stringify(jurusanData), function (err) {
     if (err) {
       return console.error(err)
     }
-    console.log(dataFilename + ' was saved!')
+    console.log(`${dataFilename} was saved!`)
   })
 }, function (err) {
   throw err

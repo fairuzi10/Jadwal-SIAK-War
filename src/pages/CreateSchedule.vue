@@ -73,18 +73,17 @@
       hide-footer
     >
       <schedule-table :chosen-class="chosenClass" />
-      <div class="d-flex justify-content-end mt-2">
-        <form class="form-inline">
-          <div class="input-group mr-2">
-            <b-input
-              class="mr-2"
-              :placeholder="suggestedScheduleName"
-              :state="isValidTypedScheduleName"
-              @change="setTypedScheduleName"
-            />
-          </div>
+      <div class="mt-3">
+        <form class="form-inline justify-content-end">
+          <b-input
+            id="typed-schedule-name"
+            class="mr-sm-2 form-control-sm"
+            :placeholder="suggestedScheduleName"
+            :state="isValidTypedScheduleName"
+            @change="setTypedScheduleName"
+          />
           <button
-            class="btn btn-yellow"
+            class="btn btn-yellow btn-sm my-2"
             @click.prevent="saveSchedule"
           >
             <b>Simpan</b>
@@ -103,23 +102,22 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ScheduleTable from './ScheduleTable'
-import ArrangeSchedule from './ArrangeSchedule'
+import ScheduleTable from '@/components/ScheduleTable'
+import ArrangeSchedule from '@/components/ArrangeSchedule'
 import {
   CREATE_SCHEDULE__UPLOAD_FILE,
   CREATE_SCHEDULE__SELECT_MAJOR,
   CREATE_SCHEDULE__SAVE_SCHEDULE,
-  CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME
+  CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
+  CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR
 } from '@/store/actions.type'
 
 export default {
   name: 'CreateSchedule',
-
   components: {
     ScheduleTable,
     ArrangeSchedule
   },
-
   data () {
     return {
       majorList: [
@@ -130,7 +128,6 @@ export default {
           { label: 'Farmasi', value: 'farmasi' }
         ].sort((a, b) => a.label.localeCompare(b.label))
       ],
-      loading: false,
       showCurrentChosenTable: false
     }
   },
@@ -144,6 +141,11 @@ export default {
       isValidTypedScheduleName: 'createSchedule_isValidTypedScheduleName'
     })
   },
+  mounted () {
+    if (this.major) {
+      this.$store.dispatch(CREATE_SCHEDULE__LOAD_CLASS_OPTIONS_FROM_MAJOR)
+    }
+  },
   methods: {
     setFile (file) {
       this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
@@ -154,9 +156,16 @@ export default {
     setTypedScheduleName (typedScheduleName) {
       this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
     },
-    saveSchedule () {
-      this.$store.dispatch(CREATE_SCHEDULE__SAVE_SCHEDULE)
-      this.scrollIntoView('top-view')
+    async saveSchedule () {
+      const createdSchedule = await this.$store.dispatch(CREATE_SCHEDULE__SAVE_SCHEDULE)
+      if (createdSchedule) {
+        this.showCurrentChosenTable = false
+        this.$router.push({ name: 'view-schedule',
+          params: {
+            scheduleId: createdSchedule.id
+          }
+        })
+      }
     }
   }
 }

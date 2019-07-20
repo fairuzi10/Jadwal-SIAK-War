@@ -201,7 +201,9 @@ $time-row-height: 50px;
 }
 
 .time-marker-row {
-  height: $time-row-height;
+  &:not(:last-child) {
+    height: $time-row-height;
+  }
 }
 
 #col-wrapper {

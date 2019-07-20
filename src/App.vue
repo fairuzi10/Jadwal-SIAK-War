@@ -1,17 +1,15 @@
 <template>
-  <home />
+  <jadwal-siak-war />
 </template>
 
 <script>
 import './mixin'
-import store from './store'
-import Home from '@/pages/home'
+import JadwalSiakWar from '@/pages'
 
 export default {
-  store,
   name: 'App',
   components: {
-    Home
+    JadwalSiakWar
   }
 }
 </script>
@@ -90,6 +88,12 @@ h5 {
   border: 1px solid $dark;
   &:hover {
     background-color: $grey1;
+  }
+}
+
+a {
+  &:hover {
+    text-decoration: none;
   }
 }
 </style>

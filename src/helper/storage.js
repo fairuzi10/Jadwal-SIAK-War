@@ -1,6 +1,6 @@
 export const JADWAL_LIST = 'jadwalList'
 export const NAMA_JADWAL_LIST = 'namaJadwalList'
-export const LAST_SEEN_JADWAL = 'lastSeenJadwal'
+export const LAST_VIEWED_JADWAL = 'lastViewedJadwal'
 export const SUGGESTED_NAMA_JADWAL = 'suggestedNamaJadwal'
 
 export const setObjectOrArray = function (key, value) {
