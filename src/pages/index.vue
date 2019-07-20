@@ -46,13 +46,6 @@
 
 <script>
 import ScheduleList from '@/components/ScheduleList'
-import {
-  getObjectOrArray,
-  NAMA_JADWAL_LIST,
-  getItem,
-  setItem,
-  LAST_VIEWED_JADWAL
-} from '@/helper/storage'
 import { WINDOW__RESIZED } from '@/store/actions.type'
 import { mapGetters } from 'vuex'
 
@@ -73,23 +66,11 @@ export default {
   created () {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
-    this.updateNamaJadwalList()
-    this.getLastViewedJadwal()
   },
   destroyed () {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    updateJadwalDilihat (namaJadwal) {
-      setItem(LAST_VIEWED_JADWAL, namaJadwal)
-      this.jadwalDilihat = namaJadwal
-    },
-    updateNamaJadwalList () {
-      this.namaJadwalList = getObjectOrArray(NAMA_JADWAL_LIST) || []
-    },
-    getLastViewedJadwal () {
-      this.jadwalDilihat = getItem(LAST_VIEWED_JADWAL)
-    },
     handleResize () {
       this.$store.dispatch(WINDOW__RESIZED)
     }
