@@ -69,7 +69,7 @@ export default {
       return this.width > this.breakpoint.lg
     }
   },
-  created () {
+  async created () {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
 
@@ -80,17 +80,19 @@ export default {
       setItem(SUGGESTED_SCHEDULE_NAME, 'Plan A')
       setItem(LAST_SESSION, CURRENT_SESSION)
     } else {
-      this.$store.dispatch(SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE)
-      this.$store.dispatch(CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE)
-      this.$store.dispatch(CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE)
+      await Promise.all([
+        this.$store.dispatch(SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE),
+        this.$store.dispatch(CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE),
+        this.$store.dispatch(CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE)
+      ])
     }
   },
   destroyed () {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    handleResize () {
-      this.$store.dispatch(WINDOW__RESIZED)
+    async handleResize () {
+      await this.$store.dispatch(WINDOW__RESIZED)
     }
   }
 }

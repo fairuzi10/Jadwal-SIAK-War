@@ -109,17 +109,17 @@ export default {
     }
   },
   methods: {
-    reset () {
-      this.$store.dispatch(ARRANGE_SCHEDULE__REFRESH)
+    async reset () {
+      await this.$store.dispatch(ARRANGE_SCHEDULE__REFRESH)
     },
-    setFilter (filter) {
-      this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS, filter)
+    async setFilter (filter) {
+      await this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS, filter)
     },
-    setFilterChosenClass (filterChosenClass) {
-      this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS, filterChosenClass)
+    async setFilterChosenClass (filterChosenClass) {
+      await this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS, filterChosenClass)
     },
-    resetConflictList () {
-      this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
+    async resetConflictList () {
+      await this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
     }
   }
 }

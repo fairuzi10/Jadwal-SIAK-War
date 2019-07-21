@@ -58,13 +58,18 @@ export default {
       scheduleList: 'scheduleList_scheduleList'
     }),
     schedule () {
-      return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId) || {}
+      return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId)
+    }
+  },
+  async created () {
+    if (!this.schedule) {
+      await this.$router.pushAsync({ name: '404' })
     }
   },
   methods: {
-    removeSchedule () {
-      this.$store.dispatch(SCHEDULE_LIST__REMOVE, this.$route.params.scheduleId)
-      this.$router.push({ name: 'create-schedule' })
+    async removeSchedule () {
+      await this.$store.dispatch(SCHEDULE_LIST__REMOVE, this.$route.params.scheduleId)
+      await this.$router.pushAsync({ name: 'create-schedule' })
     }
   }
 }

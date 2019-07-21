@@ -67,8 +67,8 @@ export default {
     })
   },
   methods: {
-    chooseOrToggleClassInstance (className, classInstance) {
-      this.$store.dispatch(ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE, { className, classInstance })
+    async chooseOrToggleClassInstance (className, classInstance) {
+      await this.$store.dispatch(ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE, { className, classInstance })
     },
     isSameClassInstance
   }

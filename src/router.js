@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -25,6 +25,19 @@ export default new Router({
       path: '/schedule/:scheduleId/edit',
       name: 'edit-schedule',
       component: () => import('@/pages/EditSchedule')
+    },
+    {
+      path: '/404',
+      name: '404',
+      component: () => import('@/pages/404')
+    },
+    {
+      path: '*',
+      redirect: { name: '404' }
     }
   ]
 })
+
+router.pushAsync = route => new Promise((resolve, reject) => router.push(route, resolve, reject))
+
+export default router

@@ -141,24 +141,24 @@ export default {
       isValidTypedScheduleName: 'createSchedule_isValidTypedScheduleName'
     })
   },
-  mounted () {
-    this.$store.dispatch(CREATE_SCHEDULE__INIT)
+  async mounted () {
+    await this.$store.dispatch(CREATE_SCHEDULE__INIT)
   },
   methods: {
-    setFile (file) {
-      this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
+    async setFile (file) {
+      await this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
     },
-    setMajor (major) {
-      this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
+    async setMajor (major) {
+      await this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
     },
-    setTypedScheduleName (typedScheduleName) {
-      this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
+    async setTypedScheduleName (typedScheduleName) {
+      await this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
     },
     async saveSchedule () {
       const createdSchedule = await this.$store.dispatch(CREATE_SCHEDULE__SAVE_SCHEDULE)
       if (createdSchedule) {
         this.showCurrentChosenTable = false
-        this.$router.push({ name: 'view-schedule',
+        await this.$router.pushAsync({ name: 'view-schedule',
           params: {
             scheduleId: createdSchedule.id
           }

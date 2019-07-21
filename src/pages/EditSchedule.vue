@@ -68,20 +68,23 @@ export default {
       return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId)
     }
   },
-  mounted () {
-    this.$store.dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {
+  async created () {
+    if (!this.schedule) {
+      await this.$router.pushAsync({ name: '404' })
+    }
+    await this.$store.dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {
       classOptions: this.schedule.classOptions,
       chosenClass: this.schedule.chosenClass,
       isCreateSchedule: false
     })
   },
   methods: {
-    saveSchedule () {
+    async saveSchedule () {
       const edittedSchedule = this.schedule
       edittedSchedule.chosenClass = this.chosenClass
-      this.$store.dispatch(SCHEDULE_LIST__CHANGE, edittedSchedule)
+      await this.$store.dispatch(SCHEDULE_LIST__CHANGE, edittedSchedule)
       this.showCurrentChosenTable = false
-      this.$router.push({ name: 'view-schedule',
+      this.$router.pushAsync({ name: 'view-schedule',
         params: {
           scheduleId: edittedSchedule.id
         }

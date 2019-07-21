@@ -6,6 +6,18 @@ import './bootstrap-vue'
 
 Vue.config.productionTip = false
 
+// eslint-disable-next-line handle-callback-err
+Vue.config.errorHandler = function (err, vm, info) {
+  vm.$bvToast.toast(err.message, {
+    title: `Terjadi masalah`,
+    toaster: 'b-toaster-top-center',
+    solid: true,
+    appendToast: false,
+    headerClass: 'text-center',
+    variant: 'danger'
+  })
+}
+
 // eslint-disable-next-line no-unused-vars
 const VueWebComponent = new Vue({
   store,

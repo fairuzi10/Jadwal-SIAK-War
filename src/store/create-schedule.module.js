@@ -154,12 +154,12 @@ const actions = {
   [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
     commit(CREATE_SCHEDULE__SET_TYPED_SCHEDULE_NAME, typedScheduleName)
   },
-  [CREATE_SCHEDULE__INIT] ({ dispatch, state, rootState }) {
+  async [CREATE_SCHEDULE__INIT] ({ dispatch, state, rootState }) {
     if (!rootState.arrangeSchedule.isCreateSchedule) {
       if (state.major) {
-        dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
+        await dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
       } else if (state.file) {
-        dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE)
+        await dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE)
       }
     }
   },
