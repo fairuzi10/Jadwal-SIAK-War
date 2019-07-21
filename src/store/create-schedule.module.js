@@ -96,7 +96,7 @@ const actions = {
     } else {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, false)
       commit(CREATE_SCHEDULE__SET_FILE, null)
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
+      await dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
     }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
@@ -111,10 +111,10 @@ const actions = {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
     commit(CREATE_SCHEDULE__SET_MAJOR, major)
     setItem(LAST_SELECTED_MAJOR, major)
-    dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
+    await dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
-  async [CREATE_SCHEDULE__SAVE_SCHEDULE] ({ commit, dispatch, state, rootState }) {
+  [CREATE_SCHEDULE__SAVE_SCHEDULE] ({ commit, dispatch, state, rootState }) {
     const scheduleName = state.typedScheduleName || state.suggestedScheduleName
     const existingSchedules = getObjectOrArray(SCHEDULE_LIST) || []
     const scheduleNameAlreadyExists = existingSchedules.filter(schedule => schedule.name === scheduleName).length > 0
@@ -137,7 +137,7 @@ const actions = {
       return validSchedule
     }
   },
-  async [CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME] ({ commit, state, rootState }) {
+  [CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME] ({ commit, state, rootState }) {
     const curCharAscii = state.suggestedScheduleName.charCodeAt(state.suggestedScheduleName.length - 1) + 1
     const nextCharAscii = Math.max(curCharAscii, rootState.scheduleList.scheduleList.length + 1)
     const nextSuggestedScheduleName = state.suggestedScheduleName.slice(0, -1) + String.fromCharCode(nextCharAscii)
@@ -148,13 +148,13 @@ const actions = {
     const suggestedScheduleName = getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A'
     commit(CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME, suggestedScheduleName)
   },
-  async [CREATE_SCHEDULE__REFRESH] ({ commit, state }) {
+  [CREATE_SCHEDULE__REFRESH] ({ commit, state }) {
     commit(CREATE_SCHEDULE__RESET)
   },
-  async [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
+  [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
     commit(CREATE_SCHEDULE__SET_TYPED_SCHEDULE_NAME, typedScheduleName)
   },
-  async [CREATE_SCHEDULE__INIT] ({ dispatch, state, rootState }) {
+  [CREATE_SCHEDULE__INIT] ({ dispatch, state, rootState }) {
     if (!rootState.arrangeSchedule.isCreateSchedule) {
       if (state.major) {
         dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
