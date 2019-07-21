@@ -51,6 +51,7 @@
 <script>
 import { ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE } from '@/store/actions.type'
 import { mapGetters } from 'vuex'
+import { isSameClassInstance } from '@/helper/utils'
 
 export default {
   name: 'ClassGroup',
@@ -69,9 +70,7 @@ export default {
     chooseOrToggleClassInstance (className, classInstance) {
       this.$store.dispatch(ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE, { className, classInstance })
     },
-    isSameClassInstance (classInstance1, classInstance2) {
-      return classInstance1 && classInstance2 && classInstance1['NAMA KELAS'] === classInstance2['NAMA KELAS']
-    }
+    isSameClassInstance
   }
 }
 </script>
