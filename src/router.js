@@ -17,9 +17,14 @@ export default new Router({
       component: () => import('@/pages/CreateSchedule')
     },
     {
-      path: '/view/:scheduleId',
+      path: '/schedule/:scheduleId',
       name: 'view-schedule',
       component: () => import('@/pages/ViewSchedule')
+    },
+    {
+      path: '/schedule/:scheduleId/edit',
+      name: 'edit-schedule',
+      component: () => import('@/pages/EditSchedule')
     }
   ]
 })

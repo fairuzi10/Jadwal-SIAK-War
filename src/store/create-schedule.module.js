@@ -5,7 +5,6 @@ import { parseTables } from '@/helper/table-parser.js'
 import uuidv4 from 'uuid/v4'
 
 import {
-  ARRANGE_SCHEDULE__INIT,
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__REFRESH,
   CREATE_SCHEDULE__INIT,
@@ -19,7 +18,8 @@ import {
 } from './actions.type'
 import {
   ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS,
-  CREATE_SCHEDULE__HAS_BEEN_LOADED,
+  CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE,
+  CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR,
   CREATE_SCHEDULE__RESET,
   CREATE_SCHEDULE__SET_FILE,
   CREATE_SCHEDULE__SET_IS_VALID_FILE,
@@ -32,7 +32,7 @@ import {
 const state = {
   file: null,
   isValidFile: null,
-  major: '',
+  major: getItem(LAST_SELECTED_MAJOR) || '',
   typedScheduleName: '',
   isValidTypedScheduleName: null,
   suggestedScheduleName: getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A',
@@ -70,23 +70,27 @@ const mutations = {
   },
   [CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME] (state, suggestedScheduleName) {
     state.suggestedScheduleName = suggestedScheduleName
-  },
-  [CREATE_SCHEDULE__HAS_BEEN_LOADED] (state) {
-    state.hasBeenLoaded = true
   }
 }
 
 const actions = {
+  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE] ({ dispatch, state }) {
+    let classOptions
+    if (state.file) {
+      const htmlString = await readFile(state.file)
+      const htmlDom = await readHtml(htmlString)
+      const tables = htmlDom.querySelectorAll('table.box')
+      classOptions = await parseTables(tables)
+    } else {
+      classOptions = {}
+    }
+    dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
+  },
   async [CREATE_SCHEDULE__UPLOAD_FILE] ({ commit, dispatch }, file) {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
     if (file && file.type === 'text/html') {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, true)
       commit(CREATE_SCHEDULE__SET_FILE, file)
-      const htmlString = await readFile(file)
-      const htmlDom = await readHtml(htmlString)
-      const tables = htmlDom.querySelectorAll('table.box')
-      const classOptions = await parseTables(tables)
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad: false })
     } else {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, false)
       commit(CREATE_SCHEDULE__SET_FILE, null)
@@ -94,19 +98,22 @@ const actions = {
     }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
+  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR] ({ dispatch, state }) {
+    if (state.major) {
+      const classOptions = (await import(`@/data/${state.major}.json`)).default
+      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
+    } else {
+      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
+    }
+  },
   async [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
     commit(CREATE_SCHEDULE__SET_MAJOR, major)
     setItem(LAST_SELECTED_MAJOR, major)
-    if (state.major) {
-      const classOptions = (await import(`@/data/${state.major}.json`)).default
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad: false })
-    } else {
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
-    }
+    dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
-  [CREATE_SCHEDULE__SAVE_SCHEDULE] ({ commit, dispatch, state, rootState }) {
+  async [CREATE_SCHEDULE__SAVE_SCHEDULE] ({ commit, dispatch, state, rootState }) {
     const scheduleName = state.typedScheduleName || state.suggestedScheduleName
     const existingSchedules = getObjectOrArray(SCHEDULE_LIST) || []
     const scheduleNameAlreadyExists = existingSchedules.filter(schedule => schedule.name === scheduleName).length > 0
@@ -129,27 +136,26 @@ const actions = {
       return validSchedule
     }
   },
-  [CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME] ({ commit, state, rootState }) {
+  async [CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME] ({ commit, state, rootState }) {
     const curCharAscii = state.suggestedScheduleName.charCodeAt(state.suggestedScheduleName.length - 1) + 1
     const nextCharAscii = Math.max(curCharAscii, rootState.scheduleList.scheduleList.length + 1)
     const nextSuggestedScheduleName = state.suggestedScheduleName.slice(0, -1) + String.fromCharCode(nextCharAscii)
     commit(CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME, nextSuggestedScheduleName)
     setItem(SUGGESTED_SCHEDULE_NAME, nextSuggestedScheduleName)
   },
-  [CREATE_SCHEDULE__REFRESH] ({ commit, state }) {
+  async [CREATE_SCHEDULE__REFRESH] ({ commit, state }) {
     commit(CREATE_SCHEDULE__RESET)
   },
-  [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
+  async [CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME] ({ commit }, typedScheduleName) {
     commit(CREATE_SCHEDULE__SET_TYPED_SCHEDULE_NAME, typedScheduleName)
   },
-  [CREATE_SCHEDULE__INIT] ({ commit, dispatch, state }) {
-    if (!state.hasBeenLoaded) {
-      const major = getItem(LAST_SELECTED_MAJOR)
-      if (major) {
-        dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
+  async [CREATE_SCHEDULE__INIT] ({ dispatch, state, rootState }) {
+    if (!rootState.arrangeSchedule.isCreateSchedule) {
+      if (state.major) {
+        dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR)
+      } else if (state.file) {
+        dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE)
       }
-      dispatch(ARRANGE_SCHEDULE__INIT)
-      commit(CREATE_SCHEDULE__HAS_BEEN_LOADED)
     }
   }
 }

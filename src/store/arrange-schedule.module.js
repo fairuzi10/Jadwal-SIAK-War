@@ -3,9 +3,9 @@ import {
   ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS,
   ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS,
-  ARRANGE_SCHEDULE__INIT,
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
-  ARRANGE_SCHEDULE__REFRESH
+  ARRANGE_SCHEDULE__REFRESH,
+  ARRANGE_SCHEDULE__RESET_CONFLICT_LIST
 } from './actions.type'
 import {
   ARRANGE_SCHEDULE__ASSIGN_OR_TOGGLE_CHOSEN_CLASS,
@@ -28,7 +28,8 @@ const state = {
   chosenClass: {},
   isLoadingClassOptions: false,
   conflictList: [],
-  shouldBeRefreshedOnNextLoad: true
+  // Persist the classOptions and chosenClass when doing create schedule -> view schedule -> create schedule routine
+  isCreateSchedule: false
 }
 
 const getters = {
@@ -42,13 +43,13 @@ const getters = {
 }
 
 const mutations = {
-  [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, shouldBeRefreshedOnNextLoad }) {
+  [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, chosenClass, isCreateSchedule }) {
     state.classOptions = classOptions
-    state.chosenClass = Object.keys(classOptions)
+    state.chosenClass = chosenClass || Object.keys(classOptions)
       .reduce((acc, className) => ({ ...acc, [className]: null }), {})
     state.filter = ''
     state.filterChosenClass = false
-    state.shouldBeRefreshedOnNextLoad = shouldBeRefreshedOnNextLoad
+    state.isCreateSchedule = isCreateSchedule
   },
   // used in create schedule
   [ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS] (state, isLoading) {
@@ -79,8 +80,8 @@ const mutations = {
 }
 
 const actions = {
-  [ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS] ({ commit, dispatch }, { classOptions, shouldBeRefreshedOnNextLoad }) {
-    commit(ARRANGE_SCHEDULE__SET_CLASS_OPTIONS, { classOptions, shouldBeRefreshedOnNextLoad })
+  [ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS] ({ commit, dispatch }, { classOptions, chosenClass, isCreateSchedule }) {
+    commit(ARRANGE_SCHEDULE__SET_CLASS_OPTIONS, { classOptions, chosenClass, isCreateSchedule })
     dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
   [ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE] ({ commit, state }, { className, classInstance }) {
@@ -120,10 +121,8 @@ const actions = {
     commit(ARRANGE_SCHEDULE__RESET)
     dispatch(ARRANGE_SCHEDULE__COMPUTE_FILTERED_CLASS)
   },
-  [ARRANGE_SCHEDULE__INIT] ({ dispatch, state }) {
-    if (state.shouldBeRefreshedOnNextLoad) {
-      dispatch(ARRANGE_SCHEDULE__REFRESH)
-    }
+  [ARRANGE_SCHEDULE__RESET_CONFLICT_LIST] ({ commit }) {
+    commit(ARRANGE_SCHEDULE__SET_CONFLICT_LIST, [])
   }
 }
 

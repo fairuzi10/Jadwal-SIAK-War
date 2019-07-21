@@ -12,7 +12,7 @@
         v-for="classInstance in classGroup.options"
         :key="classInstance.NO"
         class="class-instance-card"
-        :class="{ active: chosenClass[classGroup.name] == classInstance }"
+        :class="{ active: isSameClassInstance(chosenClass[classGroup.name], classInstance) }"
         @click="chooseOrToggleClassInstance(classGroup.name, classInstance)"
       >
         <div class="row">
@@ -68,6 +68,9 @@ export default {
   methods: {
     chooseOrToggleClassInstance (className, classInstance) {
       this.$store.dispatch(ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE, { className, classInstance })
+    },
+    isSameClassInstance (classInstance1, classInstance2) {
+      return classInstance1 && classInstance2 && classInstance1['NAMA KELAS'] === classInstance2['NAMA KELAS']
     }
   }
 }

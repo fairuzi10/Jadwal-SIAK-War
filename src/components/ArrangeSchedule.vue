@@ -54,6 +54,9 @@
       header-class="modal-header-red"
       ok-only
       ok-variant="red"
+      @ok="resetConflictList"
+      @close="resetConflictList"
+      @hide="resetConflictList"
     >
       <!-- eslint-disable vue/no-v-html -->
       <div
@@ -72,7 +75,8 @@ import ClassPlaceholder from './ClassPlaceholder'
 import {
   ARRANGE_SCHEDULE__REFRESH,
   ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
-  ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS
+  ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS,
+  ARRANGE_SCHEDULE__RESET_CONFLICT_LIST
 } from '@/store/actions.type'
 
 export default {
@@ -111,6 +115,9 @@ export default {
     },
     setFilterChosenClass (filterChosenClass) {
       this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS, filterChosenClass)
+    },
+    resetConflictList () {
+      this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
     }
   }
 }

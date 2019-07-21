@@ -8,9 +8,11 @@
       class="mb-3"
     />
     <div class="text-right">
-      <button class="btn btn-outline-grey mr-2">
-        Ubah
-      </button>
+      <router-link :to="{name: 'edit-schedule', scheduleId: schedule.id}">
+        <button class="btn btn-outline-grey mr-2">
+          Ubah
+        </button>
+      </router-link>
       <button
         class="btn btn-red"
         @click="showDeleteModal = true"
