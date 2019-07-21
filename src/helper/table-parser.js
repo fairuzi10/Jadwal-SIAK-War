@@ -29,7 +29,7 @@ const factory = (headings) => {
     const cells = arrayify(row.cells)
     // SPECIAL CASE: keterangan mata kuliah spesial will be in PERIODE column
     return cells.reduce(function (prev, curCell, i) {
-      const currCleanifier = cleanifier[headings[i]] || cleanifier['DEFAULT']
+      const currCleanifier = cleanifier[headings[i]] || cleanifier.DEFAULT
       prev[headings[i]] = currCleanifier(curCell)
       return prev
     }, {})

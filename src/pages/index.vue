@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="app">
     <b-navbar
-      toggleable="lg"
+      toggleable="true"
       variant="light"
     >
       <router-link :to="{name: 'home'}">
