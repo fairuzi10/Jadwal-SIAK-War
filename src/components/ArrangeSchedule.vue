@@ -93,7 +93,6 @@ export default {
   computed: {
     ...mapGetters({
       filteredClass: 'arrangeSchedule_filteredClass',
-      chosenClass: 'arrangeSchedule_chosenClass',
       filter: 'arrangeSchedule_filter',
       filterChosenClass: 'arrangeSchedule_filterChosenClass',
       isLoadingClassOptions: 'arrangeSchedule_isLoadingClassOptions',

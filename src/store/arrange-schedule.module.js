@@ -19,6 +19,7 @@ import {
 } from './mutations.type'
 import { matchClass } from './utils/class-filter'
 import { validateClasInstanceNotConflict } from './utils/validate-conflict'
+import { deepClone } from '@/helper/utils'
 
 const state = {
   classOptions: {},
@@ -44,8 +45,8 @@ const getters = {
 
 const mutations = {
   [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, chosenClass, isCreateSchedule }) {
-    state.classOptions = classOptions
-    state.chosenClass = chosenClass || Object.keys(classOptions)
+    state.classOptions = deepClone(classOptions)
+    state.chosenClass = deepClone(chosenClass) || Object.keys(classOptions)
       .reduce((acc, className) => ({ ...acc, [className]: null }), {})
     state.filter = ''
     state.filterChosenClass = false
@@ -75,7 +76,7 @@ const mutations = {
     state.filteredClass = {}
   },
   [ARRANGE_SCHEDULE__SET_CONFLICT_LIST] (state, conflictList) {
-    state.conflictList = conflictList
+    state.conflictList = deepClone(conflictList)
   }
 }
 
