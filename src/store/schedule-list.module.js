@@ -1,11 +1,16 @@
 import { addArrayElement, getObjectOrArray, setObjectOrArray } from '@/helper/storage'
 import { SCHEDULE_LIST } from '@/helper/storage.type'
 
-import { SCHEDULE_LIST__ADD, SCHEDULE_LIST__CHANGE, SCHEDULE_LIST__REMOVE } from './actions.type'
+import {
+  SCHEDULE_LIST__ADD,
+  SCHEDULE_LIST__CHANGE,
+  SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE,
+  SCHEDULE_LIST__REMOVE
+} from './actions.type'
 import { SCHEDULE_LIST__APPEND, SCHEDULE_LIST__ERASE, SCHEDULE_LIST__SET } from './mutations.type'
 
 const state = {
-  scheduleList: getObjectOrArray(SCHEDULE_LIST) || []
+  scheduleList: []
 }
 
 const getters = {
@@ -38,6 +43,9 @@ const actions = {
       ? schedule : curSchedule)
     commit(SCHEDULE_LIST__SET, newScheduleList)
     setObjectOrArray(SCHEDULE_LIST, newScheduleList)
+  },
+  [SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE] ({ commit }) {
+    commit(SCHEDULE_LIST__SET, getObjectOrArray(SCHEDULE_LIST) || [])
   }
 }
 

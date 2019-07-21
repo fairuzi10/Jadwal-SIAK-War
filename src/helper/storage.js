@@ -46,6 +46,6 @@ export const setItem = function (key, value) {
   if (value === null) {
     localStorage.removeItem(key)
   } else {
-    return localStorage.setItem(key, value)
+    localStorage.setItem(key, value)
   }
 }

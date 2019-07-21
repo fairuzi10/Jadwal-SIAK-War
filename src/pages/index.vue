@@ -45,8 +45,15 @@
 
 <script>
 import ScheduleList from '@/components/ScheduleList'
-import { WINDOW__RESIZED } from '@/store/actions.type'
+import {
+  WINDOW__RESIZED,
+  SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE,
+  CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE,
+  CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE
+} from '@/store/actions.type'
 import { mapGetters } from 'vuex'
+import { getItem, setItem, setObjectOrArray } from '@/helper/storage'
+import { LAST_SESSION, SCHEDULE_LIST, SUGGESTED_SCHEDULE_NAME, LAST_SELECTED_MAJOR } from '@/helper/storage.type'
 
 export default {
   name: 'JadwalSiakWar',
@@ -65,6 +72,18 @@ export default {
   created () {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
+
+    const CURRENT_SESSION = '2018/2019-SP'
+    if (getItem(LAST_SESSION) !== CURRENT_SESSION) {
+      setObjectOrArray(SCHEDULE_LIST, [])
+      setItem(LAST_SELECTED_MAJOR, null)
+      setItem(SUGGESTED_SCHEDULE_NAME, 'Plan A')
+      setItem(LAST_SESSION, CURRENT_SESSION)
+    } else {
+      this.$store.dispatch(SCHEDULE_LIST__LOAD_SCHEDULE_LIST_FROM_STORAGE)
+      this.$store.dispatch(CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE)
+      this.$store.dispatch(CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE)
+    }
   },
   destroyed () {
     window.removeEventListener('resize', this.handleResize)

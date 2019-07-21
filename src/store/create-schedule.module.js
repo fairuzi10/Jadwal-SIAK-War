@@ -8,6 +8,8 @@ import {
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
   ARRANGE_SCHEDULE__REFRESH,
   CREATE_SCHEDULE__INIT,
+  CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE,
+  CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE,
   CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
   CREATE_SCHEDULE__REFRESH,
   CREATE_SCHEDULE__SAVE_SCHEDULE,
@@ -32,10 +34,10 @@ import {
 const state = {
   file: null,
   isValidFile: null,
-  major: getItem(LAST_SELECTED_MAJOR) || '',
+  major: '',
   typedScheduleName: '',
   isValidTypedScheduleName: null,
-  suggestedScheduleName: getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A',
+  suggestedScheduleName: 'Plan A',
   hasBeenLoaded: false
 }
 
@@ -99,12 +101,11 @@ const actions = {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
   async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR] ({ dispatch, state }) {
+    let classOptions = {}
     if (state.major) {
-      const classOptions = (await import(`@/data/${state.major}.json`)).default
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
-    } else {
-      dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
+      classOptions = (await import(`@/data/${state.major}.json`)).default
     }
+    dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
   },
   async [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
@@ -143,6 +144,10 @@ const actions = {
     commit(CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME, nextSuggestedScheduleName)
     setItem(SUGGESTED_SCHEDULE_NAME, nextSuggestedScheduleName)
   },
+  [CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE] ({ commit }) {
+    const suggestedScheduleName = getItem(SUGGESTED_SCHEDULE_NAME) || 'Plan A'
+    commit(CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME, suggestedScheduleName)
+  },
   async [CREATE_SCHEDULE__REFRESH] ({ commit, state }) {
     commit(CREATE_SCHEDULE__RESET)
   },
@@ -157,6 +162,9 @@ const actions = {
         dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE)
       }
     }
+  },
+  [CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE] ({ commit }) {
+    commit(CREATE_SCHEDULE__SET_MAJOR, getItem(LAST_SELECTED_MAJOR))
   }
 }
 

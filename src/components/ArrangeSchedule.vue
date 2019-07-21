@@ -29,7 +29,10 @@
         </div>
       </div>
 
-      <div class="text-right mb-3">
+      <div
+        v-if="!isEmptyObject(filteredClass)"
+        class="text-right mb-3"
+      >
         <button
           class="btn btn-red"
           @click.prevent="reset"
