@@ -45,8 +45,8 @@ const getters = {
 
 const mutations = {
   [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, chosenClass, isCreateSchedule }) {
-    state.classOptions = classOptions
-    state.chosenClass = chosenClass || Object.keys(classOptions)
+    state.classOptions = deepClone(classOptions)
+    state.chosenClass = deepClone(chosenClass) || Object.keys(classOptions)
       .reduce((acc, className) => ({ ...acc, [className]: null }), {})
     state.filter = ''
     state.filterChosenClass = false
