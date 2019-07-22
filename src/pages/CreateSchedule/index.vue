@@ -30,6 +30,13 @@
       >
         <div class="text-center">
           Atau unggah jadwal jurusanmu
+          <button
+            id="button-help-file"
+            class="btn btn-sm btn-yellow"
+            @click.prevent="showHelpFile = true"
+          >
+            ?
+          </button>
         </div>
         <div class="custom-file">
           <input
@@ -63,6 +70,31 @@
         Lihat Jadwal Sementara
       </button>
     </transition>
+
+    <b-modal
+      v-model="showHelpFile"
+      title="Bantuan Unggah Jadwal"
+      header-text-variant="dark"
+      header-class="modal-header-yellow"
+      ok-variant="yellow"
+      ok-only
+    >
+      <ol class="pr-4">
+        <li>Buka laman <a href="https://academic.ui.ac.id/main/Schedule/Index">jadwal kuliah</a> di SIAK</li>
+        <li>
+          Klik kanan, lalu klik save as <b>(Ctrl+S)</b> dan simpan di folder yang kamu inginkan
+          <img
+            src="./save-schedule-page.png"
+            alt="Simpan file HTML jadwal dari SIAK"
+            class="img-fluid py-1"
+          >
+        </li>
+        <li>
+          Kembali ke halaman "Buat Jadwal" situs ini dan unggah file HTML tersebut
+        </li>
+        <li>Susun jadwalmu!</li>
+      </ol>
+    </b-modal>
 
     <b-modal
       v-model="showCurrentChosenTable"
@@ -128,7 +160,8 @@ export default {
           { label: 'Farmasi', value: 'farmasi' }
         ].sort((a, b) => a.label.localeCompare(b.label))
       ],
-      showCurrentChosenTable: false
+      showCurrentChosenTable: false,
+      showHelpFile: false
     }
   },
   computed: {
@@ -206,6 +239,13 @@ export default {
   &:hover {
     background-image: $gradient-yellow-dark;
   }
+}
+
+#button-help-file {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
 }
 
 .button-current-schedule-enter-active {

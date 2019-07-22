@@ -71,14 +71,22 @@ h5 {
     color: $light;
     background: $gradient-red-dark;
   }
+  &:focus {
+    box-shadow: 0 0 0 0;
+  }
 }
 .btn.btn-yellow{
   background: $gradient-yellow;
   color: $dark;
   border-radius: 0.5rem;
+  border: 1px solid $yellow5;
+
   &:hover {
-    color: $dark;
-    background: $gradient-yellow-dark;
+    transition: all 0.15s ease-in-out;
+    background-image: $gradient-yellow-dark;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0;
   }
 }
 .btn.btn-outline-grey {
@@ -88,6 +96,9 @@ h5 {
   border: 1px solid $dark;
   &:hover {
     background-color: $grey1;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0;
   }
 }
 
