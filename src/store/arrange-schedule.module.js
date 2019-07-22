@@ -30,7 +30,8 @@ const state = {
   isLoadingClassOptions: false,
   conflictList: [],
   // Persist the classOptions and chosenClass when doing create schedule -> view schedule -> create schedule routine
-  isCreateSchedule: false
+  isCreateSchedule: false,
+  totalCredit: 0
 }
 
 const getters = {
@@ -51,6 +52,7 @@ const mutations = {
     state.filter = ''
     state.filterChosenClass = false
     state.isCreateSchedule = isCreateSchedule
+    state.totalCredit = 0
   },
   // used in create schedule
   [ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS] (state, isLoading) {
@@ -60,6 +62,11 @@ const mutations = {
     let assignedClassInstance = null
     if (classInstance) {
       assignedClassInstance = isSameClassInstance(classInstance, state.chosenClass[className]) ? null : classInstance
+    }
+    if (assignedClassInstance && !state.chosenClass[className]) {
+      state.totalCredit += state.classOptions[className].credit
+    } else if (!assignedClassInstance) {
+      state.totalCredit -= state.classOptions[className].credit
     }
     state.chosenClass[className] = assignedClassInstance
   },
@@ -78,6 +85,7 @@ const mutations = {
     state.filter = ''
     state.filterChosenClass = false
     state.filteredClass = {}
+    state.totalCredit = 0
   },
   [ARRANGE_SCHEDULE__SET_CONFLICT_LIST] (state, conflictList) {
     state.conflictList = deepClone(conflictList)

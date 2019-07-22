@@ -39,17 +39,21 @@ const factory = (headings) => {
 const htmlTableToObject = (headings, table) => {
   let activeClass = null
   let activeList = null
+  let credit = 0
   const result = {}
   const rows = table.tBodies[0].rows
   for (let i = 2; i < rows.length; i++) {
     const row = rows[i]
     if (row.classList.length === 0) {
       const classNameEl = row.querySelector('strong')
+      const creditSelector = /(\d) SKS/g
+      credit = Number(creditSelector.exec(row.textContent)[1])
       if (classNameEl) {
         if (activeList) {
           result[activeClass] = {
             name: activeClass,
-            options: activeList
+            options: activeList,
+            credit
           }
         }
         activeClass = classNameEl.textContent
@@ -62,7 +66,8 @@ const htmlTableToObject = (headings, table) => {
   if (activeList) {
     result[activeClass] = {
       name: activeClass,
-      options: activeList
+      options: activeList,
+      credit
     }
   }
   return result

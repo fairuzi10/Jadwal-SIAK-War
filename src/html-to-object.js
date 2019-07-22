@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import fs from 'fs'
-import tp from './helper/TableParser'
+import { parseTables } from './helper/table-parser'
 import { JSDOM } from 'jsdom'
 
 function readFiles (dirname, onFileContent, onError, onSuccess) {
@@ -27,13 +27,13 @@ function readFiles (dirname, onFileContent, onError, onSuccess) {
 }
 
 process.chdir(__dirname)
-readFiles('data/raw/', function (filename, content) {
+readFiles('data/raw/', async function (filename, content) {
   const htmlDoc = new JSDOM(content).window.document
   const table = htmlDoc.querySelectorAll('table.box')
-  const jurusan = filename.split('.')[0].replace(' ', '-')
-  const jurusanData = tp.parse(table)
-  const dataFilename = `data/${jurusan}.json`
-  fs.writeFile(dataFilename, JSON.stringify(jurusanData), function (err) {
+  const major = filename.split('.')[0].replace(' ', '-')
+  const majorData = await parseTables(table)
+  const dataFilename = `data/${major}.json`
+  fs.writeFile(dataFilename, JSON.stringify(majorData), function (err) {
     if (err) {
       return console.error(err)
     }

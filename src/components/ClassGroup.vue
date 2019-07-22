@@ -4,9 +4,17 @@
   <div
     class="mb-4 class-card"
   >
-    <h5 class="text-center">
-      {{ classGroup.name }}
-    </h5>
+    <div class="text-center">
+      <h5 class="d-inline mr-2">
+        {{ classGroup.name }}
+      </h5>
+      <h5 class="d-inline mr-2">
+        -
+      </h5>
+      <h5 class="d-inline">
+        {{ `${classGroup.credit} SKS` }}
+      </h5>
+    </div>
     <div class="class">
       <div
         v-for="classInstance in classGroup.options"

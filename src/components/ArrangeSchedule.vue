@@ -25,20 +25,48 @@
           <label
             class="form-check-label"
             for="filter-selected"
-          >Kelas terpilih</label>
+          >Kelas dipilih</label>
         </div>
       </div>
 
-      <div
-        v-if="!isEmptyObject(filteredClass)"
-        class="text-right mb-3"
-      >
-        <button
-          class="btn btn-red"
-          @click.prevent="reset"
-        >
-          Reset
-        </button>
+      <div v-if="!isEmptyObject(classOptions)">
+        <div class="d-flex justify-content-between mb-2">
+          <span>
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <h5
+                :key="totalCredit"
+                class="d-inline ml-4"
+              >
+                {{ totalCredit }}
+              </h5>
+            </transition>
+            <h5 class="d-inline">
+              SKS dipilih
+            </h5>
+          </span>
+          <transition>
+            <button
+              class="btn btn-red"
+              @click.prevent="reset"
+            >
+              Reset
+            </button>
+          </transition>
+        </div>
+
+        <div class="progress mb-3">
+          <div
+            class="progress-bar progress-bar-striped progress-bar-animated bg-yellow"
+            role="progressbar"
+            :aria-valuenow="totalCredit"
+            aria-valuemin="0"
+            aria-valuemax="24"
+            :style="{ width: `${totalCredit * 100 / 24}%` }"
+          />
+        </div>
       </div>
 
       <class-group
@@ -72,7 +100,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import ClassGroup from './ClassGroup'
 import ClassPlaceholder from './ClassPlaceholder'
 import {
@@ -101,6 +129,9 @@ export default {
       isLoadingClassOptions: 'arrangeSchedule_isLoadingClassOptions',
       classOptions: 'arrangeSchedule_classOptions',
       conflictList: 'arrangeSchedule_conflictList'
+    }),
+    ...mapState({
+      totalCredit: state => state.arrangeSchedule.totalCredit
     })
   },
   watch: {
@@ -140,5 +171,9 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+.bg-yellow {
+  background-color: $yellow5;
 }
 </style>
