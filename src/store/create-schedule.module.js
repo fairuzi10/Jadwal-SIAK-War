@@ -93,10 +93,11 @@ const actions = {
     if (file && file.type === 'text/html') {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, true)
       commit(CREATE_SCHEDULE__SET_FILE, file)
+      await dispatch(CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE)
     } else {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, false)
       commit(CREATE_SCHEDULE__SET_FILE, null)
-      await dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, {})
+      await dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions: {}, isCreateSchedule: true })
     }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
