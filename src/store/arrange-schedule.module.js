@@ -42,7 +42,9 @@ const mutations = {
     state.filter = ''
     state.filterChosenClass = false
     state.isCreateSchedule = isCreateSchedule
-    state.totalCredit = 0
+    state.totalCredit = chosenClass
+      ? Object.keys(chosenClass).reduce((acc, className) => chosenClass[className] ? acc + classOptions[className].credit : acc, 0)
+      : 0
   },
   // used in create schedule
   [ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS] (state, isLoading) {
