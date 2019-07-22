@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import ClassGroup from './ClassGroup'
 import ClassPlaceholder from './ClassPlaceholder'
 import {
@@ -122,15 +122,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      filteredClass: 'arrangeSchedule_filteredClass',
-      filter: 'arrangeSchedule_filter',
-      filterChosenClass: 'arrangeSchedule_filterChosenClass',
-      isLoadingClassOptions: 'arrangeSchedule_isLoadingClassOptions',
-      classOptions: 'arrangeSchedule_classOptions',
-      conflictList: 'arrangeSchedule_conflictList'
-    }),
     ...mapState({
+      filteredClass: state => state.arrangeSchedule.filteredClass,
+      filter: state => state.arrangeSchedule.filter,
+      filterChosenClass: state => state.arrangeSchedule.filterChosenClass,
+      isLoadingClassOptions: state => state.arrangeSchedule.isLoadingClassOptions,
+      classOptions: state => state.arrangeSchedule.classOptions,
+      conflictList: state => state.arrangeSchedule.conflictList,
       totalCredit: state => state.arrangeSchedule.totalCredit
     })
   },

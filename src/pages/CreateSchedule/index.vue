@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import ScheduleTable from '@/components/ScheduleTable'
 import ArrangeSchedule from '@/components/ArrangeSchedule'
 import {
@@ -165,13 +165,13 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      file: 'createSchedule_file',
-      major: 'createSchedule_major',
-      isValidFile: 'createSchedule_isValidFile',
-      chosenClass: 'arrangeSchedule_chosenClass',
-      suggestedScheduleName: 'createSchedule_suggestedScheduleName',
-      isValidTypedScheduleName: 'createSchedule_isValidTypedScheduleName'
+    ...mapState({
+      file: state => state.createSchedule.file,
+      major: state => state.createSchedule.major,
+      isValidFile: state => state.createSchedule.isValidFile,
+      suggestedScheduleName: state => state.createSchedule.suggestedScheduleName,
+      isValidTypedScheduleName: state => state.createSchedule.isValidTypedScheduleName,
+      chosenClass: state => state.arrangeSchedule.chosenClass
     })
   },
   async mounted () {

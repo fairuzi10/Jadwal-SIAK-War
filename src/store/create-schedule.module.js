@@ -41,14 +41,6 @@ const state = {
   hasBeenLoaded: false
 }
 
-const getters = {
-  createSchedule_file: state => state.file,
-  createSchedule_isValidFile: state => state.isValidFile,
-  createSchedule_major: state => state.major,
-  createSchedule_suggestedScheduleName: state => state.suggestedScheduleName,
-  createSchedule_isValidTypedScheduleName: state => state.isValidTypedScheduleName
-}
-
 const mutations = {
   [CREATE_SCHEDULE__SET_FILE] (state, file) {
     state.file = file
@@ -171,7 +163,6 @@ const actions = {
 
 export default {
   state,
-  getters,
   mutations,
   actions
 }

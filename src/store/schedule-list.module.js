@@ -13,10 +13,6 @@ const state = {
   scheduleList: []
 }
 
-const getters = {
-  scheduleList_scheduleList: state => state.scheduleList
-}
-
 const mutations = {
   [SCHEDULE_LIST__APPEND] (state, { id, name, classOptions, chosenClass }) {
     state.scheduleList = [ ...state.scheduleList, { id, name, classOptions, chosenClass } ]
@@ -51,7 +47,6 @@ const actions = {
 
 export default {
   state,
-  getters,
   mutations,
   actions
 }

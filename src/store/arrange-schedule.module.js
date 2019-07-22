@@ -34,16 +34,6 @@ const state = {
   totalCredit: 0
 }
 
-const getters = {
-  arrangeSchedule_classOptions: state => state.classOptions,
-  arrangeSchedule_filter: state => state.filter,
-  arrangeSchedule_filterChosenClass: state => state.filterChosenClass,
-  arrangeSchedule_filteredClass: state => state.filteredClass,
-  arrangeSchedule_chosenClass: state => state.chosenClass,
-  arrangeSchedule_isLoadingClassOptions: state => state.isLoadingClassOptions,
-  arrangeSchedule_conflictList: state => state.conflictList
-}
-
 const mutations = {
   [ARRANGE_SCHEDULE__SET_CLASS_OPTIONS] (state, { classOptions, chosenClass, isCreateSchedule }) {
     state.classOptions = deepClone(classOptions)
@@ -141,7 +131,6 @@ const actions = {
 
 export default {
   state,
-  getters,
   mutations,
   actions
 }

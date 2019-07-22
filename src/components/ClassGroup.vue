@@ -58,7 +58,7 @@
 
 <script>
 import { ARRANGE_SCHEDULE__CHOOSE_OR_TOGGLE_CLASS_INSTANCE } from '@/store/actions.type'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { isSameClassInstance } from '@/helper/utils'
 
 export default {
@@ -70,8 +70,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      chosenClass: 'arrangeSchedule_chosenClass'
+    ...mapState({
+      chosenClass: state => state.arrangeSchedule.chosenClass
     })
   },
   methods: {

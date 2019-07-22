@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import ScheduleTable from '@/components/ScheduleTable'
 import ArrangeSchedule from '@/components/ArrangeSchedule'
 import {
@@ -60,9 +60,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      chosenClass: 'arrangeSchedule_chosenClass',
-      scheduleList: 'scheduleList_scheduleList'
+    ...mapState({
+      chosenClass: state => state.arrangeSchedule.chosenClass,
+      scheduleList: state => state.scheduleList.scheduleList
     }),
     schedule () {
       return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId)

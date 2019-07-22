@@ -39,7 +39,7 @@
 
 <script>
 import ScheduleTable from '@/components/ScheduleTable'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { SCHEDULE_LIST__REMOVE } from '@/store/actions.type'
 
 export default {
@@ -54,8 +54,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      scheduleList: 'scheduleList_scheduleList'
+    ...mapState({
+      scheduleList: state => state.scheduleList.scheduleList
     }),
     schedule () {
       return this.scheduleList.find(schedule => schedule.id === this.$route.params.scheduleId)

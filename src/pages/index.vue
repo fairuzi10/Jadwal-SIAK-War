@@ -51,7 +51,7 @@ import {
   CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE,
   CREATE_SCHEDULE__LOAD_SUGGESTED_SCHEDULE_NAME_FROM_STORAGE
 } from '@/store/actions.type'
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { getItem, setItem, setObjectOrArray } from '@/helper/storage'
 import { LAST_SESSION, SCHEDULE_LIST, SUGGESTED_SCHEDULE_NAME, LAST_SELECTED_MAJOR } from '@/helper/storage.type'
 
@@ -61,9 +61,9 @@ export default {
     ScheduleList
   },
   computed: {
-    ...mapGetters({
-      height: 'window_height',
-      width: 'window_width'
+    ...mapState({
+      height: state => state.window.height,
+      width: state => state.window.width
     }),
     isShowingSidebar () {
       return this.width > this.breakpoint.lg
