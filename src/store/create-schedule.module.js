@@ -121,7 +121,8 @@ const actions = {
         id: uuidv4(),
         name: scheduleName,
         classOptions: rootState.arrangeSchedule.classOptions,
-        chosenClass: rootState.arrangeSchedule.chosenClass
+        chosenClass: rootState.arrangeSchedule.chosenClass,
+        totalCredit: rootState.arrangeSchedule.totalCredit
       }
       dispatch(SCHEDULE_LIST__ADD, validSchedule)
       dispatch(CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME)

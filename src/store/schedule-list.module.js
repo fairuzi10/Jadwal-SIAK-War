@@ -14,8 +14,8 @@ const state = {
 }
 
 const mutations = {
-  [SCHEDULE_LIST__APPEND] (state, { id, name, classOptions, chosenClass }) {
-    state.scheduleList = [ ...state.scheduleList, { id, name, classOptions, chosenClass } ]
+  [SCHEDULE_LIST__APPEND] (state, schedule) {
+    state.scheduleList = [ ...state.scheduleList, schedule ]
   },
   [SCHEDULE_LIST__ERASE] (state, scheduleId) {
     state.scheduleList = state.scheduleList.filter(schedule => schedule.id !== scheduleId)
@@ -26,9 +26,9 @@ const mutations = {
 }
 
 const actions = {
-  [SCHEDULE_LIST__ADD] ({ commit }, { id, name, classOptions, chosenClass }) {
-    commit(SCHEDULE_LIST__APPEND, { id, name, classOptions, chosenClass })
-    addArrayElement(SCHEDULE_LIST, { id, name, classOptions, chosenClass })
+  [SCHEDULE_LIST__ADD] ({ commit }, schedule) {
+    commit(SCHEDULE_LIST__APPEND, schedule)
+    addArrayElement(SCHEDULE_LIST, schedule)
   },
   async [SCHEDULE_LIST__REMOVE] ({ commit, state }, scheduleId) {
     await commit(SCHEDULE_LIST__ERASE, scheduleId)

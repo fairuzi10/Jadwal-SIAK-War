@@ -7,18 +7,21 @@
       :chosen-class="schedule.chosenClass"
       class="mb-3"
     />
-    <div class="text-right">
-      <router-link :to="{name: 'edit-schedule', scheduleId: schedule.id}">
-        <button class="btn btn-outline-grey mr-2">
-          Ubah
+    <div class="d-flex justify-content-between">
+      <b>{{ `Total ${schedule.totalCredit} SKS` }}</b>
+      <div>
+        <router-link :to="{name: 'edit-schedule', scheduleId: schedule.id}">
+          <button class="btn btn-outline-grey mr-2">
+            Ubah
+          </button>
+        </router-link>
+        <button
+          class="btn btn-red"
+          @click="showDeleteModal = true"
+        >
+          Hapus
         </button>
-      </router-link>
-      <button
-        class="btn btn-red"
-        @click="showDeleteModal = true"
-      >
-        Hapus
-      </button>
+      </div>
     </div>
     <b-modal
       id="delete-jadwal-modal"

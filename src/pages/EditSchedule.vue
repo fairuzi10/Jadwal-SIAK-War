@@ -62,6 +62,7 @@ export default {
   computed: {
     ...mapState({
       chosenClass: state => state.arrangeSchedule.chosenClass,
+      totalCredit: state => state.arrangeSchedule.totalCredit,
       scheduleList: state => state.scheduleList.scheduleList
     }),
     schedule () {
@@ -82,6 +83,7 @@ export default {
     async saveSchedule () {
       const edittedSchedule = this.schedule
       edittedSchedule.chosenClass = this.chosenClass
+      edittedSchedule.totalCredit = this.totalCredit
       await this.$store.dispatch(SCHEDULE_LIST__CHANGE, edittedSchedule)
       this.showCurrentChosenTable = false
       this.$router.pushAsync({ name: 'view-schedule',

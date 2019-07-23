@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex mb-2">
+    <div class="d-flex mb-3">
       <div id="time-col">
         <div
           v-for="time in timeList"
@@ -48,6 +48,7 @@
     <div
       v-for="classInstance in specialClass"
       :key="classInstance['NAMA KELAS']"
+      class="mb-3"
     >
       <strong>{{ '+ ' + simplifyClassName(classInstance['NAMA KELAS']) }}</strong>
     </div>
