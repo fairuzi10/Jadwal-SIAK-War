@@ -57,6 +57,12 @@ import { LAST_SESSION, SCHEDULE_LIST, SUGGESTED_SCHEDULE_NAME, LAST_SELECTED_MAJ
 
 export default {
   name: 'JadwalSiakWar',
+  metaInfo: {
+    title: 'Jadwal SIAK War',
+    meta: [
+      { name: 'description', content: 'Susun jadwal SIAK war-mu dan menangkan SIAK war!' }
+    ]
+  },
   components: {
     ScheduleList
   },

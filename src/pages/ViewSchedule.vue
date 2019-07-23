@@ -47,6 +47,11 @@ import { SCHEDULE_LIST__REMOVE } from '@/store/actions.type'
 
 export default {
   name: 'ViewSchedule',
+  metaInfo () {
+    return {
+      title: this.schedule.name
+    }
+  },
   components: {
     ScheduleTable
   },

@@ -17,6 +17,12 @@
 
 <script>
 export default {
-  name: 'Home'
+  name: 'Home',
+  metaInfo: {
+    title: 'Jadwal SIAK War',
+    meta: [
+      { name: 'description', content: 'Susun Jadwal SIAK War, cara praktis mempersiapkan SIAK War' }
+    ]
+  }
 }
 </script>

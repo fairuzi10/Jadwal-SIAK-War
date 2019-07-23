@@ -50,6 +50,11 @@ import {
 
 export default {
   name: 'EditSchedule',
+  metaInfo () {
+    return {
+      title: `Ubah ${this.schedule.name}`
+    }
+  },
   components: {
     ScheduleTable,
     ArrangeSchedule

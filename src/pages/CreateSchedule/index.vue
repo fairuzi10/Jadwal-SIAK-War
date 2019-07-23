@@ -146,6 +146,12 @@ import {
 
 export default {
   name: 'CreateSchedule',
+  metaInfo: {
+    title: 'Buat Jadwal',
+    meta: [
+      { name: 'description', content: 'Buat jadwal SIAK war-mu dan menangkan SIAK war!' }
+    ]
+  },
   components: {
     ScheduleTable,
     ArrangeSchedule
