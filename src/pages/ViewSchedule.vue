@@ -49,7 +49,7 @@ export default {
   name: 'ViewSchedule',
   metaInfo () {
     return {
-      title: this.schedule.name
+      title: this.schedule ? this.schedule.name : 'Lihat Jadwal'
     }
   },
   components: {
