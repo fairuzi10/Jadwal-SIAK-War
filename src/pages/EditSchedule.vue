@@ -10,19 +10,20 @@
       <button
         v-if="!allValueOfObjectIsNull(chosenClass)"
         id="button-current-schedule"
-        @click="showCurrentChosenTable = true"
+        @click="showCurrentChosenTable"
       >
         Lihat Hasil Perubahan
       </button>
     </transition>
 
     <b-modal
-      v-model="showCurrentChosenTable"
+      v-model="isShowingCurrentChosenTable"
       :title="`${schedule.name} Sementara`"
       header-text-variant="dark"
       header-class="modal-header-yellow schedule-table"
       dialog-class="schedule-table"
       hide-footer
+      @hide="backToArrangeSchedule"
     >
       <schedule-table :chosen-class="chosenClass" />
       <div class="mt-3">
@@ -43,6 +44,7 @@
 import { mapState } from 'vuex'
 import ScheduleTable from '@/components/ScheduleTable'
 import ArrangeSchedule from '@/components/ArrangeSchedule'
+import { SCHEDULE } from '@/analytics.type'
 import {
   ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS,
   SCHEDULE_LIST__CHANGE
@@ -61,7 +63,7 @@ export default {
   },
   data () {
     return {
-      showCurrentChosenTable: false
+      isShowingCurrentChosenTable: false
     }
   },
   computed: {
@@ -90,12 +92,19 @@ export default {
       edittedSchedule.chosenClass = this.chosenClass
       edittedSchedule.totalCredit = this.totalCredit
       await this.$store.dispatch(SCHEDULE_LIST__CHANGE, edittedSchedule)
-      this.showCurrentChosenTable = false
+      this.isShowingCurrentChosenTable = false
       this.$router.pushAsync({ name: 'view-schedule',
         params: {
           scheduleId: edittedSchedule.id
         }
       })
+    },
+    showCurrentChosenTable () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.SHOW_CURRENT_CHOSEN_TABLE, this.$route.name)
+      this.isShowingCurrentChosenTable = true
+    },
+    backToArrangeSchedule () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.BACK_TO_ARRANGE_SCHEDULE, this.$route.name)
     }
   }
 }

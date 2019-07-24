@@ -33,7 +33,7 @@
           <button
             id="button-help-file"
             class="btn btn-sm btn-yellow"
-            @click.prevent="showHelpFile = true"
+            @click.prevent="showHelpFile"
           >
             ?
           </button>
@@ -65,14 +65,14 @@
       <button
         v-if="!allValueOfObjectIsNull(chosenClass)"
         id="button-current-schedule"
-        @click="showCurrentChosenTable = true"
+        @click="showCurrentChosenTable"
       >
         Lihat Jadwal Sementara
       </button>
     </transition>
 
     <b-modal
-      v-model="showHelpFile"
+      v-model="isShowingHelpFile"
       title="Bantuan Unggah Jadwal"
       header-text-variant="dark"
       header-class="modal-header-yellow"
@@ -97,12 +97,13 @@
     </b-modal>
 
     <b-modal
-      v-model="showCurrentChosenTable"
+      v-model="isShowingCurrentChosenTable"
       title="Jadwal Sementara"
       header-text-variant="dark"
       header-class="modal-header-yellow schedule-table"
       dialog-class="schedule-table"
       hide-footer
+      @hide="backToArrangeSchedule"
     >
       <schedule-table :chosen-class="chosenClass" />
       <div class="mt-3">
@@ -143,6 +144,7 @@ import {
   CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
   CREATE_SCHEDULE__INIT
 } from '@/store/actions.type'
+import { FILE, MAJOR, SCHEDULE } from '@/analytics.type'
 
 export default {
   name: 'CreateSchedule',
@@ -166,8 +168,8 @@ export default {
           { label: 'Farmasi', value: 'farmasi' }
         ].sort((a, b) => a.label.localeCompare(b.label))
       ],
-      showCurrentChosenTable: false,
-      showHelpFile: false
+      isShowingCurrentChosenTable: false,
+      isShowingHelpFile: false
     }
   },
   computed: {
@@ -185,24 +187,38 @@ export default {
   },
   methods: {
     async setFile (file) {
+      this.$ga.event(FILE.toString(), FILE.UPLOAD, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
     },
     async setMajor (major) {
+      this.$ga.event(MAJOR.toString(), MAJOR.CHOOSE, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
     },
     async setTypedScheduleName (typedScheduleName) {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.TYPING_NAME, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
     },
     async saveSchedule () {
       const createdSchedule = await this.$store.dispatch(CREATE_SCHEDULE__SAVE_SCHEDULE)
       if (createdSchedule) {
-        this.showCurrentChosenTable = false
+        this.isShowingCurrentChosenTable = false
         await this.$router.pushAsync({ name: 'view-schedule',
           params: {
             scheduleId: createdSchedule.id
           }
         })
       }
+    },
+    showCurrentChosenTable () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.SHOW_CURRENT_CHOSEN_TABLE, this.$route.name)
+      this.isShowingCurrentChosenTable = true
+    },
+    showHelpFile () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.HELP_FILE, this.$route.name)
+      this.isShowingHelpFile = true
+    },
+    backToArrangeSchedule () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.BACK_TO_ARRANGE_SCHEDULE, this.$route.name)
     }
   }
 }

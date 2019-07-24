@@ -42,10 +42,21 @@
         Buat jadwal lain sebagai rencana cadangan!
       </div>
     </div>
+    <div class="col-12 text-center">
+      <button
+        id="button-start-create-schedule"
+        class="btn btn-yellow"
+        @click="goToCreateSchedule"
+      >
+        <b>Mulai Buat Jadwal</b>
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
+import { SCHEDULE } from '@/analytics.type'
+
 export default {
   name: 'Home',
   metaInfo: {
@@ -53,6 +64,12 @@ export default {
     meta: [
       { name: 'description', content: 'Susun Jadwal SIAK War, cara praktis mempersiapkan SIAK War' }
     ]
+  },
+  methods: {
+    async goToCreateSchedule () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.CREATE, this.$route.name)
+      await this.$router.pushAsync({ name: 'create-schedule' })
+    }
   }
 }
 </script>
@@ -76,6 +93,22 @@ export default {
       transform: scale(1.2);
       z-index: 1;
     }
+  }
+}
+
+#button-start-create-schedule {
+  font-size: 1.3rem;
+  margin: 3rem 1rem;
+
+  padding: 0.5rem 1.5rem;
+  @include md {
+    padding: 0.5rem 2rem;
+  }
+  @include lg {
+    padding: 0.5rem 2.5rem;
+  }
+  @include xl {
+    padding: 0.5rem 3rem;
   }
 }
 </style>

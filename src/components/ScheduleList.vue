@@ -30,19 +30,19 @@
         </div>
       </div>
       <hr>
-      <router-link :to="{ name: 'create-schedule' }">
-        <button
-          class="yellow-block-button my-4 py-2"
-        >
-          Buat Jadwal Baru
-        </button>
-      </router-link>
+      <button
+        class="yellow-block-button my-4 py-2"
+        @click="goToCreateSchedule"
+      >
+        Buat Jadwal Baru
+      </button>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { SCHEDULE } from '@/analytics.type'
 
 export default {
   name: 'ScheduleList',
@@ -50,6 +50,12 @@ export default {
     ...mapState({
       scheduleList: state => state.scheduleList.scheduleList
     })
+  },
+  methods: {
+    async goToCreateSchedule () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.CREATE, 'schedule-list')
+      await this.$router.pushAsync({ name: 'create-schedule' })
+    }
   }
 }
 </script>

@@ -10,6 +10,16 @@
     <div class="d-flex justify-content-between">
       <b>{{ `Total ${schedule.totalCredit} SKS` }}</b>
       <div>
+        <button
+          class="btn btn-outline-grey mr-2"
+          @click="syncWithCalendar"
+        >
+          <img
+            src="https://www.gstatic.com/images/branding/product/1x/calendar_32dp.png"
+            style="max-height: 24px;"
+          >
+          Sync
+        </button>
         <router-link :to="{name: 'edit-schedule', scheduleId: schedule.id}">
           <button class="btn btn-outline-grey mr-2">
             Ubah
@@ -37,6 +47,17 @@
     >
       Yakin ingin menghapus jadwal ini?
     </b-modal>
+
+    <b-modal
+      v-model="isShowingComingSoonFeature"
+      title="Coming Soon"
+      header-text-variant="dark"
+      ok-variant="yellow"
+      ok-only
+      header-class="modal-header-yellow"
+    >
+      Terima kasih atas ketertarikannya. Fitur ini akan hadir segera.
+    </b-modal>
   </div>
 </template>
 
@@ -44,6 +65,7 @@
 import ScheduleTable from '@/components/ScheduleTable'
 import { mapState } from 'vuex'
 import { SCHEDULE_LIST__REMOVE } from '@/store/actions.type'
+import { SCHEDULE, FEATURE_REQUEST } from '@/analytics.type'
 
 export default {
   name: 'ViewSchedule',
@@ -58,7 +80,8 @@ export default {
   data () {
     return {
       showDeleteModal: false,
-      editJadwal: false
+      editJadwal: false,
+      isShowingComingSoonFeature: false
     }
   },
   computed: {
@@ -76,8 +99,13 @@ export default {
   },
   methods: {
     async removeSchedule () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.REMOVE, this.$route.name)
       await this.$store.dispatch(SCHEDULE_LIST__REMOVE, this.$route.params.scheduleId)
       await this.$router.pushAsync({ name: 'create-schedule' })
+    },
+    syncWithCalendar () {
+      this.$ga.event(FEATURE_REQUEST.toString(), FEATURE_REQUEST.SYNC_WITH_CALENDAR, this.$route.name)
+      this.isShowingComingSoonFeature = true
     }
   }
 }

@@ -69,6 +69,15 @@
         </div>
       </div>
 
+      <div class="text-center text-md-left my-4">
+        <button
+          class="btn btn-yellow"
+          @click="addOtherActivity"
+        >
+          <b>+ Tambah kegiatan lain</b>
+        </button>
+      </div>
+
       <class-group
         v-for="(curClass, className) in filteredClass"
         :key="className"
@@ -96,6 +105,17 @@
         v-html="conflict"
       />
     </b-modal>
+
+    <b-modal
+      v-model="isShowingComingSoonFeature"
+      title="Coming Soon"
+      header-text-variant="dark"
+      ok-variant="yellow"
+      ok-only
+      header-class="modal-header-yellow"
+    >
+      Terima kasih atas ketertarikannya. Fitur ini akan hadir segera.
+    </b-modal>
   </div>
 </template>
 
@@ -103,6 +123,7 @@
 import { mapState } from 'vuex'
 import ClassGroup from './ClassGroup'
 import ClassPlaceholder from './ClassPlaceholder'
+import { SCHEDULE, FEATURE_REQUEST } from '@/analytics.type'
 import {
   ARRANGE_SCHEDULE__REFRESH,
   ARRANGE_SCHEDULE__FILTER_CLASS_OPTIONS,
@@ -118,7 +139,8 @@ export default {
   },
   data () {
     return {
-      isShowingModal: false
+      isShowingModal: false,
+      isShowingComingSoonFeature: false
     }
   },
   computed: {
@@ -139,6 +161,7 @@ export default {
   },
   methods: {
     async reset () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.RESET, this.$route.name)
       await this.$store.dispatch(ARRANGE_SCHEDULE__REFRESH)
     },
     async setFilter (filter) {
@@ -148,7 +171,12 @@ export default {
       await this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS, filterChosenClass)
     },
     async resetConflictList () {
+      this.$ga.event(SCHEDULE.toString(), SCHEDULE.CONFLICT, this.$route.name)
       await this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
+    },
+    addOtherActivity () {
+      this.$ga.event(FEATURE_REQUEST.toString(), FEATURE_REQUEST.ADD_OTHER_ACTIVITY, this.$route.name)
+      this.isShowingComingSoonFeature = true
     }
   }
 }
