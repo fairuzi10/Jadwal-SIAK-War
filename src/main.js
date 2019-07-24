@@ -1,9 +1,11 @@
 import Vue from 'vue'
+import { exception } from 'vue-analytics'
 import App from './App.vue'
 import store from './store'
 import router from './router'
 import './bootstrap-vue'
 import './meta-head'
+import './analytics'
 
 Vue.config.productionTip = false
 
@@ -17,6 +19,7 @@ Vue.config.errorHandler = function (err, vm, info) {
     headerClass: 'text-center',
     variant: 'danger'
   })
+  exception(err.message || err)
 }
 
 // eslint-disable-next-line no-unused-vars
