@@ -22,7 +22,7 @@
         </b-collapse>
       </template>
     </b-navbar>
-    <div class="container-fluid px-0 d-flex full-height">
+    <div class="container-fluid px-0 d-flex desktop-full-height">
       <div class="row no-gutters flex-grow-1">
         <schedule-list
           v-if="isShowingSidebar"
@@ -136,8 +136,10 @@ body {
   box-shadow: 0px 10px 20px -10px rgba(0,64,128,0.2);
 }
 
-.full-height {
-  min-height: 1000px;
+.desktop-full-height {
+  @include lg {
+    min-height: 1000px;
+  }
 }
 
 .schedule-list-navbar-wrapper {
