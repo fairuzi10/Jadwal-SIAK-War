@@ -246,7 +246,6 @@ export default {
       }
     },
     showCurrentChosenTable () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.SHOW_CURRENT_CHOSEN_TABLE, this.$route.name)
       this.isShowingCurrentChosenTable = true
     },
     showHelpFile () {
