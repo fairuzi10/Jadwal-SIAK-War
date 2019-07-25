@@ -7,6 +7,6 @@ Vue.use(VueAnalytics, {
   router,
   debug: {
     enabled: process.env.NODE_ENV !== 'production',
-    sendHitTask: false
+    sendHitTask: process.env.NODE_ENV === 'production'
   }
 })
