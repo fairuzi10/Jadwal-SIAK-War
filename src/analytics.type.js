@@ -1,6 +1,8 @@
 export const FILE = {
   toString: () => 'File',
-  UPLOAD: 'Upload'
+  UPLOAD: 'Upload',
+  HELP_SCHEDULE: 'Help schedule',
+  FAQ_SCHEDULE: 'FAQ schedule'
 }
 
 export const MAJOR = {
@@ -15,7 +17,6 @@ export const SCHEDULE = {
   CREATE: 'Create',
   RESET: 'Reset',
   CONFLICT: 'Conflict',
-  HELP_FILE: 'Help file',
   SHOW_CURRENT_CHOSEN_TABLE: 'Show current chosen table',
   BACK_TO_ARRANGE_SCHEDULE: 'Back to arrange schedule'
 }

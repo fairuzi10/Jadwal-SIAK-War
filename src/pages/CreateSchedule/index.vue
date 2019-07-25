@@ -79,7 +79,7 @@
       ok-variant="yellow"
       ok-only
     >
-      <ol class="pr-4">
+      <ol class="pr-4 mb-4">
         <li>Buka laman <a href="https://academic.ui.ac.id/main/Schedule/Index">jadwal kuliah</a> di SIAK</li>
         <li>
           Klik kanan, lalu klik save as <b>(Ctrl+S)</b> dan simpan di folder yang kamu inginkan
@@ -94,6 +94,34 @@
         </li>
         <li>Susun jadwalmu!</li>
       </ol>
+
+      <h3 class="text-center">
+        FAQ
+      </h3>
+      <div class="accordion">
+        <div
+          v-for="(faq, idx) in fileFaq"
+          :key="faq.question"
+          class="card"
+        >
+          <div
+            class="card-header collapsible-header"
+            @click="openFaqCollapsibleOfIdx(idx)"
+          >
+            {{ faq.question }}
+          </div>
+
+          <b-collapse
+            :id="`accordion-${idx}`"
+            accordion="my-accordion"
+            role="tabpanel"
+          >
+            <div class="card-body">
+              {{ faq.answer }}
+            </div>
+          </b-collapse>
+        </div>
+      </div>
     </b-modal>
 
     <b-modal
@@ -145,6 +173,7 @@ import {
   CREATE_SCHEDULE__INIT
 } from '@/store/actions.type'
 import { FILE, MAJOR, SCHEDULE } from '@/analytics.type'
+import { BCollapse } from 'bootstrap-vue'
 
 export default {
   name: 'CreateSchedule',
@@ -156,7 +185,8 @@ export default {
   },
   components: {
     ScheduleTable,
-    ArrangeSchedule
+    ArrangeSchedule,
+    BCollapse
   },
   data () {
     return {
@@ -167,6 +197,13 @@ export default {
           { label: 'Teknik Elektro', value: 'teknik-elektro' },
           { label: 'Farmasi', value: 'farmasi' }
         ].sort((a, b) => a.label.localeCompare(b.label))
+      ],
+      fileFaq: [
+        {
+          question: 'Apakah mengunggah file jadwal berbahaya bagi akun SSO saya?',
+          answer: 'Tidak! Jika kamu membuka file tersebut dengan teks editor seperti Notepad, kamu dapat melihat bahwa ' +
+          'data pribadi yang terdapat pada file tersebut hanyalah namamu. Kamu bahkan dapat menghapusnya jika diinginkan.'
+        }
       ],
       isShowingCurrentChosenTable: false,
       isShowingHelpFile: false
@@ -214,11 +251,15 @@ export default {
       this.isShowingCurrentChosenTable = true
     },
     showHelpFile () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.HELP_FILE, this.$route.name)
+      this.$ga.event(FILE.toString(), FILE.HELP_SCHEDULE, this.$route.name)
       this.isShowingHelpFile = true
     },
     backToArrangeSchedule () {
       this.$ga.event(SCHEDULE.toString(), SCHEDULE.BACK_TO_ARRANGE_SCHEDULE, this.$route.name)
+    },
+    openFaqCollapsibleOfIdx (idx) {
+      this.$ga.event(FILE.toString(), FILE.FAQ_SCHEDULE, this.fileFaq[idx].question)
+      this.$root.$emit('bv::toggle::collapse', `accordion-${idx}`)
     }
   }
 }
@@ -286,6 +327,10 @@ export default {
     bottom: 30px;
     opacity: 1;
   }
+}
+
+.card-header.collapsible-header {
+  cursor: pointer;
 }
 
 </style>
