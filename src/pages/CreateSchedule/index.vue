@@ -131,7 +131,6 @@
       header-class="modal-header-yellow schedule-table"
       dialog-class="schedule-table"
       hide-footer
-      @hide="backToArrangeSchedule"
     >
       <schedule-table :chosen-class="chosenClass" />
       <div class="mt-3">
@@ -253,9 +252,6 @@ export default {
     showHelpFile () {
       this.$ga.event(FILE.toString(), FILE.HELP_SCHEDULE, this.$route.name)
       this.isShowingHelpFile = true
-    },
-    backToArrangeSchedule () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.BACK_TO_ARRANGE_SCHEDULE, this.$route.name)
     },
     openFaqCollapsibleOfIdx (idx) {
       this.$ga.event(FILE.toString(), FILE.FAQ_SCHEDULE, this.fileFaq[idx].question)

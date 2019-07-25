@@ -15,10 +15,7 @@ export const SCHEDULE = {
   TYPING_NAME: 'Typing name',
   REMOVE: 'Remove',
   CREATE: 'Create',
-  RESET: 'Reset',
-  CONFLICT: 'Conflict',
-  SHOW_CURRENT_CHOSEN_TABLE: 'Show current chosen table',
-  BACK_TO_ARRANGE_SCHEDULE: 'Back to arrange schedule'
+  RESET: 'Reset'
 }
 
 export const FEATURE_REQUEST = {

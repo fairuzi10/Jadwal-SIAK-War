@@ -171,7 +171,6 @@ export default {
       await this.$store.dispatch(ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS, filterChosenClass)
     },
     async resetConflictList () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.CONFLICT, this.$route.name)
       await this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
     },
     addOtherActivity () {
