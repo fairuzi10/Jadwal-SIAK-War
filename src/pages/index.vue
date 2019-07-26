@@ -60,7 +60,10 @@ export default {
   metaInfo: {
     title: 'Jadwal SIAK War',
     meta: [
-      { name: 'description', content: 'Susun jadwal SIAK war-mu dan menangkan SIAK war!' }
+      { name: 'og:title', content: 'Jadwal SIAK War' },
+      { name: 'description', content: 'Susun jadwal SIAK war-mu dan menangkan SIAK war!' },
+      { name: 'og:description', content: 'Susun jadwal SIAK war-mu dan menangkan SIAK war!' },
+      { name: 'og:image', content: require(`@/assets/logo-small.png`) }
     ]
   },
   components: {
