@@ -22,14 +22,14 @@
         </b-collapse>
       </template>
     </b-navbar>
-    <div class="container-fluid px-0 d-flex desktop-full-height">
-      <div class="row no-gutters flex-grow-1">
+    <div class="container-fluid px-0">
+      <div class="row no-gutters">
         <schedule-list
           v-if="isShowingSidebar"
           class="schedule-list-sidebar-wrapper"
         />
         <div
-          class="col"
+          class="col desktop-full-height"
         >
           <transition
             name="fade"
@@ -140,6 +140,8 @@ body {
 }
 
 .desktop-full-height {
+  padding-bottom: 3rem;
+
   @include lg {
     min-height: 1000px;
   }
