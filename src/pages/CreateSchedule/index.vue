@@ -223,15 +223,15 @@ export default {
   },
   methods: {
     async setFile (file) {
-      this.$ga.event(FILE.toString(), FILE.UPLOAD, this.$route.name)
+      this.$ga.event(String(FILE), FILE.UPLOAD, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
     },
     async setMajor (major) {
-      this.$ga.event(MAJOR.toString(), MAJOR.CHOOSE, major)
+      this.$ga.event(String(MAJOR), MAJOR.CHOOSE, major)
       await this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
     },
     async setTypedScheduleName (typedScheduleName) {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.TYPING_NAME, this.$route.name)
+      this.$ga.event(String(SCHEDULE), SCHEDULE.TYPING_NAME, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME, typedScheduleName)
     },
     async saveSchedule () {
@@ -249,11 +249,11 @@ export default {
       this.isShowingCurrentChosenTable = true
     },
     showHelpFile () {
-      this.$ga.event(FILE.toString(), FILE.HELP_SCHEDULE, this.$route.name)
+      this.$ga.event(String(FILE), FILE.HELP_SCHEDULE, this.$route.name)
       this.isShowingHelpFile = true
     },
     openFaqCollapsibleOfIdx (idx) {
-      this.$ga.event(FILE.toString(), FILE.FAQ_SCHEDULE, this.fileFaq[idx].question)
+      this.$ga.event(String(FILE), FILE.FAQ_SCHEDULE, this.fileFaq[idx].question)
       this.$root.$emit('bv::toggle::collapse', `accordion-${idx}`)
     }
   }

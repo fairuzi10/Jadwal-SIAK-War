@@ -99,12 +99,12 @@ export default {
   },
   methods: {
     async removeSchedule () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.REMOVE, this.$route.name)
+      this.$ga.event(String(SCHEDULE), SCHEDULE.REMOVE, this.$route.name)
       await this.$store.dispatch(SCHEDULE_LIST__REMOVE, this.$route.params.scheduleId)
       await this.$router.pushAsync({ name: 'create-schedule' })
     },
     syncWithCalendar () {
-      this.$ga.event(FEATURE_REQUEST.toString(), FEATURE_REQUEST.SYNC_WITH_CALENDAR, this.$route.name)
+      this.$ga.event(String(FEATURE_REQUEST), FEATURE_REQUEST.SYNC_WITH_CALENDAR, this.$route.name)
       this.isShowingComingSoonFeature = true
     }
   }

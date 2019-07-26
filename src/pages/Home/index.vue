@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     async goToCreateSchedule () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.CREATE, this.$route.name)
+      this.$ga.event(String(SCHEDULE), SCHEDULE.CREATE, this.$route.name)
       await this.$router.pushAsync({ name: 'create-schedule' })
     }
   }

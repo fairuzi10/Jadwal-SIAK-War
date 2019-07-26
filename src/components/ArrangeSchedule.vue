@@ -161,7 +161,7 @@ export default {
   },
   methods: {
     async reset () {
-      this.$ga.event(SCHEDULE.toString(), SCHEDULE.RESET, this.$route.name)
+      this.$ga.event(String(SCHEDULE), SCHEDULE.RESET, this.$route.name)
       await this.$store.dispatch(ARRANGE_SCHEDULE__REFRESH)
     },
     async setFilter (filter) {
@@ -174,7 +174,7 @@ export default {
       await this.$store.dispatch(ARRANGE_SCHEDULE__RESET_CONFLICT_LIST)
     },
     addOtherActivity () {
-      this.$ga.event(FEATURE_REQUEST.toString(), FEATURE_REQUEST.ADD_OTHER_ACTIVITY, this.$route.name)
+      this.$ga.event(String(FEATURE_REQUEST), FEATURE_REQUEST.ADD_OTHER_ACTIVITY, this.$route.name)
       this.isShowingComingSoonFeature = true
     }
   }
