@@ -227,7 +227,7 @@ export default {
       await this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
     },
     async setMajor (major) {
-      this.$ga.event(MAJOR.toString(), MAJOR.CHOOSE, this.$route.name)
+      this.$ga.event(MAJOR.toString(), MAJOR.CHOOSE, major)
       await this.$store.dispatch(CREATE_SCHEDULE__SELECT_MAJOR, major)
     },
     async setTypedScheduleName (typedScheduleName) {
