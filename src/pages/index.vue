@@ -3,6 +3,7 @@
     <b-navbar
       toggleable="true"
       variant="light"
+      sticky
     >
       <router-link :to="{name: 'home'}">
         <b-navbar-brand class="text-decoration-none">

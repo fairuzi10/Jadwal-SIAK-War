@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="arrange-schedule">
     <template v-if="!isLoadingClassOptions">
       <div
         v-if="!isEmptyObject(classOptions)"
