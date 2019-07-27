@@ -52,7 +52,7 @@ export default {
   name: 'EditSchedule',
   metaInfo () {
     return {
-      title: `Ubah ${this.schedule.name}`
+      title: this.schedule ? `Ubah ${this.schedule.name}` : 'Ubah Jadwal'
     }
   },
   components: {
