@@ -59,12 +59,13 @@
 
         <div class="progress mb-3">
           <div
-            class="progress-bar progress-bar-striped progress-bar-animated bg-yellow"
+            class="progress-bar progress-bar-striped progress-bar-animated"
             role="progressbar"
             :aria-valuenow="totalCredit"
             aria-valuemin="0"
             aria-valuemax="24"
-            :style="{ width: `${totalCredit * 100 / 24}%` }"
+            :style="{ width: `${totalCredit * 100 / 24}%`,
+                      backgroundColor: creditBarColor }"
           />
         </div>
       </div>
@@ -130,6 +131,7 @@ import {
   ARRANGE_SCHEDULE__FILTER_IS_CHOSEN_CLASS,
   ARRANGE_SCHEDULE__RESET_CONFLICT_LIST
 } from '@/store/actions.type'
+import { mixColor } from '@/helper/styles'
 
 export default {
   name: 'ArrangeSchedule',
@@ -152,7 +154,13 @@ export default {
       classOptions: state => state.arrangeSchedule.classOptions,
       conflictList: state => state.arrangeSchedule.conflictList,
       totalCredit: state => state.arrangeSchedule.totalCredit
-    })
+    }),
+    creditBarColor () {
+      let percentage = (24 - this.totalCredit) * 100 / (24 - 14) // start mixing the color from 14 credit
+      percentage = Math.min(100, percentage)
+      percentage = Math.max(0, percentage)
+      return mixColor('#f7d316', '#ED213A', percentage)
+    }
   },
   watch: {
     conflictList (newList) {
