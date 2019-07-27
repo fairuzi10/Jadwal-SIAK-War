@@ -4,7 +4,9 @@
     class="pt-5"
   >
     <div class="bg-gradient-yellow p-1 mb-3">
-      <h4>Jadwal Tersimpan</h4>
+      <h4 class="mt-2">
+        Jadwal Tersimpan
+      </h4>
     </div>
     <div v-if="isEmptyObject(scheduleList)">
       Belum ada jadwal tersimpan
