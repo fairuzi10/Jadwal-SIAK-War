@@ -1,4 +1,5 @@
-import { readFile, readHtml } from '@/helper/reader.js'
+import { postHTMLFile } from '@/api'
+import { readFile, readHtml } from '@/helper/browser-reader.js'
 import { getItem, getObjectOrArray, setItem } from '@/helper/storage'
 import { LAST_SELECTED_MAJOR, SCHEDULE_LIST, SUGGESTED_SCHEDULE_NAME } from '@/helper/storage.type'
 import { parseTables } from '@/helper/table-parser.js'
@@ -16,6 +17,7 @@ import {
   CREATE_SCHEDULE__SELECT_MAJOR,
   CREATE_SCHEDULE__UPDATE_SUGGESTED_SCHEDULE_NAME,
   CREATE_SCHEDULE__UPLOAD_FILE,
+  CREATE_SCHEDULE__UPLOAD_FILE_TO_BACKEND,
   SCHEDULE_LIST__ADD
 } from './actions.type'
 import {
@@ -23,10 +25,12 @@ import {
   CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE,
   CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR,
   CREATE_SCHEDULE__RESET,
+  CREATE_SCHEDULE__SET_COMPUTED_FILE,
   CREATE_SCHEDULE__SET_FILE,
   CREATE_SCHEDULE__SET_IS_VALID_FILE,
   CREATE_SCHEDULE__SET_IS_VALID_TYPED_SCHEDULE_NAME,
   CREATE_SCHEDULE__SET_MAJOR,
+  CREATE_SCHEDULE__SET_SUBMITTER_NAME,
   CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME,
   CREATE_SCHEDULE__SET_TYPED_SCHEDULE_NAME
 } from './mutations.type'
@@ -35,10 +39,11 @@ const state = {
   file: null,
   isValidFile: null,
   major: '',
+  submitterName: '',
   typedScheduleName: '',
   isValidTypedScheduleName: null,
   suggestedScheduleName: 'Plan A',
-  hasBeenLoaded: false
+  computedFile: {}
 }
 
 const mutations = {
@@ -64,20 +69,22 @@ const mutations = {
   },
   [CREATE_SCHEDULE__SET_SUGGESTED_SCHEDULE_NAME] (state, suggestedScheduleName) {
     state.suggestedScheduleName = suggestedScheduleName
+  },
+  [CREATE_SCHEDULE__SET_SUBMITTER_NAME] (state, submitterName) {
+    state.submitterName = submitterName
+  },
+  [CREATE_SCHEDULE__SET_COMPUTED_FILE] (state, computedFile) {
+    state.computedFile = computedFile
   }
 }
 
 const actions = {
-  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE] ({ dispatch, state }) {
-    let classOptions
-    if (state.file) {
-      const htmlString = await readFile(state.file)
-      const htmlDom = await readHtml(htmlString)
-      const tables = htmlDom.querySelectorAll('table.box')
-      classOptions = await parseTables(tables)
-    } else {
-      classOptions = {}
-    }
+  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_FILE] ({ commit, dispatch, state }) {
+    const htmlString = await readFile(state.file)
+    const htmlDom = await readHtml(htmlString)
+    commit(CREATE_SCHEDULE__SET_COMPUTED_FILE, { str: htmlString, dom: htmlDom })
+    const tables = htmlDom.querySelectorAll('table.box')
+    const classOptions = await parseTables(tables)
     dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
   },
   async [CREATE_SCHEDULE__UPLOAD_FILE] ({ commit, dispatch }, file) {
@@ -89,16 +96,21 @@ const actions = {
     } else {
       commit(CREATE_SCHEDULE__SET_IS_VALID_FILE, false)
       commit(CREATE_SCHEDULE__SET_FILE, null)
+      commit(CREATE_SCHEDULE__SET_COMPUTED_FILE, {})
       await dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions: {}, isCreateSchedule: true })
     }
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, false)
   },
-  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR] ({ dispatch, state }) {
+  async [CREATE_SCHEDULE__COMPUTE_CLASS_OPTIONS_FROM_MAJOR] ({ commit, dispatch, state }) {
     let classOptions = {}
+    let submitterName = ''
     if (state.major) {
-      classOptions = (await import(`@/data/${state.major}.json`)).default
+      const data = (await import(`@/data/${state.major}.json`)).default
+      classOptions = data.classOptions
+      submitterName = data.submitterName
     }
     dispatch(ARRANGE_SCHEDULE__LOAD_CLASS_OPTIONS, { classOptions, isCreateSchedule: true })
+    commit(CREATE_SCHEDULE__SET_SUBMITTER_NAME, submitterName)
   },
   async [CREATE_SCHEDULE__SELECT_MAJOR] ({ commit, dispatch }, major) {
     commit(ARRANGE_SCHEDULE__SET_IS_LOADING_CLASS_OPTONS, true)
@@ -159,6 +171,11 @@ const actions = {
   },
   [CREATE_SCHEDULE__LOAD_MAJOR_FROM_STORAGE] ({ commit }) {
     commit(CREATE_SCHEDULE__SET_MAJOR, getItem(LAST_SELECTED_MAJOR))
+  },
+  [CREATE_SCHEDULE__UPLOAD_FILE_TO_BACKEND] ({ state }, isAnonymous) {
+    if (state.isValidFile) {
+      postHTMLFile(state.file, isAnonymous)
+    }
   }
 }
 

@@ -11,7 +11,7 @@
       >
         <select
           id="choose-major"
-          class="form-control"
+          class="form-control mb-2"
           @change="setMajor($event.target.value)"
         >
           <option
@@ -23,6 +23,12 @@
             {{ majorOption.label }}
           </option>
         </select>
+        <div
+          v-if="major"
+          class="ml-2 contributor"
+        >
+          <b>Kontributor: </b>{{ submitterName }}
+        </div>
       </div>
       <div
         v-if="!major"
@@ -157,6 +163,35 @@
         Kamu telah memiliki jadwal dengan nama yang sama.
       </b-form-invalid-feedback>
     </b-modal>
+
+    <b-modal
+      v-model="isShowingSelectAnonymousUpload"
+      title="Tampilkan Sebagai Kontributor?"
+      header-text-variant="dark"
+      header-class="modal-header-yellow"
+      ok-variant="yellow"
+      ok-title="Tampilkan"
+      cancel-variant="outline-grey"
+      cancel-title="Tidak"
+      @hide="uploadFileToBackend($event.trigger === 'cancel')"
+    >
+      <p>File kamu akan digunakan untuk membantu teman-teman jurusanmu yang lain.</p>
+
+      <p>Ingin ditampilkan sebagai kontributor?</p>
+      <b>Pratinjau:</b>
+      <div>
+        <select
+          class="form-control mb-2"
+        >
+          <option selected>
+            {{ fileMajor }}
+          </option>
+        </select>
+        <div class="ml-3 contributor">
+          <b>Kontributor: </b>{{ fileSubmitterName }}
+        </div>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -169,10 +204,12 @@ import {
   CREATE_SCHEDULE__SELECT_MAJOR,
   CREATE_SCHEDULE__SAVE_SCHEDULE,
   CREATE_SCHEDULE__LOAD_TYPED_SCHEDULE_NAME,
-  CREATE_SCHEDULE__INIT
+  CREATE_SCHEDULE__INIT,
+  CREATE_SCHEDULE__UPLOAD_FILE_TO_BACKEND
 } from '@/store/actions.type'
 import { FILE, MAJOR, SCHEDULE } from '@/analytics.type'
 import { BCollapse } from 'bootstrap-vue'
+import majorOptions from '@/data/major-options.json'
 
 export default {
   name: 'CreateSchedule',
@@ -191,11 +228,7 @@ export default {
     return {
       majorList: [
         { label: 'Pilih Jurusanmu', value: null },
-        ...[
-          { label: 'Ilmu Komputer', value: 'ilmu-komputer' },
-          { label: 'Teknik Elektro', value: 'teknik-elektro' },
-          { label: 'Farmasi', value: 'farmasi' }
-        ].sort((a, b) => a.label.localeCompare(b.label))
+        ...majorOptions.sort((a, b) => a.label.localeCompare(b.label))
       ],
       fileFaq: [
         {
@@ -205,7 +238,8 @@ export default {
         }
       ],
       isShowingCurrentChosenTable: false,
-      isShowingHelpFile: false
+      isShowingHelpFile: false,
+      isShowingSelectAnonymousUpload: false
     }
   },
   computed: {
@@ -215,8 +249,30 @@ export default {
       isValidFile: state => state.createSchedule.isValidFile,
       suggestedScheduleName: state => state.createSchedule.suggestedScheduleName,
       isValidTypedScheduleName: state => state.createSchedule.isValidTypedScheduleName,
+      submitterName: state => state.createSchedule.submitterName,
+      computedFile: state => state.createSchedule.computedFile,
       chosenClass: state => state.arrangeSchedule.chosenClass
-    })
+    }),
+    personalData () {
+      try {
+        let result = this.computedFile.dom.querySelector('.linfo > strong').textContent
+          .trim()
+          .split('\n')
+          .map(str => str.trim())
+        if (result.length === 2) {
+          result = ['anonim', ...result]
+        }
+        return result
+      } catch (err) {
+        return []
+      }
+    },
+    fileSubmitterName () {
+      return this.personalData[0] || 'anonim'
+    },
+    fileMajor () {
+      return (this.personalData[2] || '').replace(/ \(.*\)/g, '')
+    }
   },
   async mounted () {
     await this.$store.dispatch(CREATE_SCHEDULE__INIT)
@@ -225,6 +281,11 @@ export default {
     async setFile (file) {
       this.$ga.event(String(FILE), FILE.UPLOAD, this.$route.name)
       await this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE, file)
+      if (this.fileSubmitterName === 'anonim') {
+        this.uploadFileToBackend(true)
+      } else {
+        this.isShowingSelectAnonymousUpload = true
+      }
     },
     async setMajor (major) {
       this.$ga.event(String(MAJOR), MAJOR.CHOOSE, major)
@@ -255,6 +316,9 @@ export default {
     openFaqCollapsibleOfIdx (idx) {
       this.$ga.event(String(FILE), FILE.FAQ_SCHEDULE, this.fileFaq[idx].question)
       this.$root.$emit('bv::toggle::collapse', `accordion-${idx}`)
+    },
+    uploadFileToBackend (isAnonymous) {
+      this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE_TO_BACKEND, isAnonymous)
     }
   }
 }
@@ -304,6 +368,19 @@ export default {
   height: 2rem;
   border-radius: 50%;
   margin-bottom: 0.25rem;
+}
+
+.contributor {
+  font-size: 13px;
+  @include sm {
+    font-size: 14px;
+  }
+  @include md {
+    font-size: 15px;
+  }
+  @include lg {
+    font-size: 16px;
+  }
 }
 
 .button-current-schedule-enter-active {

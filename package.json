@@ -7,7 +7,8 @@
     "build": "npm run precompute && vue-cli-service build --name jadwal-siak",
     "lint": "vue-cli-service lint",
     "precompute": "babel-node --presets es2015 --plugins transform-es2015-destructuring,transform-object-rest-spread src/html-to-object.js",
-    "preview": "serve dist"
+    "preview": "serve dist",
+    "redump": "gsutil -m cp 'gs://jadwal-siak-war/*.html' src/data/raw"
   },
   "dependencies": {
     "babel-preset-es2015": "^6.24.1",
