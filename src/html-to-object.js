@@ -7,7 +7,6 @@ import { slugify } from './helper/utils'
 import { JSDOM } from 'jsdom'
 
 const selectedFileOfMajor = {}
-const majorOptions = []
 
 const processFile = async filename => {
   const content = await readFileAsync(filename)
@@ -37,10 +36,8 @@ const processFile = async filename => {
       // async check
       if (selectedFileOfMajor[major] === filename) {
         console.log(`Using ${filename} for ${major}`)
-        const slugifiedMajor = slugify(major)
-        const dataFilename = `${slugifiedMajor}.json`
+        const dataFilename = `${slugify(major)}.json`
         await writeFileAsync(dataFilename, JSON.stringify(data))
-        majorOptions.push({ label: major, value: slugifiedMajor })
       }
     }
   } catch (err) {
@@ -58,6 +55,7 @@ const main = async () => {
     await Promise.all(
       filenames.map(filename => processFile(filename).catch(console.error))
     )
+    const majorOptions = Object.keys(selectedFileOfMajor).map(major => ({ label: major, value: slugify(major) }))
     await writeFileAsync('major-options.json', JSON.stringify(majorOptions))
   } catch (err) {
     console.error(err)
