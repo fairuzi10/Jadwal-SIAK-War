@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "npm run precompute && vue-cli-service build --name jadwal-siak",
+    "build": "vue-cli-service build --name jadwal-siak",
     "lint": "vue-cli-service lint",
     "precompute": "babel-node --presets es2015 --plugins transform-es2015-destructuring,transform-object-rest-spread,dynamic-import-node src/html-to-object.js",
     "preview": "serve dist",
