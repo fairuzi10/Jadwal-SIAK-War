@@ -12,34 +12,46 @@
         >
       </div>
       <div class="col-12 mb-5">
-        <i id="alt-logo">Susun jadwalmu dan jadilah pemenangnya!</i>
+        <i id="alt-logo">Susun jadwalmu dan jadilah pemenang SIAK War!</i>
+      </div>
+      <div class="col-12 mb-5">
+        <h4 class="mb-3">
+          Persiapkan SIAK War dengan 3 langkah mudah
+        </h4>
+        <h6>1. Buka situs 'Jadwal SIAK War'</h6>
+        <h6>2. Susun jadwal yang kamu inginkan</h6>
+        <h6>3. Buat jadwal lain sebagai rencana cadangan!</h6>
       </div>
       <div class="col-12">
-        <h3>Persiapkan SIAK War dengan 3 langkah mudah</h3>
-      </div>
-      <div class="col-12 col-md-4 img-explanation-wrapper">
-        <img
-          src="./open-jadwal-siak-war.png"
-          alt="Buka situs 'Jadwal SIAK War'"
-          class="img-fluid img-explanation"
-        >
-        Buka situs 'Jadwal SIAK War'.
-      </div>
-      <div class="col-12 col-md-4 img-explanation-wrapper">
-        <img
-          src="./create-schedule.png"
-          alt="Susun jadwalmu"
-          class="img-fluid img-explanation"
-        >
-        Susun jadwal yang kamu inginkan.
-      </div>
-      <div class="col-12 col-md-4 img-explanation-wrapper">
-        <img
-          src="./create-more-plan.png"
-          alt="Buat jadwal lain sebagai rencana cadangan!"
-          class="img-fluid img-explanation"
-        >
-        Buat jadwal lain sebagai rencana cadangan!
+        <h4 class="mb-4">
+          Fitur Unggulan
+        </h4>
+        <div class="row">
+          <div class="img-explanation-wrapper">
+            <img
+              src="./schedule-conflict.png"
+              class="img-explanation"
+              alt="Deteksi jadwal bentrok"
+            >
+            <p>Deteksi jadwal bentrok</p>
+          </div>
+          <div class="img-explanation-wrapper">
+            <img
+              src="./schedule-table.png"
+              class="img-explanation"
+              alt="Lihat tabel jadwal"
+            >
+            <p>Lihat tabel jadwal</p>
+          </div>
+          <div class="img-explanation-wrapper">
+            <img
+              src="./plan-more-schedule.png"
+              class="img-explanation"
+              alt="Buat rencana cadangan"
+            >
+            <p>Buat rencana cadangan</p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-12 text-center">
@@ -81,12 +93,20 @@ export default {
 .img-explanation {
   box-shadow: 0px 20px 20px -10px rgba(0,64,128,0.2);
   margin-bottom: 1rem;
+  height: 250px;
+  max-width: 100%;
 }
 
 .img-explanation-wrapper {
   cursor: pointer;
   transition: transform .15s;
-  padding: 1rem 3rem;
+  padding: 1rem 1rem;
+  flex: 0 0 100%;
+
+  @include lg {
+    width: none;
+    flex: 0 0 33.33%;
+  }
 
   @include md {
     &:hover {
@@ -98,7 +118,7 @@ export default {
 
 #button-start-create-schedule {
   font-size: 1.3rem;
-  margin: 3rem 1rem;
+  margin: 2rem 1rem;
 
   padding: 0.5rem 1.5rem;
   @include md {
