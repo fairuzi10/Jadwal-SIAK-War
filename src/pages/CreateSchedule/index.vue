@@ -86,7 +86,18 @@
       ok-only
     >
       <ol class="pr-4 mb-4">
-        <li>Buka laman <a href="https://academic.ui.ac.id/main/Schedule/Index">jadwal kuliah</a> di SIAK</li>
+        <li>
+          Masuk ke <a
+            href="https://academic.ui.ac.id/main/Authentication/"
+            target="_blank"
+          >SIAK</a> menggunakan akunmu
+        </li>
+        <li>
+          Buka laman <a
+            href="https://academic.ui.ac.id/main/Schedule/Index"
+            target="_blank"
+          >jadwal kuliah</a> di SIAK
+        </li>
         <li>
           Klik kanan, lalu klik save as <b>(Ctrl+S)</b> dan simpan di folder yang kamu inginkan
           <img
@@ -97,6 +108,13 @@
         </li>
         <li>
           Kembali ke halaman "Buat Jadwal" situs ini dan unggah file HTML tersebut
+          <div class="text-center">
+            <img
+              src="./upload-schedule.png"
+              alt="Unggah file HTML jadwal dari SIAK"
+              class="img-fluid py-1"
+            >
+          </div>
         </li>
         <li>Susun jadwalmu!</li>
       </ol>
