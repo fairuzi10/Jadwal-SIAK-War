@@ -2,7 +2,8 @@ export const FILE = {
   toString: () => 'File',
   UPLOAD: 'Upload',
   HELP_SCHEDULE: 'Help schedule',
-  FAQ_SCHEDULE: 'FAQ schedule'
+  FAQ_SCHEDULE: 'FAQ schedule',
+  UPLOAD_TO_BACKEND: 'Upload to backend'
 }
 
 export const MAJOR = {

@@ -177,7 +177,7 @@
     >
       <p>File kamu akan digunakan untuk membantu teman-teman jurusanmu yang lain.</p>
 
-      <p>Ingin ditampilkan sebagai kontributor?</p>
+      <p>Jika terpilih, apakah kamu ingin ditampilkan sebagai kontributor?</p>
       <b>Pratinjau:</b>
       <div>
         <select
@@ -318,6 +318,7 @@ export default {
       this.$root.$emit('bv::toggle::collapse', `accordion-${idx}`)
     },
     uploadFileToBackend (isAnonymous) {
+      this.$ga.event(String(FILE), FILE.UPLOAD_TO_BACKEND, String(isAnonymous))
       this.$store.dispatch(CREATE_SCHEDULE__UPLOAD_FILE_TO_BACKEND, isAnonymous)
     }
   }
