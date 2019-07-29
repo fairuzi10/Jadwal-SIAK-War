@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "npm run precompute && vue-cli-service build --name jadwal-siak",
     "lint": "vue-cli-service lint",
-    "precompute": "babel-node --presets es2015 --plugins transform-es2015-destructuring,transform-object-rest-spread src/html-to-object.js",
+    "precompute": "babel-node --presets es2015 --plugins transform-es2015-destructuring,transform-object-rest-spread,dynamic-import-node src/html-to-object.js",
     "preview": "serve dist",
     "redump": "gsutil -m cp 'gs://jadwal-siak-war/*.html' src/data/raw"
   },
@@ -35,6 +35,7 @@
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-component": "^1.1.1",
+    "babel-plugin-dynamic-import-node": "^2.3.0",
     "babel-plugin-transform-es2015-destructuring": "^6.23.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "braces": "^2.3.2",

@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
 import fs from 'fs'
-import path from 'path'
-import { parseTables } from './helper/table-parser'
-import { readFileAsync, writeFileAsync } from './helper/local-reader'
-import { slugify } from './helper/utils'
 import { JSDOM } from 'jsdom'
+import path from 'path'
+
+import { readFileAsync, writeFileAsync } from './helper/local-reader'
+import { parseTables } from './helper/table-parser'
+import { deepCompare, slugify } from './helper/utils'
 
 const selectedFileOfMajor = {}
 
@@ -33,10 +34,15 @@ const processFile = async filename => {
         classOptions
       }
 
-      // async check
-      if (selectedFileOfMajor[major] === filename) {
+      const dataFilename = `${slugify(major)}.json`
+      let sameWithExistingData = false
+      try {
+        const existingData = await import(`./data/${dataFilename}`)
+        sameWithExistingData = deepCompare(existingData.default.classOptions) === deepCompare(classOptions)
+      } catch (err) {}
+
+      if (!sameWithExistingData && selectedFileOfMajor[major] === filename) {
         console.log(`Using ${filename} for ${major}`)
-        const dataFilename = `${slugify(major)}.json`
         await writeFileAsync(dataFilename, JSON.stringify(data))
       }
     }
