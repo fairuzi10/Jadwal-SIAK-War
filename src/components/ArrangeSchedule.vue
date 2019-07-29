@@ -1,10 +1,7 @@
 <template>
   <div id="arrange-schedule">
-    <template v-if="!isLoadingClassOptions">
-      <div
-        v-if="!isEmptyObject(classOptions)"
-        class="filter-box"
-      >
+    <template v-if="!isEmptyObject(classOptions)">
+      <div class="filter-box">
         <h5>Filter</h5>
         <input
           :value="filter"
@@ -29,7 +26,7 @@
         </div>
       </div>
 
-      <div v-if="!isEmptyObject(classOptions)">
+      <div>
         <div class="d-flex justify-content-between mb-2">
           <span>
             <transition
@@ -86,7 +83,7 @@
         class="mb-3"
       />
     </template>
-    <class-placeholder v-else />
+    <class-placeholder v-else-if="isLoadingClassOptions" />
     <b-modal
       id="conflict-modal"
       v-model="isShowingModal"
