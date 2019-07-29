@@ -38,7 +38,7 @@ const processFile = async filename => {
       let sameWithExistingData = false
       try {
         const existingData = await import(`./data/${dataFilename}`)
-        sameWithExistingData = deepCompare(existingData.default.classOptions) === deepCompare(classOptions)
+        sameWithExistingData = deepCompare(existingData.default.classOptions, classOptions)
       } catch (err) {}
 
       if (!sameWithExistingData && selectedFileOfMajor[major] === filename) {
