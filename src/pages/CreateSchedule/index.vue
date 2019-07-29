@@ -173,7 +173,7 @@
       ok-title="Tampilkan"
       cancel-variant="outline-grey"
       cancel-title="Tidak"
-      @hide="uploadFileToBackend($event.trigger === 'cancel')"
+      @hide="uploadFileToBackend($event.trigger !== 'ok')"
     >
       <p>File kamu akan digunakan untuk membantu teman-teman jurusanmu yang lain.</p>
 
