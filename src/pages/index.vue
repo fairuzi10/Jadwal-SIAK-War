@@ -85,7 +85,7 @@ export default {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
 
-    const CURRENT_SESSION = '2018/2019-SP'
+    const CURRENT_SESSION = '2019/2020-1'
     if (getItem(LAST_SESSION) !== CURRENT_SESSION) {
       setObjectOrArray(SCHEDULE_LIST, [])
       setItem(LAST_SELECTED_MAJOR, null)
