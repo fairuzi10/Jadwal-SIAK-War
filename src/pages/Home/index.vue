@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5">
+  <div id="home">
     <h1 class="text-center">
       Jadwal SIAK War
     </h1>

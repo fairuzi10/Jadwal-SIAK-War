@@ -1,5 +1,8 @@
 <template>
-  <div id="create-schedule">
+  <div
+    id="create-schedule"
+    class="px-3"
+  >
     <h3 class="text-center">
       Buat Jadwal
     </h3>
@@ -344,11 +347,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-#create-schedule {
-  min-height: $min-window-height;
-  padding: 3rem 1rem;
-}
 
 #choose-major-form {
   border: 1px solid $border-color;

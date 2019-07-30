@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="schedule-list"
-    class="pt-5"
-  >
+  <div id="schedule-list">
     <div class="bg-gradient-yellow p-1 mb-3">
       <h4 class="mt-2">
         Jadwal Tersimpan

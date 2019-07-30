@@ -1,5 +1,8 @@
 <template>
-  <div id="edit-schedule">
+  <div
+    id="edit-schedule"
+    class="px-3"
+  >
     <h3 class="text-center">
       {{ `Ubah ${schedule.name}` }}
     </h3>
@@ -105,11 +108,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-#edit-schedule {
-  min-height: $min-window-height;
-  padding: 3rem 1rem;
-}
 
 #button-current-schedule {
   position: fixed;

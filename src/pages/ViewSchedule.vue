@@ -113,8 +113,8 @@ export default {
 
 <style lang="scss" scoped>
 #view-schedule {
-  min-height: $min-window-height;
-  padding: 3rem 0.25rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 
   @include sm {
     padding-left: 0.5rem;

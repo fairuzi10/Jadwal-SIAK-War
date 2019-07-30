@@ -3,7 +3,7 @@
     <b-navbar
       toggleable="true"
       variant="light"
-      sticky
+      fixed="top"
     >
       <router-link :to="{name: 'home'}">
         <b-navbar-brand class="text-decoration-none">
@@ -27,17 +27,19 @@
       <div class="row no-gutters">
         <schedule-list
           v-if="isShowingSidebar"
-          class="schedule-list-sidebar-wrapper"
+          class="schedule-list-sidebar-wrapper padding-offset-navbar"
         />
         <div
-          class="col desktop-full-height"
+          class="col desktop-full-height padding-offset-navbar"
         >
-          <transition
-            name="fade"
-            mode="out-in"
-          >
-            <router-view :key="$route.fullPath" />
-          </transition>
+          <div class="pt-3">
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <router-view :key="$route.fullPath" />
+            </transition>
+          </div>
         </div>
       </div>
     </div>
@@ -114,6 +116,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $dark;
+}
+
+.padding-offset-navbar {
+  padding-top: 100px;
 }
 
 .fade-enter-active, .fade-leave-active {
