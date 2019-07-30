@@ -19,16 +19,22 @@ module.exports = {
       }
     }
   },
-  configureWebpack: {
-    plugins: [
-      new PrerenderSPAPlugin({
-        staticDir: path.join(__dirname, 'dist'),
-        routes: [ '/', '/create', '/schedule/' ]
-      })
-    ],
-    performance: {
-      maxEntrypointSize: 1024000,
-      maxAssetSize: 512000
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      return {
+        plugins: [
+          new PrerenderSPAPlugin({
+            staticDir: path.join(__dirname, 'dist'),
+            routes: [ '/', '/create', '/schedule/' ]
+          })
+        ],
+        performance: {
+          maxEntrypointSize: 1024000,
+          maxAssetSize: 512000
+        }
+      }
+    } else {
+      return {}
     }
   }
 }
