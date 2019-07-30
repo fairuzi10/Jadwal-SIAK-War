@@ -3,7 +3,7 @@
     <h1 class="text-center">
       Jadwal SIAK War
     </h1>
-    <div class="text-center row justify-content-center">
+    <div class="text-center row no-gutters justify-content-center">
       <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-7 my-3">
         <img
           id="logo"
@@ -26,7 +26,7 @@
         <h4 class="mb-4">
           Fitur Unggulan
         </h4>
-        <div class="row">
+        <div class="row no-gutters">
           <div class="img-explanation-wrapper">
             <img
               src="./schedule-conflict.png"
@@ -100,7 +100,7 @@ export default {
 .img-explanation-wrapper {
   cursor: pointer;
   transition: transform .15s;
-  padding: 1rem 1rem;
+  padding: 1rem;
   flex: 0 0 100%;
 
   @include lg {
