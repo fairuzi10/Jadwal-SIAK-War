@@ -47,7 +47,6 @@ const htmlTableToObject = (headings, table) => {
     if (row.classList.length === 0) {
       const classNameEl = row.querySelector('strong')
       const creditSelector = /(\d) SKS/g
-      credit = Number(creditSelector.exec(row.textContent)[1])
       if (classNameEl) {
         if (activeList) {
           result[activeClass] = {
@@ -58,6 +57,7 @@ const htmlTableToObject = (headings, table) => {
         }
         activeClass = classNameEl.textContent
         activeList = []
+        credit = Number(creditSelector.exec(row.textContent)[1])
       }
     } else {
       activeList.push(factory(headings)(row))
